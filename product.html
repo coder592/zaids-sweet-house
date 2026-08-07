@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Product Details</title>
+
+    <link rel="stylesheet" href="style.css">
+
+ </head>
+
+ <body>
+
+<nav>
+
+    <div class="logo">
+        <img src="images/logo.png" alt="Logo">
+        Zaid's Sweet House
+    </div>
+
+    <ul>
+        <li><a href="index.html">Home</a></li>
+    </ul>
+
+</nav>
+
+<section class="product-page">
+
+    <div class="product-image">
+
+        <img src="images/kaju-katli.jpg"
+             alt="Kaju Katli"
+             id="productImage">
+
+    </div>
+
+    <div class="product-details">
+
+        <h1 id="productName">Kaju Katli</h1>
+
+        <div class="rating">
+            ⭐⭐⭐⭐⭐
+        </div>
+
+        <h2 id="productPrice">₹699 / kg</h2>
+
+        <p id="productOffer" class="offer">
+            15% OFF
+        </p>
+
+        <p class="stock">
+            ✅ In Stock
+        </p>
+
+        <div class="quantity">
+
+    <button onclick="decreaseQty()">-</button>
+
+    <span id="qty">1</span>
+
+    <button onclick="increaseQty()">+</button>
+
+</div>
+
+        <button onclick="addToCart('Kaju Katli',699)">
+            🛒 Add To Cart
+        </button>
+
+        <button onclick="buyNow()">
+            Buy Now
+        </button>
+
+    </div>
+
+</section>
+
+<script>
+
+const products = {
+
+"kaju-katli":{
+name:"Kaju Katli",
+price:"₹699 / kg",
+offer:"15% OFF",
+image:"images/kaju-katli.jpg"
+},
+
+"gulab-jamun":{
+name:"Gulab Jamun",
+price:"₹350 / kg",
+offer:"10% OFF",
+image:"images/gulab-jamun.jpg"
+},
+
+"rasgulla":{
+name:"Rasgulla",
+price:"₹380 / kg",
+offer:"12% OFF",
+image:"images/rasgulla.jpg"
+},
+
+"motichoor-laddu":{
+name:"Motichoor Laddu",
+price:"₹420 / kg",
+offer:"15% OFF",
+image:"images/motichoor-laddu.jpg"
+},
+
+"chocolate-cake":{
+name:"Chocolate Cake",
+price:"₹599",
+offer:"20% OFF",
+image:"images/chocolate-cake.jpg"
+},
+
+"black-forest-cake":{
+name:"Black Forest Cake",
+price:"₹699",
+offer:"15% OFF",
+image:"images/black-forest.jpg"
+},
+
+"red-velvet-cake":{
+name:"Red Velvet Cake",
+price:"₹799",
+offer:"10% OFF",
+image:"images/red-velvet.jpg"
+},
+
+"butterscotch-cake":{
+name:"Butterscotch Cake",
+price:"₹649",
+offer:"20% OFF",
+image:"images/butterscotch-cake.jpg"
+},
+
+"mix-farsan":{
+name:"Mix Farsan",
+price:"₹320 / kg",
+offer:"10% OFF",
+image:"images/mix-farsan.jpg"
+},
+
+"sev":{
+name:"Sev",
+price:"₹220 / kg",
+offer:"10% OFF",
+image:"images/sev.jpg"
+},
+
+"bhakarwadi":{
+name:"Bhakarwadi",
+price:"₹280 / kg",
+offer:"15% OFF",
+image:"images/bhakarwadi.jpg"
+},
+
+"chivda":{
+name:"Chivda",
+price:"₹240 / kg",
+offer:"12% OFF",
+image:"images/chivda.jpg"
+}
+
+};
+
+const productId = new URLSearchParams(window.location.search).get("product");
+
+if(products[productId]){
+
+document.getElementById("productName").innerText = products[productId].name;
+
+document.getElementById("productPrice").innerText = products[productId].price;
+
+document.getElementById("productOffer").innerText = products[productId].offer;
+
+document.getElementById("productImage").src = products[productId].image;
+
+}
+
+</script>
+
+<script>
+
+let quantity = 1;
+
+function increaseQty(){
+
+    quantity++;
+
+    document.getElementById("qty").innerText = quantity;
+
+}
+
+function decreaseQty(){
+
+    if(quantity > 1){
+
+        quantity--;
+
+        document.getElementById("qty").innerText = quantity;
+
+    }
+
+}
+
+function buyNow(){
+
+    addCurrentProduct();
+
+    window.location.href = "index.html#checkout";
+
+}
+
+</script>
+
+<script src"script.js"></script>
+
+</body>
+
+</html>

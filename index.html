@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Zaid's Sweet House | Fresh Sweets, Cakes & Farsan</title>
+
+    <meta name="description"
+        content="Zaid's Sweet House - Fresh Sweets, Cakes, Farsan and Seasonal Special Items. Order online with fast delivery.">
+
+    <meta name="keywords"
+        content="sweet shop, sweets, cakes, farsan, bakery, online sweets">
+
+    <meta name="author"
+        content="Zaid's Sweet House">
+
+    <link rel="icon" href="images/logo.png">
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <div class="logo">
+
+        <img src="images/logo.png" alt="Logo">
+
+        <span>Zaid's Sweet House</span>
+
+    </div>
+
+    <div class="menu-btn" id="menuBtn">
+        ☰
+    </div>
+
+    <ul>
+
+        <li><a href="#home">Home</a></li>
+
+        <li><a href="#menu">Menu</a></li>
+
+        <li><a href="#about">About</a></li>
+
+        <li><a href="#gallery">Gallery</a></li>
+
+        <li><a href="#contact">Contact</a></li>
+
+    </ul>
+
+    <button id="darkModeBtn">
+        🌙 Dark Mode
+    </button>
+
+</nav>
+
+<!-- ================= HERO ================= -->
+
+<section class="hero" id="home">
+
+    <h1>
+        Fresh Sweets, Cakes & Farsan
+    </h1>
+
+    <p>
+        Made Fresh Every Day | Pure Taste | Fast Delivery
+    </p>
+
+    <a href="#menu">
+
+        <button>
+            Shop Now
+        </button>
+
+    </a>
+
+</section>
+
+<!-- ================= OFFER BANNER ================= -->
+
+<section class="offer-banner">
+
+    <h2>
+        🎉 Special Festival Offer 🎉
+    </h2>
+
+    <p>
+
+        Get up to
+        <strong>20% OFF</strong>
+
+        on selected sweets, cakes and farsan.
+
+    </p>
+
+    <a href="#menu">
+    <button>
+        Shop Offers
+    </button>
+    </a>
+
+</section>
+
+<!-- ================= FEATURES ================= -->
+
+<section class="features">
+
+    <h2>
+        Why Choose Us?
+    </h2>
+
+    <div class="feature-container">
+
+        <div class="feature-card">
+
+            <h3>🍬 Fresh Sweets</h3>
+
+            <p>
+                Prepared daily using premium quality ingredients.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>🚚 Fast Delivery</h3>
+
+            <p>
+                Safe and quick delivery to your doorstep.
+            </p>
+
+        </div>
+
+        <div class="feature-card">
+
+            <h3>⭐ Premium Quality</h3>
+
+            <p>
+                Hygienic preparation with trusted taste.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= MENU ================= -->
+
+<section class="menu" id="menu">
+
+    <h2>Our Special Menu</h2>
+
+    <div class="search-box">
+        <input type="text"
+               id="searchFood"
+               placeholder="Search products...">
+    </div>
+
+    <div class="categories">
+
+        <div class="category-card"
+        onclick="filterFood('all')">
+            🍽️
+            <h3>All</h3>
+        </div>
+
+        <div class="category-card" 
+        onclick="filterFood('sweets')">
+            🍬
+            <h3>Sweets</h3>
+        </div>
+
+        <div class="category-card" 
+        onclick="filterFood('cakes')">
+            🎂
+            <h3>Cakes</h3>
+        </div>
+
+        <div class="category-card" 
+        onclick="filterFood('farsan')">
+            🥨
+            <h3>Farsan</h3>
+        </div>
+
+    </div>
+
+    <div class="menu-container">
+
+        <!-- Product 1 -->
+
+        <div class="card"
+        data-category="sweets">
+
+            <span class="badge">Best Seller</span>
+
+            <img src="images/kaju-katli.jpg" alt="Kaju Katli">
+
+            <h3>Kaju Katli</h3>
+
+            <div class="rating">⭐⭐⭐⭐⭐</div>
+
+            <p class="price">₹699 / kg</p>
+
+            <p class="offer">15% OFF</p>
+
+    
+            <button onclick="addToCart('Kaju Katli',699)">
+            🛒 Add to Cart
+            </button>
+
+        </div>
+
+        <div class="card" data-category="sweets">
+
+    <span class="badge">
+        Best Seller
+    </span>
+
+    <img src="images/gulab-jamun.jpg" alt="Gulab Jamun">
+
+    <h3>Gulab Jamun</h3>
+
+    <div class="rating">
+        ⭐⭐⭐⭐⭐
+    </div>
+
+    <p class="price">
+        ₹350 / kg
+    </p>
+
+    <p class="offer">
+        10% OFF
+    </p>
+
+
+
+    <button onclick="addToCart('Gulab Jamun',350)">
+    🛒 Add to Cart
+    </button>
+
+</div>
+
+<div class="card" data-category="sweets">
+
+    <span class="badge">
+        Fresh
+    </span>
+
+    <img src="images/rasgulla.jpg" alt="Rasgulla">
+
+    <h3>Rasgulla</h3>
+
+    <div class="rating">
+        ⭐⭐⭐⭐⭐
+    </div>
+
+    <p class="price">
+        ₹380 / kg
+    </p>
+
+    <p class="offer">
+        15% OFF
+    </p>
+
+    
+    <button onclick="addToCart('Rasgulla',380)">
+    🛒 Add to Cart
+    </button>
+
+</div>
+
+<div class="card" data-category="sweets">
+
+    <span class="badge">
+        Popular
+    </span>
+
+    <img src="images/motichoor-laddu.jpg" alt="Motichoor Laddu">
+
+    <h3>Motichoor Laddu</h3>
+
+    <div class="rating">
+        ⭐⭐⭐⭐⭐
+    </div>
+
+    <p class="price">
+        ₹420 / kg
+    </p>
+
+    <p class="offer">
+        12% OFF
+    </p>
+
+    <button on onclick="addToCart('Laddu',420)">
+    🛒 Add to Cart
+    </button>
+
+</div>
+
+        <!-- Product 2 -->
+
+        <div class="card" data-category="cakes">
+
+            <span class="badge">Popular</span>
+
+            <img src="images/chocolate-cake.jpg" alt="Chocolate Cake">
+
+            <h3>Chocolate Cake</h3>
+
+            <div class="rating">⭐⭐⭐⭐⭐</div>
+
+            <p class="price">₹599</p>
+
+            <p class="offer">20% OFF</p>
+
+            
+
+<button onclick="addToCart('Chocolate Cake',599)">
+    🛒 Add to Cart
+</button>
+        </div>
+
+        <div class="card" data-category="cakes">
+
+    <span class="badge">
+        Best Seller
+    </span>
+
+    <img src="images/black-forest.jpg" alt="Black Forest Cake">
+
+    <h3>Black Forest Cake</h3>
+
+    <div class="rating">
+        ⭐⭐⭐⭐⭐
+    </div>
+
+    <p class="price">
+        ₹699
+    </p>
+
+    <p class="offer">
+        15% OFF
+    </p>
+
+    
+
+    <button onclick="addToCart('Black Forest Cake',699)">
+    🛒 Add to Cart
+    </button></a>
+
+</div>
+
+<div class="card" data-category="cakes">
+
+    <span class="badge">
+        Premium
+    </span>
+
+    <img src="images/red-velvet.jpg" alt="Red Velvet Cake">
+
+    <h3>Red Velvet Cake</h3>
+
+    <div class="rating">
+        ⭐⭐⭐⭐⭐
+    </div>
+
+    <p class="price">
+        ₹799
+    </p>
+
+    <p class="offer">
+        10% OFF
+    </p>
+
+    
+    <button onclick="addToCart('Red Velvet Cake',799)">
+    🛒 Add to Cart
+    </button>
+
+</div>
+
+<div class="card" data-category="cakes">
+
+    <span class="badge">
+        Popular
+    </span>
+
+    <img src="images/butterscotch-cake.jpg" alt="Butterscotch Cake">
+
+    <h3>Butterscotch Cake</h3>
+
+    <div class="rating">
+        ⭐⭐⭐⭐⭐
+    </div>
+
+    <p class="price">
+        ₹649
+    </p>
+
+    <p class="offer">
+        20% OFF
+    </p>
+
+    
+    <button onclick="addToCart('Butterscotch Cake',649)">
+    🛒 Add to Cart
+    </button>
+
+</div>
+
+        <!-- Product 3 -->
+
+        <div class="card"
+        data-category="farsan">
+
+            <span class="badge">Fresh Today</span>
+
+            <img src="images/mix-farsan.jpg" alt="Mix Farsan">
+
+            <h3>Mix Farsan</h3>
+
+            <div class="rating">⭐⭐⭐⭐⭐</div>
+
+            <p class="price">₹320 / kg</p>
+
+            <p class="offer">10% OFF</p>
+
+          
+
+<button onclick="addToCart('Mix Farsan',320)">
+    🛒 Add to Cart
+</button>
+
+        </div>
+
+    <div class="card" data-category="farsan">
+
+    <span class="badge">
+        Fresh
+    </span>
+
+    <img src="images/sev.jpg" alt="Sev">
+
+    <h3>Sev</h3>
+
+    <div class="rating">
+        ⭐⭐⭐⭐⭐
+    </div>
+
+    <p class="price">
+        ₹220 / kg
+    </p>
+
+    <p class="offer">
+        10% OFF
+    </p>
+
+   
+    <button onclick="addToCart('Sev',220)">
+    🛒 Add to Cart
+    </button>
+
+</div>
+
+<div class="card" data-category="farsan">
+
+    <span class="badge">
+        Best Seller
+    </span>
+
+    <img src="images/bhakarwadi.jpg" alt="Bhakarwadi">
+
+    <h3>Bhakarwadi</h3>
+
+    <div class="rating">
+        ⭐⭐⭐⭐⭐
+    </div>
+
+    <p class="price">
+        ₹280 / kg
+    </p>
+
+    <p class="offer">
+        15% OFF
+    </p>
+
+   
+    <button onclick="addToCart('Bhakaradi',280)">
+    🛒 Add to Cart
+    </button>
+
+</div>
+
+<div class="card" data-category="farsan">
+
+    <span class="badge">
+        Popular
+    </span>
+
+    <img src="images/chivda.jpg" alt="Chivda">
+
+    <h3>Chivda</h3>
+
+    <div class="rating">
+        ⭐⭐⭐⭐⭐
+    </div>
+
+    <p class="price">
+        ₹240 / kg
+    </p>
+
+    <p class="offer">
+        12% OFF
+    </p>
+
+   
+    <button onclick="addToCart('Chivda',240)">
+    🛒 Add to Cart
+    </button>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= CART ================= -->
+
+<section class="cart">
+
+    <h2>Your Cart 🛒</h2>
+
+    <div id="cartItems">
+        Cart is empty
+    </div>
+
+    <h3>Total: ₹<span id="total">0</span></h3>
+
+</section>
+
+<!-- ================= ORDER SUMMARY ================= -->
+
+<section class="order-summary">
+
+    <h2>Order Summary 🧾</h2>
+
+    <div id="summaryItems">
+        No items added
+    </div>
+
+    <h3>Total: ₹<span id="summaryTotal">0</span></h3>
+
+</section>
+
+<!-- ================= CHECKOUT ================= -->
+
+<section class="checkout">
+
+<h2>Checkout</h2>
+
+<form id="checkoutForm">
+
+<input
+type="text"
+id="customerName"
+placeholder="Your Name"
+required>
+
+<input
+type="text"
+id="customerAddress"
+placeholder="Your Address"
+required>
+
+<input
+type="tel"
+id="customerPhone"
+placeholder="Phone Number"
+required>
+
+<div class="payment">
+
+<h3>Payment Method</h3>
+
+<label>
+<input type="radio" name="payment" value="UPI" checked>
+UPI Payment
+</label>
+
+<br><br>
+
+<label>
+<input type="radio" name="payment" value="COD">
+Cash On Delivery
+</label>
+
+</div>
+
+<div class="upi-payment">
+
+<h3>Scan & Pay UPI</h3>
+
+<img src="images/qr.png" alt="UPI QR Code">
+
+<p>UPI ID: zaidssweethouse@upi</p>
+
+</div>
+
+<button type="submit">
+Place Order
+</button>
+
+</form>
+
+</section>
+
+<!-- ================= REVIEWS ================= -->
+
+<section class="reviews">
+
+<h2>Customer Reviews</h2>
+
+<div class="review-container">
+
+<div class="review-card">
+
+<img src="images/user.png" alt="Customer">
+
+<h3>⭐⭐⭐⭐⭐</h3>
+
+<p>"Fresh sweets and amazing quality. Highly recommended!"</p>
+
+<h4>- Ahmed Khan</h4>
+
+</div>
+
+<div class="review-card">
+
+<img src="images/user.png" alt="Customer">
+
+<h3>⭐⭐⭐⭐⭐</h3>
+
+<p>"Chocolate cake was delicious. Delivery was quick."</p>
+
+<h4>- Ayesha Ali</h4>
+
+</div>
+
+<div class="review-card">
+
+<img src="images/user.png" alt="Customer">
+
+<h3>⭐⭐⭐⭐⭐</h3>
+
+<p>"Best farsan in the city. Will order again."</p>
+
+<h4>- Rahul Sharma</h4>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+<h2>Zaid's Sweet House</h2>
+
+<p>Fresh Sweets | Cakes | Farsan</p>
+
+<p>
+    Email:
+     <a 
+href="mailto:zaidssweethouse@gmail.com">
+        zaidssweethouse@gmail.com
+        </a>
+</p>
+
+<p>
+Phone:
+<a href="tel:+919424708856">
+    +91 9424708856</a>
+</p>
+
+<p>Address:<a
+href="https://maps.com/?q=Nagpur,Maharashtra">
+    target="_blank">       
+    Nagpur, Maharashtra, India
+</a>
+</p>
+
+<p>© 2026 Zaid's Sweet House. All Rights Reserved.</p>
+
+</footer>
+
+
+<!-- ================= ABOUT ================= -->
+
+<section class="about" id="about">
+
+    <div class="about-container">
+
+        <div class="about-text">
+
+            <h2>About Zaid's Sweet House</h2>
+
+            <p>
+                Welcome to Zaid's Sweet House. We prepare fresh sweets,
+                delicious cakes and tasty farsan every day using premium
+                quality ingredients.
+            </p>
+
+            <p>
+                Our mission is to deliver fresh, hygienic and affordable
+                products with the best customer experience.
+            </p>
+
+            <a href="#contact">
+            <button>Know More</button>
+            </a>
+
+        </div>
+
+        <div class="about-image">
+
+            <img src="images/hero.jpg" alt="Sweet Shop">
+
+        </div>
+
+    </div>
+
+</section>
+<!-- ================= GALLERY ================= -->
+
+<section class="gallery" id="gallery">
+
+    <h2>Our Gallery</h2>
+
+    <div class="gallery-container">
+
+        <img src="images/kaju-katli.jpg" alt="Kaju Katli">
+
+        <img src="images/chocolate-cake.jpg" alt="Chocolate Cake">
+
+        <img src="images/mix-farsan.jpg" alt="Mix Farsan">
+
+    </div>
+
+</section>
+
+<!-- ================= CONTACT ================= -->
+
+<section class="contact" id="contact">
+
+    <h2>Contact Us</h2>
+
+    <form id="contactForm">
+
+        <input
+            type="text"
+            placeholder="Your Name"
+            required>
+
+        <input
+            type="email"
+            placeholder="Your Email"
+            required>
+
+        <input
+            type="tel"
+            placeholder="Your Phone">
+
+        <textarea
+            rows="5"
+            placeholder="Write Your Message..."
+            required></textarea>
+
+        <button type="submit">
+            Send Message
+        </button>
+
+    </form>
+
+    <br><br>
+
+    <h3>📍 Zaid's Sweet House</h3>
+
+    <p>Nagpur, Maharashtra, India</p>
+
+    <p>📞 +91 9424708856</p>
+
+    <p>📧 zaidssweethouse@gmail.c
+    om</p>
+
+</section>
+
+<!-- ================= FLOATING BUTTONS ================= -->
+
+<a
+href="https://wa.me/919424708856"
+class="whatsapp-btn"
+target="_blank">
+
+💬
+
+</a>
+
+<button id="topBtn">
+⬆
+</button>
+
+<!-- ================= LOADER ================= -->
+
+<div class="loader">
+
+<div class="loader-circle"></div>
+
+</div>
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
