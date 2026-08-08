@@ -1,8 +1,68 @@
 /* ==========================================
+   ZAID'S SWEET HOUSE
+   COMPLETE FIXED SCRIPT.JS
+========================================== */
+
+
+/* ==========================================
    CART
 ========================================== */
 
 let cart = [];
+
+
+/* ==========================================
+   LOAD CART FROM LOCAL STORAGE
+========================================== */
+
+function loadCart() {
+
+    try {
+
+        const savedCart = localStorage.getItem("zaidsSweetHouseCart");
+
+        if (savedCart) {
+
+            cart = JSON.parse(savedCart);
+
+            if (!Array.isArray(cart)) {
+                cart = [];
+            }
+
+        }
+
+    } catch (error) {
+
+        console.error("Cart loading error:", error);
+
+        cart = [];
+
+    }
+
+}
+
+
+/* ==========================================
+   SAVE CART
+========================================== */
+
+function saveCart() {
+
+    try {
+
+        localStorage.setItem(
+            "zaidsSweetHouseCart",
+            JSON.stringify(cart)
+        );
+
+    } catch (error) {
+
+        console.error("Cart saving error:", error);
+
+    }
+
+}
+
 
 /* ==========================================
    ADD WEIGHTED PRODUCT
@@ -12,13 +72,31 @@ function addWeightedProduct(name, pricePerKg, weightId) {
 
     const weightSelect = document.getElementById(weightId);
 
+    if (!weightSelect) {
+
+        console.error("Weight selector not found:", weightId);
+
+        return;
+
+    }
+
     const weight = parseFloat(weightSelect.value);
 
-    const weightText = weight === 1
-        ? "1 kg"
-        : `${weight * 1000}g`;
+    if (isNaN(weight) || weight <= 0) {
 
-    const finalPrice = Math.round(pricePerKg * weight);
+        alert("Please select a valid weight.");
+
+        return;
+
+    }
+
+    const weightText =
+        weight === 1
+            ? "1 kg"
+            : `${weight * 1000}g`;
+
+    const finalPrice =
+        Math.round(Number(pricePerKg) * weight);
 
     const item = cart.find(
         product =>
@@ -35,25 +113,45 @@ function addWeightedProduct(name, pricePerKg, weightId) {
         cart.push({
 
             name: name,
+
             price: finalPrice,
+
             quantity: 1,
+
             weight: weightText
 
         });
 
     }
 
+    saveCart();
+
     displayCart();
 
 }
 
+
 /* ==========================================
-   ADD TO CART
+   ADD NORMAL PRODUCT
 ========================================== */
 
 function addToCart(name, price) {
 
-    const item = cart.find(product => product.name === name);
+    const numericPrice = Number(price);
+
+    if (isNaN(numericPrice)) {
+
+        console.error("Invalid product price:", price);
+
+        return;
+
+    }
+
+    const item = cart.find(
+        product =>
+            product.name === name &&
+            !product.weight
+    );
 
     if (item) {
 
@@ -64,80 +162,98 @@ function addToCart(name, price) {
         cart.push({
 
             name: name,
-            price: price,
+
+            price: numericPrice,
+
             quantity: 1
 
         });
 
     }
 
+    saveCart();
+
     displayCart();
 
 }
 
-     
-// ==========================
-// DISPLAY CART
-// ==========================
+
+/* ==========================================
+   DISPLAY CART
+========================================== */
 
 function displayCart() {
 
-    const cartCount = document.getElementById("cartCount");
+    const cartCount =
+        document.getElementById("cartCount");
 
-if (cartCount) {
-    const count = cart.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-    );
+    const cartBox =
+        document.getElementById("cartItems");
 
-    cartCount.innerText = `(${count})`;
-}
+    const totalBox =
+        document.getElementById("total");
 
-    const cartBox = document.getElementById("cartItems");
+    const summaryBox =
+        document.getElementById("summaryItems");
 
-    const totalBox = document.getElementById("total");
+    const summaryTotal =
+        document.getElementById("summaryTotal");
 
-    const summaryBox = document.getElementById("summaryItems");
 
-    const summaryTotal = document.getElementById("summaryTotal");
+    /* ---------- CART COUNT ---------- */
 
-    let total = 0;
+    if (cartCount) {
+
+        const count = cart.reduce(
+            (sum, item) =>
+                sum + Number(item.quantity || 0),
+            0
+        );
+
+        cartCount.innerText =
+            count > 0 ? `(${count})` : "(0)";
+
+    }
+
+
+    /* ---------- CLEAR OLD CONTENT ---------- */
 
     if (cartBox) {
-
         cartBox.innerHTML = "";
-
     }
 
     if (summaryBox) {
-
         summaryBox.innerHTML = "";
-
     }
+
+
+    /* ---------- EMPTY CART ---------- */
 
     if (cart.length === 0) {
 
         if (cartBox) {
 
-            cartBox.innerHTML = "<h3>Your cart is empty 🛒</h3>";
+            cartBox.innerHTML =
+                "<h3>Your cart is empty 🛒</h3>";
 
         }
 
         if (summaryBox) {
 
-            summaryBox.innerHTML = "No items added";
+            summaryBox.innerHTML =
+                "No items added";
 
         }
 
         if (totalBox) {
 
-            totalBox.innerHTML = "0";
+            totalBox.innerText = "0";
 
         }
 
         if (summaryTotal) {
 
-            summaryTotal.innerHTML = "0";
+            summaryTotal.innerText = "0";
 
         }
 
@@ -145,80 +261,125 @@ if (cartCount) {
 
     }
 
+
+    /* ---------- DISPLAY ITEMS ---------- */
+
+    let total = 0;
+
     cart.forEach((item, index) => {
 
-        const itemTotal = item.price * item.quantity;
+        const price =
+            Number(item.price) || 0;
+
+        const quantity =
+            Number(item.quantity) || 0;
+
+        const itemTotal =
+            price * quantity;
 
         total += itemTotal;
 
+
+        /* ---------- CART ITEM ---------- */
+
         if (cartBox) {
 
-            cartBox.innerHTML += `
+            const cartItem =
+                document.createElement("div");
 
-            <div class="cart-item">
+            cartItem.className = "cart-item";
 
-                <h3>${item.name}</h3>
+            cartItem.innerHTML = `
+
+                <h3>${escapeHTML(item.name)}</h3>
 
                 <p>
-    ${item.weight ? item.weight + " × " : ""}
-    ₹${item.price} × ${item.quantity}
-</p>
-                <button onclick="changeQuantity(${index}, -1)">
+                    ${item.weight
+                        ? escapeHTML(item.weight) + " × "
+                        : ""
+                    }
+                    ₹${price} × ${quantity}
+                </p>
+
+                <button
+                    type="button"
+                    onclick="changeQuantity(${index}, -1)"
+                >
                     −
                 </button>
 
-                <button onclick="changeQuantity(${index}, 1)">
+                <button
+                    type="button"
+                    onclick="changeQuantity(${index}, 1)"
+                >
                     +
                 </button>
 
-                <button onclick="removeItem(${index})">
+                <button
+                    type="button"
+                    onclick="removeItem(${index})"
+                >
                     ❌ Remove
                 </button>
 
-            </div>
-
             `;
+
+            cartBox.appendChild(cartItem);
 
         }
 
+
+        /* ---------- ORDER SUMMARY ---------- */
+
         if (summaryBox) {
 
-            summaryBox.innerHTML += `
+            const summaryItem =
+                document.createElement("p");
 
-            <p>
-    ${item.name}
-    ${item.weight ? "(" + item.weight + ")" : ""}
-    × ${item.quantity}
-    = ₹${itemTotal}
-</p>
+            summaryItem.innerText =
+                `${item.name}` +
+                `${item.weight ? ` (${item.weight})` : ""}` +
+                ` × ${quantity} = ₹${itemTotal}`;
 
-            `;
+            summaryBox.appendChild(summaryItem);
 
         }
 
     });
 
+
+    /* ---------- TOTAL ---------- */
+
     if (totalBox) {
 
-        totalBox.innerHTML = total;
+        totalBox.innerText = total;
 
     }
 
     if (summaryTotal) {
 
-        summaryTotal.innerHTML = total;
+        summaryTotal.innerText = total;
 
     }
 
 }
 
-// ==========================
-// CHANGE QUANTITY
-// ==========================
+
+/* ==========================================
+   CHANGE QUANTITY
+========================================== */
 
 function changeQuantity(index, change) {
 
-    cart[index].quantity += change;
+    if (!cart[index]) {
+
+        return;
+
+    }
+
+    cart[index].quantity =
+        Number(cart[index].quantity) + Number(change);
+
 
     if (cart[index].quantity <= 0) {
 
@@ -226,21 +387,50 @@ function changeQuantity(index, change) {
 
     }
 
+    saveCart();
+
     displayCart();
 
 }
 
-// ==========================
-// REMOVE ITEM
-// ==========================
+
+/* ==========================================
+   REMOVE ITEM
+========================================== */
 
 function removeItem(index) {
 
+    if (!cart[index]) {
+
+        return;
+
+    }
+
     cart.splice(index, 1);
+
+    saveCart();
 
     displayCart();
 
 }
+
+
+/* ==========================================
+   ESCAPE HTML
+========================================== */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
 /* ==========================================
    CHECKOUT
 ========================================== */
@@ -248,112 +438,167 @@ function removeItem(index) {
 const checkoutForm =
     document.getElementById("checkoutForm");
 
+
 if (checkoutForm) {
 
-    checkoutForm.addEventListener("submit", function (e) {
+    checkoutForm.addEventListener(
+        "submit",
+        function (e) {
 
-        e.preventDefault();
-
-        // Empty Cart Check
-        if (cart.length === 0) {
-
-            alert("Your cart is empty!");
-
-            return;
-
-        }
-
-        const name =
-            document.getElementById("customerName").value.trim();
-
-        const address =
-            document.getElementById("customerAddress").value.trim();
-
-        const phone =
-            document.getElementById("customerPhone").value.trim();
-
-        const paymentInput =
-            document.querySelector(
-                'input[name="payment"]:checked'
-            );
-
-        if (!paymentInput) {
-
-            alert("Please select a payment method.");
-
-            return;
-
-        }
-
-        const paymentMethod =
-            paymentInput.value;
+            e.preventDefault();
 
 
-        // ==========================================
-        // ORDER ID + DATE + TIME
-        // ==========================================
+            /* ---------- EMPTY CART ---------- */
 
-        const now = new Date();
+            if (cart.length === 0) {
 
-        const orderId =
-            "ZSH-" +
-            Date.now().toString().slice(-6);
+                alert("Your cart is empty!");
 
-        const billDate =
-            now.toLocaleDateString("en-IN");
+                return;
 
-        const billTime =
-            now.toLocaleTimeString(
-                "en-IN",
-                {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                }
-            );
+            }
 
 
-        // ==========================================
-        // CALCULATE ORDER
-        // ==========================================
+            /* ---------- CUSTOMER DETAILS ---------- */
 
-        let subtotal = 0;
+            const nameInput =
+                document.getElementById("customerName");
 
-        let order = "";
+            const addressInput =
+                document.getElementById("customerAddress");
 
-        cart.forEach(item => {
+            const phoneInput =
+                document.getElementById("customerPhone");
 
-            const itemTotal =
-                item.price * item.quantity;
 
-            subtotal += itemTotal;
+            const name =
+                nameInput
+                    ? nameInput.value.trim()
+                    : "";
 
-            order +=
+            const address =
+                addressInput
+                    ? addressInput.value.trim()
+                    : "";
+
+            const phone =
+                phoneInput
+                    ? phoneInput.value.trim()
+                    : "";
+
+
+            if (!name || !address || !phone) {
+
+                alert(
+                    "Please fill all customer details."
+                );
+
+                return;
+
+            }
+
+
+            /* ---------- PAYMENT ---------- */
+
+            const paymentInput =
+                document.querySelector(
+                    'input[name="payment"]:checked'
+                );
+
+
+            if (!paymentInput) {
+
+                alert(
+                    "Please select a payment method."
+                );
+
+                return;
+
+            }
+
+
+            const paymentMethod =
+                paymentInput.value;
+
+
+            /* ==========================================
+               ORDER ID + DATE + TIME
+            ========================================== */
+
+            const now = new Date();
+
+
+            const orderId =
+                "ZSH-" +
+                Date.now()
+                    .toString()
+                    .slice(-6);
+
+
+            const billDate =
+                now.toLocaleDateString("en-IN");
+
+
+            const billTime =
+                now.toLocaleTimeString(
+                    "en-IN",
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                );
+
+
+            /* ==========================================
+               CALCULATE ORDER
+            ========================================== */
+
+            let subtotal = 0;
+
+            let order = "";
+
+
+            cart.forEach(item => {
+
+                const itemTotal =
+                    Number(item.price) *
+                    Number(item.quantity);
+
+
+                subtotal += itemTotal;
+
+
+                order +=
 `${item.name}
-${item.weight ? `Weight : ${item.weight}
-` : ""}Qty : ${item.quantity}
+${item.weight
+    ? `Weight : ${item.weight}\n`
+    : ""
+}Qty : ${item.quantity}
 Price : ₹${itemTotal}
 
 `;
 
-        });
+            });
 
 
-        // Future-ready
-        const discount = 0;
+            /* ---------- FUTURE READY ---------- */
 
-        const deliveryCharge = 0;
+            const discount = 0;
 
-        const grandTotal =
-            subtotal -
-            discount +
-            deliveryCharge;
+            const deliveryCharge = 0;
 
 
-        // ==========================================
-        // WHATSAPP MESSAGE
-        // ==========================================
+            const grandTotal =
+                subtotal -
+                discount +
+                deliveryCharge;
 
-        const message =
+
+            /* ==========================================
+               WHATSAPP MESSAGE
+            ========================================== */
+
+            const message =
 `New Order - Zaid's Sweet House
 
 Order ID : ${orderId}
@@ -382,57 +627,79 @@ Delivery : ₹${deliveryCharge}
 Grand Total : ₹${grandTotal}`;
 
 
-        const whatsappURL =
-            `https://wa.me/919424708856?text=${encodeURIComponent(message)}`;
+            const whatsappURL =
+                `https://wa.me/919424708856?text=${encodeURIComponent(message)}`;
 
 
-        // ==========================================
-        // BILL CUSTOMER DETAILS
-        // ==========================================
+            /* ==========================================
+               CUSTOMER DIGITAL BILL
+            ========================================== */
 
-        document.getElementById("billOrderId").innerText =
-            orderId;
+            setBillText(
+                "billOrderId",
+                orderId
+            );
 
-        document.getElementById("billDate").innerText =
-            `${billDate} | ${billTime}`;
+            setBillText(
+                "billDate",
+                `${billDate} | ${billTime}`
+            );
 
-        document.getElementById("billCustomerName").innerText =
-            name;
+            setBillText(
+                "billCustomerName",
+                name
+            );
 
-        document.getElementById("billCustomerPhone").innerText =
-            phone;
+            setBillText(
+                "billCustomerPhone",
+                phone
+            );
 
-        document.getElementById("billCustomerAddress").innerText =
-            address;
+            setBillText(
+                "billCustomerAddress",
+                address
+            );
 
-        document.getElementById("billPaymentMethod").innerText =
-            paymentMethod;
+            setBillText(
+                "billPaymentMethod",
+                paymentMethod
+            );
 
 
-        // ==========================================
-        // BILL ITEMS
-        // ==========================================
+            /* ==========================================
+               BILL ITEMS
+            ========================================== */
 
-        const billItems =
-            document.getElementById("billItems");
+            const billItems =
+                document.getElementById("billItems");
 
-        if (billItems) {
 
-            billItems.innerHTML = "";
+            if (billItems) {
 
-            cart.forEach(item => {
+                billItems.innerHTML = "";
 
-                const itemTotal =
-                    item.price * item.quantity;
 
-                billItems.innerHTML += `
+                cart.forEach(item => {
 
-                    <tr>
+                    const itemTotal =
+                        Number(item.price) *
+                        Number(item.quantity);
 
-                        <td>${item.name}</td>
+
+                    const row =
+                        document.createElement("tr");
+
+
+                    row.innerHTML = `
 
                         <td>
-                            ${item.weight || "-"}
+                            ${escapeHTML(item.name)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                item.weight || "-"
+                            )}
                         </td>
 
                         <td>
@@ -447,162 +714,281 @@ Grand Total : ₹${grandTotal}`;
                             ₹${itemTotal}
                         </td>
 
-                    </tr>
+                    `;
 
-                `;
 
-            });
+                    billItems.appendChild(row);
+
+                });
+
+            }
+
+
+            /* ==========================================
+               BILL TOTALS
+            ========================================== */
+
+            setBillText(
+                "billSubtotal",
+                subtotal
+            );
+
+            setBillText(
+                "billDiscount",
+                discount
+            );
+
+            setBillText(
+                "billDelivery",
+                deliveryCharge
+            );
+
+            setBillText(
+                "billGrandTotal",
+                grandTotal
+            );
+
+
+            /* ==========================================
+               SHOW DIGITAL BILL
+            ========================================== */
+
+            const customerBill =
+                document.getElementById("customerBill");
+
+
+            if (customerBill) {
+
+                customerBill.style.display =
+                    "block";
+
+
+                customerBill.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }
+
+
+            /* ==========================================
+               OPEN WHATSAPP
+            ========================================== */
+
+            window.open(
+                whatsappURL,
+                "_blank"
+            );
+
+
+            /* ==========================================
+               CLEAR CART
+            ========================================== */
+
+            cart = [];
+
+            saveCart();
+
+            displayCart();
+
+
+            /* ==========================================
+               RESET CHECKOUT FORM
+            ========================================== */
+
+            checkoutForm.reset();
 
         }
-
-
-        // ==========================================
-        // BILL TOTALS
-        // ==========================================
-
-        document.getElementById("billSubtotal").innerText =
-            subtotal;
-
-        document.getElementById("billDiscount").innerText =
-            discount;
-
-        document.getElementById("billDelivery").innerText =
-            deliveryCharge;
-
-        document.getElementById("billGrandTotal").innerText =
-            grandTotal;
-
-
-        // ==========================================
-        // SHOW BILL
-        // ==========================================
-
-        const customerBill =
-            document.getElementById("customerBill");
-
-        if (customerBill) {
-
-            customerBill.style.display = "block";
-
-            customerBill.scrollIntoView({
-                behavior: "smooth"
-            });
-
-        }
-
-
-        // ==========================================
-        // OPEN WHATSAPP
-        // ==========================================
-
-        window.open(
-            whatsappURL,
-            "_blank"
-        );
-
-
-        // Clear Cart
-        cart = [];
-
-        displayCart();
-
-        // Reset Form
-        checkoutForm.reset();
-
-    });
+    );
 
 }
+
+
+/* ==========================================
+   BILL TEXT HELPER
+========================================== */
+
+function setBillText(id, value) {
+
+    const element =
+        document.getElementById(id);
+
+
+    if (element) {
+
+        element.innerText = value;
+
+    }
+
+}
+
+
+/* ==========================================
+   PRINT BILL
+========================================== */
+
+function printBill() {
+
+    const customerBill =
+        document.getElementById("customerBill");
+
+
+    if (!customerBill) {
+
+        alert("Bill not found.");
+
+        return;
+
+    }
+
+
+    window.print();
+
+}
+
+
 /* ==========================================
    SCROLL TO TOP
 ========================================== */
 
-const topBtn = document.getElementById("topBtn");
+const topBtn =
+    document.getElementById("topBtn");
+
 
 if (topBtn) {
 
-    window.addEventListener("scroll", () => {
+    window.addEventListener(
+        "scroll",
+        function () {
 
-        if (window.scrollY > 300) {
+            if (window.scrollY > 300) {
 
-            topBtn.style.display = "block";
+                topBtn.style.display =
+                    "block";
+
+            } else {
+
+                topBtn.style.display =
+                    "none";
+
+            }
 
         }
+    );
 
-        else {
 
-            topBtn.style.display = "none";
+    topBtn.addEventListener(
+        "click",
+        function () {
+
+            window.scrollTo({
+
+                top: 0,
+
+                behavior: "smooth"
+
+            });
 
         }
-
-    });
-
-    topBtn.addEventListener("click", () => {
-
-        window.scrollTo({
-
-            top: 0,
-
-            behavior: "smooth"
-
-        });
-
-    });
+    );
 
 }
+
+
 /* ==========================================
    SEARCH PRODUCTS
 ========================================== */
 
-const searchFood = document.getElementById("searchFood");
+const searchFood =
+    document.getElementById("searchFood");
+
 
 if (searchFood) {
 
-    searchFood.addEventListener("keyup", () => {
+    searchFood.addEventListener(
+        "input",
+        function () {
 
-        const value = searchFood.value.toLowerCase();
+            const value =
+                searchFood.value
+                    .trim()
+                    .toLowerCase();
 
-        const cards = document.querySelectorAll(".card");
 
-        cards.forEach(card => {
+            const cards =
+                document.querySelectorAll(
+                    "#menu .card, .menu-container .card"
+                );
 
-            const productName = card
-                .querySelector("h3")
-                .innerText
-                .toLowerCase();
 
-            if (productName.includes(value)) {
+            cards.forEach(function (card) {
 
-                card.style.display = "block";
+                const titleElement =
+                    card.querySelector("h3");
 
-            } else {
 
-                card.style.display = "none";
+                if (!titleElement) {
 
-            }
+                    return;
 
-        });
+                }
 
-    });
+
+                const productName =
+                    titleElement.innerText
+                        .toLowerCase();
+
+
+                card.style.display =
+                    productName.includes(value)
+                        ? ""
+                        : "none";
+
+            });
+
+        }
+    );
 
 }
+
 
 /* ==========================================
    CATEGORY FILTER
 ========================================== */
 
-function filterFood(category){
+function filterFood(category) {
 
-    const cards = document.querySelectorAll(".card");
+    const cards =
+        document.querySelectorAll(
+            "#menu .card, .menu-container .card"
+        );
 
-    cards.forEach(function(card){
 
-        const itemCategory = card.getAttribute("data-category");
+    const selectedCategory =
+        String(category)
+            .trim()
+            .toLowerCase();
 
-        if(category === "all" || itemCategory === category){
 
-            card.style.display = "block";
+    cards.forEach(function (card) {
 
-        }else{
+        const itemCategory =
+            (
+                card.getAttribute("data-category") ||
+                ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        if (
+            selectedCategory === "all" ||
+            itemCategory === selectedCategory
+        ) {
+
+            card.style.display = "";
+
+        } else {
 
             card.style.display = "none";
 
@@ -613,87 +999,184 @@ function filterFood(category){
 }
 
 
-
 /* ==========================================
    MOBILE MENU
 ========================================== */
 
-const menuBtn = document.getElementById("menuBtn");
+const menuBtn =
+    document.getElementById("menuBtn");
 
-const navMenu = document.querySelector("nav ul");
+
+const navMenu =
+    document.querySelector("nav ul");
+
 
 if (menuBtn && navMenu) {
 
-    menuBtn.addEventListener("click", () => {
+    menuBtn.addEventListener(
+        "click",
+        function () {
 
-        navMenu.classList.toggle("active");
+            navMenu.classList.toggle("active");
 
-    });
+        }
+    );
+
+
+    /* ---------- CLOSE MENU AFTER CLICK ---------- */
+
+    navMenu.querySelectorAll("a").forEach(
+        function (link) {
+
+            link.addEventListener(
+                "click",
+                function () {
+
+                    navMenu.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+        }
+    );
 
 }
+
 
 /* ==========================================
    PAGE LOADER
 ========================================== */
 
-window.addEventListener("load", function () {
-    const loader = document.querySelector(".loader");
+window.addEventListener(
+    "load",
+    function () {
 
-    if(loader){
-        loader.style.display = "none";
+        const loader =
+            document.querySelector(".loader");
+
+
+        if (loader) {
+
+            loader.style.display =
+                "none";
+
+        }
+
     }
-})
+);
 
-/* ==========================================
-   LOCAL STORAGE
-========================================== */
-
-// Save Cart
-
-function saveCart() {}
 
 /* ==========================================
    CONTACT FORM
 ========================================== */
 
-const contactForm = document.getElementById("contactForm");
+const contactForm =
+    document.getElementById("contactForm");
+
 
 if (contactForm) {
 
-    contactForm.addEventListener("submit", function (e) {
+    contactForm.addEventListener(
+        "submit",
+        function (e) {
 
-        e.preventDefault();
+            e.preventDefault();
 
-        const name = contactForm.querySelector('input[type="text"]').value;
 
-        const email = contactForm.querySelector('input[type="email"]').value;
+            const nameInput =
+                contactForm.querySelector(
+                    'input[type="text"]'
+                );
 
-        const phone = contactForm.querySelector('input[type="tel"]').value;
 
-        const message = contactForm.querySelector("textarea").value;
+            const emailInput =
+                contactForm.querySelector(
+                    'input[type="email"]'
+                );
 
-        const whatsappMessage =
-`📩 *New Contact Message*
 
-👤 Name: ${name}
+            const phoneInput =
+                contactForm.querySelector(
+                    'input[type="tel"]'
+                );
 
-📧 Email: ${email}
 
-📞 Phone: ${phone}
+            const messageInput =
+                contactForm.querySelector(
+                    "textarea"
+                );
 
-💬 Message:
+
+            const name =
+                nameInput
+                    ? nameInput.value.trim()
+                    : "";
+
+
+            const email =
+                emailInput
+                    ? emailInput.value.trim()
+                    : "";
+
+
+            const phone =
+                phoneInput
+                    ? phoneInput.value.trim()
+                    : "";
+
+
+            const message =
+                messageInput
+                    ? messageInput.value.trim()
+                    : "";
+
+
+            if (!name || !phone || !message) {
+
+                alert(
+                    "Please fill all required fields."
+                );
+
+                return;
+
+            }
+
+
+            const whatsappMessage =
+`📩 New Contact Message
+
+Name: ${name}
+
+Email: ${email}
+
+Phone: ${phone}
+
+Message:
 ${message}`;
 
-        const whatsappURL =
-`https://wa.me/919424708856?text=${encodeURIComponent(whatsappMessage)}`;
 
-        window.open(whatsappURL, "_blank");
+            const whatsappURL =
+                `https://wa.me/919424708856?text=${encodeURIComponent(
+                    whatsappMessage
+                )}`;
 
-        contactForm.reset();
 
-    });
+            window.open(
+                whatsappURL,
+                "_blank"
+            );
+
+
+            contactForm.reset();
+
+        }
+    );
 
 }
+
+
 /* ==========================================
    START PAGE FROM TOP
 ========================================== */
@@ -702,14 +1185,33 @@ if (!window.location.hash) {
 
     history.scrollRestoration = "manual";
 
-    window.addEventListener("load", function () {
 
-        setTimeout(function () {
+    window.addEventListener(
+        "load",
+        function () {
 
-            window.scrollTo(0, 0);
+            setTimeout(
+                function () {
 
-        }, 100);
+                    window.scrollTo(
+                        0,
+                        0
+                    );
 
-    });
+                },
+                100
+            );
+
+        }
+    );
 
 }
+
+
+/* ==========================================
+   INITIALIZE CART
+========================================== */
+
+loadCart();
+
+displayCart();
