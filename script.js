@@ -279,21 +279,6 @@ ${order}
     });
 
 }
-/* ==========================================
-   DARK MODE
-========================================== */
-
-const darkBtn = document.getElementById("darkModeBtn");
-
-if (darkBtn) {
-
-    darkBtn.addEventListener("click", () => {
-
-        document.body.classList.toggle("dark");
-
-    });
-
-}
 
 /* ==========================================
    SCROLL TO TOP
@@ -473,6 +458,25 @@ ${message}`;
         window.open(whatsappURL, "_blank");
 
         contactForm.reset();
+
+    });
+
+}
+/* ==========================================
+   START PAGE FROM TOP
+========================================== */
+
+if (!window.location.hash) {
+
+    history.scrollRestoration = "manual";
+
+    window.addEventListener("load", function () {
+
+        setTimeout(function () {
+
+            window.scrollTo(0, 0);
+
+        }, 100);
 
     });
 
