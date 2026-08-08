@@ -1834,3 +1834,323 @@ footer p{
     font-size: 15px;
 
 }
+/* ==========================================
+   CUSTOMER DIGITAL BILL
+========================================== */
+
+.customer-bill {
+
+    display: none;
+
+    max-width: 850px;
+
+    margin: 50px auto;
+
+    padding: 35px;
+
+    background: #ffffff;
+
+    color: #222;
+
+    border-radius: 15px;
+
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+
+    font-family: Arial, sans-serif;
+
+}
+
+.bill-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    border-bottom: 2px solid #d35400;
+
+    padding-bottom: 20px;
+
+}
+
+.bill-header img {
+
+    width: 75px;
+
+    height: 75px;
+
+    object-fit: contain;
+
+    border-radius: 10px;
+
+}
+
+.bill-header h2 {
+
+    margin: 0 0 5px;
+
+    color: #d35400;
+
+    font-size: 28px;
+
+}
+
+.bill-header p {
+
+    margin: 4px 0;
+
+    color: #555;
+
+}
+
+.bill-title {
+
+    text-align: center;
+
+    margin: 25px 0;
+
+}
+
+.bill-title h2 {
+
+    color: #3b1f14;
+
+    margin-bottom: 10px;
+
+}
+
+.bill-title p {
+
+    margin: 5px;
+
+}
+
+.customer-details {
+
+    background: #fff8ed;
+
+    padding: 18px;
+
+    border-radius: 10px;
+
+    margin-bottom: 25px;
+
+}
+
+.customer-details p {
+
+    margin: 8px 0;
+
+}
+
+.bill-items {
+
+    overflow-x: auto;
+
+}
+
+.bill-items table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 600px;
+
+}
+
+.bill-items th {
+
+    background: #d35400;
+
+    color: white;
+
+    padding: 12px;
+
+}
+
+.bill-items td {
+
+    padding: 12px;
+
+    text-align: center;
+
+    border-bottom: 1px solid #ddd;
+
+}
+
+.bill-total {
+
+    margin-top: 25px;
+
+    margin-left: auto;
+
+    max-width: 300px;
+
+    text-align: right;
+
+}
+
+.bill-total p {
+
+    margin: 8px 0;
+
+}
+
+.bill-total h3 {
+
+    color: #d35400;
+
+    font-size: 22px;
+
+    border-top: 2px solid #ddd;
+
+    padding-top: 12px;
+
+}
+
+.bill-payment {
+
+    margin-top: 25px;
+
+    padding: 15px;
+
+    background: #f8f8f8;
+
+    border-radius: 10px;
+
+}
+
+.bill-footer {
+
+    text-align: center;
+
+    margin-top: 30px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #ddd;
+
+    color: #666;
+
+}
+
+.print-bill-btn {
+
+    display: block;
+
+    margin: 25px auto 0;
+
+    padding: 12px 25px;
+
+    background: #d35400;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+}
+
+.print-bill-btn:hover {
+
+    background: #a84300;
+
+}
+
+
+/* ==========================================
+   BILL PRINT VERSION
+========================================== */
+
+@media print {
+
+    body * {
+
+        visibility: hidden;
+
+    }
+
+    .customer-bill,
+    .customer-bill * {
+
+        visibility: visible;
+
+    }
+
+    .customer-bill {
+
+        display: block !important;
+
+        position: absolute;
+
+        left: 0;
+
+        top: 0;
+
+        width: 100%;
+
+        max-width: none;
+
+        margin: 0;
+
+        box-shadow: none;
+
+        border-radius: 0;
+
+    }
+
+    .print-bill-btn {
+
+        display: none;
+
+    }
+
+}
+@media(max-width:768px){
+
+    .customer-bill{
+
+        width:90%;
+
+        padding:20px;
+
+        margin:30px auto;
+
+    }
+
+    .bill-header{
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+    .bill-header h2{
+
+        font-size:23px;
+
+    }
+
+    .bill-items table{
+
+        min-width:550px;
+
+    }
+
+    .bill-total{
+
+        max-width:100%;
+
+        text-align:right;
+
+    }
+
+}

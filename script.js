@@ -5,6 +5,49 @@
 let cart = [];
 
 /* ==========================================
+   ADD WEIGHTED PRODUCT
+========================================== */
+
+function addWeightedProduct(name, pricePerKg, weightId) {
+
+    const weightSelect = document.getElementById(weightId);
+
+    const weight = parseFloat(weightSelect.value);
+
+    const weightText = weight === 1
+        ? "1 kg"
+        : `${weight * 1000}g`;
+
+    const finalPrice = Math.round(pricePerKg * weight);
+
+    const item = cart.find(
+        product =>
+            product.name === name &&
+            product.weight === weightText
+    );
+
+    if (item) {
+
+        item.quantity++;
+
+    } else {
+
+        cart.push({
+
+            name: name,
+            price: finalPrice,
+            quantity: 1,
+            weight: weightText
+
+        });
+
+    }
+
+    displayCart();
+
+}
+
+/* ==========================================
    ADD TO CART
 ========================================== */
 
@@ -38,6 +81,17 @@ function addToCart(name, price) {
 // ==========================
 
 function displayCart() {
+
+    const cartCount = document.getElementById("cartCount");
+
+if (cartCount) {
+    const count = cart.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+    );
+
+    cartCount.innerText = `(${count})`;
+}
 
     const cartBox = document.getElementById("cartItems");
 
@@ -106,11 +160,9 @@ function displayCart() {
                 <h3>${item.name}</h3>
 
                 <p>
-
-                    ₹${item.price} × ${item.quantity}
-
-                </p>
-
+    ${item.weight ? item.weight + " × " : ""}
+    ₹${item.price} × ${item.quantity}
+</p>
                 <button onclick="changeQuantity(${index}, -1)">
                     −
                 </button>
@@ -134,12 +186,11 @@ function displayCart() {
             summaryBox.innerHTML += `
 
             <p>
-
-                ${item.name} × ${item.quantity}
-
-                = ₹${itemTotal}
-
-            </p>
+    ${item.name}
+    ${item.weight ? "(" + item.weight + ")" : ""}
+    × ${item.quantity}
+    = ₹${itemTotal}
+</p>
 
             `;
 
@@ -194,7 +245,8 @@ function removeItem(index) {
    CHECKOUT
 ========================================== */
 
-const checkoutForm = document.getElementById("checkoutForm");
+const checkoutForm =
+    document.getElementById("checkoutForm");
 
 if (checkoutForm) {
 
@@ -211,47 +263,111 @@ if (checkoutForm) {
 
         }
 
-        const name = document.getElementById("customerName").value.trim();
+        const name =
+            document.getElementById("customerName").value.trim();
 
-        const address = document.getElementById("customerAddress").value.trim();
+        const address =
+            document.getElementById("customerAddress").value.trim();
 
-        const phone = document.getElementById("customerPhone").value.trim();
+        const phone =
+            document.getElementById("customerPhone").value.trim();
 
-        // Payment Method
-        const paymentMethod = document.querySelector(
-            'input[name="payment"]:checked'
-        ).value;
+        const paymentInput =
+            document.querySelector(
+                'input[name="payment"]:checked'
+            );
+
+        if (!paymentInput) {
+
+            alert("Please select a payment method.");
+
+            return;
+
+        }
+
+        const paymentMethod =
+            paymentInput.value;
+
+
+        // ==========================================
+        // ORDER ID + DATE + TIME
+        // ==========================================
+
+        const now = new Date();
+
+        const orderId =
+            "ZSH-" +
+            Date.now().toString().slice(-6);
+
+        const billDate =
+            now.toLocaleDateString("en-IN");
+
+        const billTime =
+            now.toLocaleTimeString(
+                "en-IN",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            );
+
+
+        // ==========================================
+        // CALCULATE ORDER
+        // ==========================================
+
+        let subtotal = 0;
 
         let order = "";
 
-        let total = 0;
-
         cart.forEach(item => {
 
-            const itemTotal = item.price * item.quantity;
+            const itemTotal =
+                item.price * item.quantity;
 
-            total += itemTotal;
+            subtotal += itemTotal;
 
             order +=
 `${item.name}
-Qty : ${item.quantity}
+${item.weight ? `Weight : ${item.weight}
+` : ""}Qty : ${item.quantity}
 Price : ₹${itemTotal}
 
 `;
 
         });
 
+
+        // Future-ready
+        const discount = 0;
+
+        const deliveryCharge = 0;
+
+        const grandTotal =
+            subtotal -
+            discount +
+            deliveryCharge;
+
+
+        // ==========================================
+        // WHATSAPP MESSAGE
+        // ==========================================
+
         const message =
+`New Order - Zaid's Sweet House
 
-`🍬 *New Order - Zaid's Sweet House*
+Order ID : ${orderId}
 
-👤 Name : ${name}
+Name : ${name}
 
-📍 Address : ${address}
+Address : ${address}
 
-📞 Phone : ${phone}
+Phone : ${phone}
 
-💳 Payment : ${paymentMethod}
+Payment : ${paymentMethod}
+
+Date : ${billDate}
+Time : ${billTime}
 
 -------------------------
 
@@ -259,27 +375,143 @@ ${order}
 
 -------------------------
 
-💰 Total : ₹${total}`;
+Subtotal : ₹${subtotal}
+Discount : ₹${discount}
+Delivery : ₹${deliveryCharge}
+
+Grand Total : ₹${grandTotal}`;
+
 
         const whatsappURL =
-`https://wa.me/919424708856?text=${encodeURIComponent(message)}`;
+            `https://wa.me/919424708856?text=${encodeURIComponent(message)}`;
 
-        window.open(whatsappURL, "_blank");
+
+        // ==========================================
+        // BILL CUSTOMER DETAILS
+        // ==========================================
+
+        document.getElementById("billOrderId").innerText =
+            orderId;
+
+        document.getElementById("billDate").innerText =
+            `${billDate} | ${billTime}`;
+
+        document.getElementById("billCustomerName").innerText =
+            name;
+
+        document.getElementById("billCustomerPhone").innerText =
+            phone;
+
+        document.getElementById("billCustomerAddress").innerText =
+            address;
+
+        document.getElementById("billPaymentMethod").innerText =
+            paymentMethod;
+
+
+        // ==========================================
+        // BILL ITEMS
+        // ==========================================
+
+        const billItems =
+            document.getElementById("billItems");
+
+        if (billItems) {
+
+            billItems.innerHTML = "";
+
+            cart.forEach(item => {
+
+                const itemTotal =
+                    item.price * item.quantity;
+
+                billItems.innerHTML += `
+
+                    <tr>
+
+                        <td>${item.name}</td>
+
+                        <td>
+                            ${item.weight || "-"}
+                        </td>
+
+                        <td>
+                            ${item.quantity}
+                        </td>
+
+                        <td>
+                            ₹${item.price}
+                        </td>
+
+                        <td>
+                            ₹${itemTotal}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            });
+
+        }
+
+
+        // ==========================================
+        // BILL TOTALS
+        // ==========================================
+
+        document.getElementById("billSubtotal").innerText =
+            subtotal;
+
+        document.getElementById("billDiscount").innerText =
+            discount;
+
+        document.getElementById("billDelivery").innerText =
+            deliveryCharge;
+
+        document.getElementById("billGrandTotal").innerText =
+            grandTotal;
+
+
+        // ==========================================
+        // SHOW BILL
+        // ==========================================
+
+        const customerBill =
+            document.getElementById("customerBill");
+
+        if (customerBill) {
+
+            customerBill.style.display = "block";
+
+            customerBill.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        }
+
+
+        // ==========================================
+        // OPEN WHATSAPP
+        // ==========================================
+
+        window.open(
+            whatsappURL,
+            "_blank"
+        );
+
 
         // Clear Cart
-
         cart = [];
 
         displayCart();
 
         // Reset Form
-
         checkoutForm.reset();
 
     });
 
 }
-
 /* ==========================================
    SCROLL TO TOP
 ========================================== */
