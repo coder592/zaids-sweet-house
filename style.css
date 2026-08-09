@@ -1776,3 +1776,128 @@ body {
     }
 
 }
+/* ==========================================
+   FINAL UPDATE - MOBILE NAVBAR
+========================================== */
+
+@media (max-width: 768px) {
+
+    nav {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        min-height: 64px;
+        padding: 10px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        box-sizing: border-box;
+    }
+
+    .logo {
+        flex: 1;
+        min-width: 0;
+        gap: 7px;
+        font-size: 18px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .logo img {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+    }
+
+    .logo span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .menu-btn {
+        display: block;
+        flex-shrink: 0;
+        width: 42px;
+        font-size: 28px;
+        text-align: center;
+    }
+
+    nav ul {
+        top: 64px;
+        left: 0;
+        width: 100%;
+        padding: 10px 0;
+        box-sizing: border-box;
+    }
+
+    nav ul li {
+        width: 100%;
+        margin: 3px 0;
+    }
+
+    nav ul li a {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    #darkModeBtn {
+        display: none;
+    }
+}
+
+
+/* ==========================================
+   FINAL UPDATE - PRODUCT CARD ALIGNMENT
+========================================== */
+
+@media (max-width: 600px) {
+
+    #menu .menu-container {
+        align-items: stretch;
+    }
+
+    #menu .menu-container .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        box-sizing: border-box;
+    }
+
+    #menu .menu-container .card img {
+        flex-shrink: 0;
+    }
+
+    #menu .menu-container .card h3 {
+        min-height: 29px;
+    }
+
+    #menu .menu-container .card .rating {
+        min-height: 14px;
+    }
+
+    #menu .menu-container .card .price {
+        min-height: 17px;
+    }
+
+    #menu .menu-container .card .offer {
+        min-height: 13px;
+    }
+
+    #menu .menu-container .card button {
+        margin-top: auto;
+    }
+}
+
+
+/* ==========================================
+   FINAL UPDATE - REMOVE FLOATING BUTTONS
+========================================== */
+
+.whatsapp-btn,
+#topBtn {
+    display: none !important;
+}
