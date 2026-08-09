@@ -153,7 +153,7 @@ nav ul li a:hover {
         ),
         url("images/hero.jpg");
 
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
 }
@@ -1996,5 +1996,13 @@ body {
         display: block;
         padding: 8px 12px;
         font-size: 13px;
+    }
+}
+@media (max-width: 768px) {
+    .hero {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #3b1f12;
     }
 }
