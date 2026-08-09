@@ -1901,3 +1901,100 @@ body {
 #topBtn {
     display: none !important;
 }
+/* ==========================================
+   FINAL NAVBAR CORRECTION
+========================================== */
+
+@media (max-width: 768px) {
+
+    nav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+
+        width: 100%;
+        min-height: 58px;
+        height: 58px;
+
+        padding: 8px 14px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        box-sizing: border-box;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        width: auto;
+        flex: 0 1 auto;
+
+        font-size: 19px;
+        white-space: nowrap;
+    }
+
+    .logo img {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+    }
+
+    /* 3-line menu button */
+    .menu-btn {
+        display: block;
+        width: auto;
+        flex-shrink: 0;
+
+        font-size: 28px;
+        line-height: 1;
+        color: #fff;
+    }
+
+    nav ul {
+        position: absolute;
+
+        top: 58px;
+        left: 0;
+
+        width: 100%;
+
+        display: none;
+
+        flex-direction: column;
+        align-items: center;
+
+        padding: 10px 0;
+
+        background: #222;
+        box-sizing: border-box;
+    }
+
+    nav ul.active {
+        display: flex;
+    }
+
+    nav ul li {
+        width: 100%;
+        margin: 3px 0;
+        text-align: center;
+    }
+
+    nav ul li a {
+        display: block;
+        width: 100%;
+        padding: 9px 10px;
+        box-sizing: border-box;
+    }
+
+    /* Dark mode button ko hide nahi karna */
+    #darkModeBtn {
+        display: block;
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}
