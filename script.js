@@ -958,32 +958,28 @@ if (searchFood) {
 
 function filterFood(category) {
 
-    const cards =
-        document.querySelectorAll(
-            "#menu .card, .menu-container .card"
-        );
+    const container = document.querySelector("#menu .menu-container");
+    const cards = document.querySelectorAll("#menu .menu-container .card");
 
+    if (!container) return;
 
-    const selectedCategory =
-        String(category)
-            .trim()
-            .toLowerCase();
+    if (category === "all") {
 
+        container.classList.remove("filtered");
 
-    cards.forEach(function (card) {
+    } else {
 
-        const itemCategory =
-            (
-                card.getAttribute("data-category") ||
-                ""
-            )
-            .trim()
-            .toLowerCase();
+        container.classList.add("filtered");
 
+    }
+
+    cards.forEach(function(card) {
+
+        const itemCategory = card.getAttribute("data-category");
 
         if (
-            selectedCategory === "all" ||
-            itemCategory === selectedCategory
+            category === "all" ||
+            itemCategory === category
         ) {
 
             card.style.display = "";
@@ -997,7 +993,6 @@ function filterFood(category) {
     });
 
 }
-
 
 /* ==========================================
    MOBILE MENU
