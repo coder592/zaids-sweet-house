@@ -947,6 +947,33 @@ function filterFood(category) {
 }
 
 /* ==========================================
+   INSTAGRAM AD CATEGORY
+========================================== */
+
+function applyCategoryFromURL() {
+
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+    const category = params.get("category");
+
+    const validCategories = [
+        "all",
+        "sweets",
+        "cakes",
+        "farsan"
+    ];
+
+    if (validCategories.includes(category)) {
+
+        filterFood(category);
+
+    }
+
+}
+
+/* ==========================================
    MOBILE MENU
 ========================================== */
 
@@ -1162,3 +1189,5 @@ if (!window.location.hash) {
 loadCart();
 
 displayCart();
+
+applyCategoryFromURL();
