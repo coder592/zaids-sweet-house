@@ -175,18 +175,15 @@ nav ul li a:hover {
 ========================================== */
 
 .offer-banner {
-    background:
-        linear-gradient(
-            135deg,
-            #d35400,
-            #ff9f43
-        );
-
+    background: linear-gradient(
+        135deg,
+        #3b1f14,
+        #7a4a2e
+    );
     color: #fff;
     text-align: center;
     padding: 60px 20px;
 }
-
 .offer-banner h2 {
     font-size: 40px;
     margin-bottom: 15px;
@@ -2010,7 +2007,7 @@ body {
 @media (max-width: 768px) {
 
     .hero {
-        height: 50vw;
+        height: 58vw;
         min-height: 0;
         padding: 0;
 
@@ -2027,4 +2024,32 @@ body {
         display: none;
     }
 
+}
+@media (max-width: 600px) {
+
+    .offer-banner {
+        padding: 40px 18px;
+    }
+
+    .offer-banner h2 {
+        font-size: 32px;
+        line-height: 1.25;
+    }
+
+    .offer-banner p {
+        font-size: 17px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    .offer-banner button {
+        padding: 11px 24px;
+        font-size: 16px;
+    }
+
+}
+.hero h1,
+.hero p,
+.hero a {
+    display: none;
 }
