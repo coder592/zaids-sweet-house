@@ -2003,3 +2003,26 @@ body {
         background-color: #3b1f12;
     }
 }
+/* ==========================================
+   MOBILE HERO - IMAGE ONLY
+========================================== */
+
+@media (max-width: 768px) {
+
+    .hero {
+        min-height: 0;
+        height: auto;
+        padding: 0;
+
+        background-size: 100% auto;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .hero h1,
+    .hero p,
+    .hero a {
+        display: none;
+    }
+
+}
