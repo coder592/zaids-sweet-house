@@ -2004,19 +2004,21 @@ body {
     }
 }
 /* ==========================================
-   MOBILE HERO - IMAGE ONLY
+   MOBILE HERO - FULL IMAGE
 ========================================== */
 
 @media (max-width: 768px) {
 
     .hero {
+        height: 50vw;
         min-height: 0;
-        height: auto;
         padding: 0;
 
-        background-size: 100% auto;
+        background-size: 100% 100%;
         background-position: center;
         background-repeat: no-repeat;
+
+        display: block;
     }
 
     .hero h1,
