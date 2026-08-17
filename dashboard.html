@@ -3,138 +3,482 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Admin Dashboard | Zaid's Sweet House</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<link rel="stylesheet" href="style.css">
+    <title>Admin Dashboard | Zaid's Sweet House</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
+
 <body>
 
-<section class="dashboard">
 
-<h1>Admin Dashboard</h1>
+<script>
 
-<div class="dashboard-container">
+/* ==========================================
+   ADMIN DASHBOARD SECURITY
+========================================== */
 
-<a href="products.html" class="dashboard-link">
+(function () {
 
-<div class="dashboard-card">
+    if (
+        sessionStorage.getItem("adminLoggedIn")
+        !== "true"
+    ) {
 
-<h2>📦 Products</h2>
+        window.location.replace("admin.html");
 
-<p>
-Add, Edit & Delete Products
-</p>
+        return;
 
-</div>
+    }
 
-</a>
 
-<a href="orders.html" class="dashboard-link">
+    window.history.replaceState(
+        null,
+        "",
+        window.location.href
+    );
 
-<div class="dashboard-card">
 
-<h2>🛒 Orders</h2>
+    window.addEventListener(
+        "popstate",
+        function () {
 
-<p>
-View Customer Orders
-</p>
+            window.history.pushState(
+                null,
+                "",
+                window.location.href
+            );
 
-</div>
+        }
+    );
 
-</a>
 
-<a href="customers.html" class="dashboard-link">
+    document.addEventListener(
+        "visibilitychange",
+        function () {
 
-<div class="dashboard-card">
+            if (
+                document.visibilityState ===
+                "visible"
+            ) {
 
-<h2>👥 Customers</h2>
+                if (
+                    sessionStorage.getItem(
+                        "adminLoggedIn"
+                    ) !== "true"
+                ) {
 
-<p>
-Customer Details
-</p>
+                    window.location.replace(
+                        "admin.html"
+                    );
 
-</div>
+                }
 
-</a>
+            }
 
-<a href="offers.html" class="dashboard-link">
+        }
+    );
 
-<div class="dashboard-card">
+})();
 
-<h2>🎉 Offers</h2>
 
-<p>
-Manage Festival Offers
-</p>
+window.addEventListener(
+    "pageshow",
+    function () {
 
-</div>
+        if (
+            sessionStorage.getItem(
+                "adminLoggedIn"
+            ) !== "true"
+        ) {
 
-</a>
+            window.location.replace(
+                "admin.html"
+            );
 
-<a href="gallery-admin.html" class="dashboard-link">
+        }
 
-<div class="dashboard-card">
+    }
+);
 
-<h2>🖼 Gallery</h2>
+</script>
 
-<p>
-Manage Gallery Images
-</p>
 
-</div>
 
-</a>
+<header class="admin-header">
 
-<a href="settings.html" class="dashboard-link">
+    <div>
 
-<div class="dashboard-card">
+        <h1>
+            🍬 Zaid's Sweet House
+        </h1>
 
-<h2>⚙ Settings</h2>
+        <p>
+            Admin Dashboard
+        </p>
 
-<p>
-Website Settings
-</p>
+    </div>
 
-</div>
 
-</a>
+    <button
+        type="button"
+        id="logoutAdminBtn"
+    >
+        🚪 Logout
+    </button>
 
-<a href="index.html" class="dashboard-link">
+</header>
 
-<div class="dashboard-card">
 
-<h2>🌐 View Website</h2>
 
-<p>
-Open Customer Website
-</p>
+<main class="admin-dashboard">
 
-</div>
 
-</a>
+    <h2>
+        Dashboard Overview
+    </h2>
 
-<a href="admin.html" class="dashboard-link">
 
-<div class="dashboard-card">
 
-<h2>🚪 Logout</h2>
+    <!-- ==========================================
+         STATISTICS
+    =========================================== -->
 
-<p>
-Back to Login
-</p>
+    <div class="admin-stats">
 
-</div>
 
-</a>
+        <div class="admin-stat-card">
 
-</div>
+            <h3>
+                📦 Total Orders
+            </h3>
 
-</section>
+            <p id="totalOrders">
+                0
+            </p>
+
+        </div>
+
+
+
+        <div class="admin-stat-card">
+
+            <h3>
+                💰 Total Sales
+            </h3>
+
+            <p>
+                ₹<span id="totalSales">0</span>
+            </p>
+
+        </div>
+
+
+
+        <div class="admin-stat-card">
+
+            <h3>
+                ⏳ Pending Orders
+            </h3>
+
+            <p id="pendingOrders">
+                0
+            </p>
+
+        </div>
+
+
+
+        <div class="admin-stat-card">
+
+            <h3>
+                ✅ Completed Orders
+            </h3>
+
+            <p id="completedOrders">
+                0
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ==========================================
+         CUSTOMER ORDERS
+    =========================================== -->
+
+    <section class="admin-orders">
+
+
+        <div class="admin-orders-header">
+
+            <h2>
+                📦 Customer Orders
+            </h2>
+
+
+            <button
+                type="button"
+                id="clearOrdersBtn"
+            >
+                🗑️ Clear Orders
+            </button>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             SEARCH & FILTER
+        =========================================== -->
+
+        <div class="admin-search">
+
+
+            <input
+                type="text"
+                id="adminOrderSearch"
+                placeholder="🔎 Search Order ID, customer or phone..."
+            >
+
+
+            <select id="adminStatusFilter">
+
+                <option value="all">
+                    All Orders
+                </option>
+
+                <option value="Pending">
+                    Pending
+                </option>
+
+                <option value="Confirmed">
+                    Confirmed
+                </option>
+
+                <option value="Preparing">
+                    Preparing
+                </option>
+
+                <option value="Delivered">
+                    Delivered
+                </option>
+
+                <option value="Cancelled">
+                    Cancelled
+                </option>
+
+            </select>
+
+
+        </div>
+
+
+
+        <!-- ==========================================
+             ORDERS
+        =========================================== -->
+
+        <div id="ordersList">
+
+            <div class="no-orders">
+
+                <h3>
+                    Loading orders...
+                </h3>
+
+                <p>
+                    Please wait.
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ==========================================
+     FIREBASE CONFIG
+=========================================== -->
+
+<script src="firebase-config.js"></script>
+
+<script type="module">
+
+    import { initializeApp } from
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+        getAuth,
+        onAuthStateChanged
+    } from
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+    import {
+        getFirestore,
+        collection,
+        getDocs,
+        updateDoc,
+        deleteDoc,
+        doc
+    } from
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+    /* ==========================================
+       FIREBASE INITIALIZATION
+    ========================================== */
+
+    const app =
+        initializeApp(
+            window.firebaseConfig
+        );
+
+
+    /* ==========================================
+       FIREBASE AUTH
+    ========================================== */
+
+    const auth =
+        getAuth(app);
+
+
+    /* ==========================================
+       FIRESTORE
+    ========================================== */
+
+    const db =
+        getFirestore(app);
+
+
+    window.firebaseDB =
+        db;
+
+
+    window.firebaseAuth =
+        auth;
+
+
+    window.firebaseUpdateDoc =
+        updateDoc;
+
+
+    window.firebaseDeleteDoc =
+        deleteDoc;
+
+
+    window.firebaseDoc =
+        doc;
+
+
+    /* ==========================================
+       FIREBASE ORDERS
+    ========================================== */
+
+    window.firebaseGetOrders =
+        async function () {
+
+            return await getDocs(
+                collection(
+                    db,
+                    "orders"
+                )
+            );
+
+        };
+
+
+    console.log(
+        "Firebase dashboard connected"
+    );
+
+
+    /* ==========================================
+       CHECK ADMIN AUTHENTICATION
+    ========================================== */
+
+    onAuthStateChanged(
+        auth,
+        function (user) {
+
+            if (!user) {
+
+                console.error(
+                    "Firebase admin authentication missing."
+                );
+
+                window.location.replace(
+                    "admin.html"
+                );
+
+                return;
+
+            }
+
+
+            console.log(
+                "Firebase admin authenticated:",
+                user.email
+            );
+
+
+            if (
+                user.email !==
+                "mdzaidqureshi28@gmail.com"
+            ) {
+
+                console.error(
+                    "Unauthorized Firebase account."
+                );
+
+                window.location.replace(
+                    "admin.html"
+                );
+
+                return;
+
+            }
+
+
+            /* ==========================================
+               AUTH READY → LOAD DASHBOARD
+            ========================================== */
+
+            if (
+                typeof window.loadAdminOrders ===
+                "function"
+            ) {
+
+                window.loadAdminOrders();
+
+            }
+
+        }
+    );
+
+</script>
+
+<script src="dashboard.js"></script>
 
 </body>
 

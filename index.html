@@ -1,26 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Zaid's Sweet House | Fresh Sweets, Cakes & Farsan</title>
 
     <meta name="description"
-        content="Zaid's Sweet House - Fresh Sweets, Cakes, Farsan and Seasonal Special Items. Order online with fast delivery.">
+          content="Zaid's Sweet House - Fresh Sweets, Cakes, Farsan and Seasonal Special Items.">
 
     <meta name="keywords"
-        content="sweet shop, sweets, cakes, farsan, bakery, online sweets">
+          content="sweet shop, sweets, cakes, farsan, bakery, online sweets">
 
-    <meta name="author"
-        content="Zaid's Sweet House">
+    <meta name="author" content="Zaid's Sweet House">
 
     <link rel="icon" href="images/logo.png">
-
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
@@ -29,30 +24,32 @@
 
 <nav>
 
-    <div class="logo">
-
-        <img src="images/logo.png" alt="Logo">
-
+    <a href="#home" class="logo">
+        <img src="images/logo.png" alt="Zaid's Sweet House Logo">
         <span>Zaid's Sweet House</span>
+    </a>
 
-    </div>
-
-    <div class="menu-btn" id="menuBtn">
+    <button class="menu-btn"
+            id="menuBtn"
+            type="button"
+            aria-label="Open menu">
         ☰
-    </div>
+    </button>
 
-    <ul>
+    <ul id="navMenu">
 
         <li><a href="#home">Home</a></li>
 
         <li><a href="#menu">Menu</a></li>
 
         <li>
-    <a href="#cart">
-        🛒 Cart <span id="cartCount">(0)</span>
-    </a>
-</li>
-        <li><a href="#gallery">Gallery</a></li> 
+            <a href="#cart">
+                🛒 Cart
+                <span id="cartCount">(0)</span>
+            </a>
+        </li>
+
+        <li><a href="#gallery">Gallery</a></li>
 
         <li><a href="#about">About</a></li>
 
@@ -60,99 +57,76 @@
 
     </ul>
 
-   
 </nav>
+
 
 <!-- ================= HERO ================= -->
 
 <section class="hero" id="home">
 
-    <h1>
-        Fresh Sweets, Cakes & Farsan
-    </h1>
+    <div class="hero-overlay"></div>
 
-    <p>
-        Made Fresh Every Day | Pure Taste | Fast Delivery
-    </p>
+    <div class="hero-content">
 
-    <a href="#menu">
-
-        <button>
-            Shop Now
-        </button>
-
-    </a>
+    </div>
 
 </section>
 
-<!-- ================= OFFER BANNER ================= -->
 
-<section class="offer-banner">
-
-    <h2>
-        🎉 Special Festival Offer 🎉
-    </h2>
-
-    <p>
-
-        Get up to
-        <strong>20% OFF</strong>
-
-        on selected sweets, cakes and farsan.
-
-    </p>
-
-    <a href="#menu">
-    <button>
-        Shop Offers
-    </button>
-    </a>
-
-</section>
-
-<!-- ================= FEATURES ================= -->
+<!-- ================= WHY CHOOSE US ================= -->
 
 <section class="features">
 
-    <h2>
-        Why Choose Us?
-    </h2>
+    <div class="features-heading">
+
+        <span class="features-label">WHY US</span>
+
+        <h2>Why Choose Us?</h2>
+
+        <p>
+            Quality, freshness and service you can trust.
+        </p>
+
+    </div>
 
     <div class="feature-container">
 
         <div class="feature-card">
+            <div class="feature-icon">🍬</div>
 
-            <h3>🍬 Fresh Sweets</h3>
+            <h3>Fresh Sweets</h3>
 
             <p>
                 Prepared daily using premium quality ingredients.
             </p>
-
         </div>
 
-        <div class="feature-card">
 
-            <h3>🚚 Fast Delivery</h3>
+        <div class="feature-card">
+            <div class="feature-icon">🚚</div>
+
+            <h3>Fast Delivery</h3>
 
             <p>
                 Safe and quick delivery to your doorstep.
             </p>
-
         </div>
 
-        <div class="feature-card">
 
-            <h3>⭐ Premium Quality</h3>
+        <div class="feature-card">
+            <div class="feature-icon">⭐</div>
+
+            <h3>Premium Quality</h3>
 
             <p>
                 Hygienic preparation with trusted taste.
             </p>
-
         </div>
 
     </div>
 
 </section>
+
 
 <!-- ================= MENU ================= -->
 
@@ -160,541 +134,752 @@
 
     <h2>Our Special Menu</h2>
 
+    <div class="menu-offer">
+    <button
+        type="button"
+        id="offersBtn"
+        disabled>
+        🎉 Offers
+    </button>
+</div>
+
     <div class="search-box">
-        <input type="text"
-               id="searchFood"
-               placeholder="Search products...">
+        <input
+            type="search"
+            id="searchFood"
+            placeholder="Search products..."
+            autocomplete="off">
     </div>
 
-    <div class="categories">
 
-        <div class="category-card"
-        onclick="filterFood('all')">
-            🍽️
-            <h3>All</h3>
-        </div>
+    <!-- MENU FILTERS -->
 
-        <div class="category-card" 
-        onclick="filterFood('sweets')">
-            🍬
-            <h3>Sweets</h3>
-        </div>
+<div class="menu-filter">
 
-        <div class="category-card" 
-        onclick="filterFood('cakes')">
-            🎂
-            <h3>Cakes</h3>
-        </div>
+    <span class="filter-label">Filter:</span>
 
-        <div class="category-card" 
-        onclick="filterFood('farsan')">
-            🥨
-            <h3>Farsan</h3>
-        </div>
+    <div class="filter-options">
+
+        <button
+            type="button"
+            class="filter-btn active"
+            onclick="filterFood('all')">
+            All
+        </button>
+
+        <button
+            type="button"
+            class="filter-btn"
+            onclick="filterFood('sweets')">
+            🍬 Sweets
+        </button>
+
+        <button
+            type="button"
+            class="filter-btn"
+            onclick="filterFood('cakes')">
+            🎂 Cakes
+        </button>
+
+        <button
+            type="button"
+            class="filter-btn"
+            onclick="filterFood('farsan')">
+            🥨 Farsan
+        </button>
 
     </div>
+
+</div>
+
+    <!-- PRODUCTS -->
 
     <div class="menu-container">
 
-        <!-- Product 1 -->
+
+        <!-- KAJU KATLI -->
 
         <div class="card" data-category="sweets">
 
-    <span class="badge">Best Seller</span>
+            <span class="badge">Best Seller</span>
 
-    <img src="images/kaju-katli.jpg" alt="Kaju Katli">
+            <img
+                src="images/kaju-katli.jpg"
+                alt="Kaju Katli"
+                loading="lazy">
 
-    <h3>Kaju Katli</h3>
+            <h3>Kaju Katli</h3>
 
-    <div class="rating">⭐⭐⭐⭐⭐</div>
+            <p class="price">₹699 / kg</p>
 
-    <p class="price">₹699 / kg</p>
+            <p class="offer">15% OFF</p>
 
-    <p class="offer">15% OFF</p>
+            <select id="weight-kaju-katli">
+                <option value="0.25">250g</option>
+                <option value="0.5">500g</option>
+                <option value="1" selected>1 kg</option>
+            </select>
 
-    <select id="weight-kaju-katli">
-        <option value="0.25">250g</option>
-        <option value="0.5">500g</option>
-        <option value="1" selected>1 kg</option>
-    </select>
+            <button
+                type="button"
+                onclick="addWeightedProduct(
+                    'Kaju Katli',
+                    699,
+                    'weight-kaju-katli'
+                )">
+                🛒 Add to Cart
+            </button>
 
-    <button onclick="addWeightedProduct('Kaju Katli',699,'weight-kaju-katli')">
-        🛒 Add to Cart
-    </button>
+        </div>
 
-</div>
+
+        <!-- GULAB JAMUN -->
 
         <div class="card" data-category="sweets">
 
-    <span class="badge">
-        Best Seller
-    </span>
+            <span class="badge">Best Seller</span>
 
-    <img src="images/gulab-jamun.jpg" alt="Gulab Jamun">
+            <img
+                src="images/gulab-jamun.jpg"
+                alt="Gulab Jamun"
+                loading="lazy">
 
-    <h3>Gulab Jamun</h3>
+            <h3>Gulab Jamun</h3>
 
-    <div class="rating">
-        ⭐⭐⭐⭐⭐
-    </div>
+            <p class="price">₹350 / kg</p>
 
-    <p class="price">
-        ₹350 / kg
-    </p>
+            <p class="offer">10% OFF</p>
 
-    <p class="offer">
-        10% OFF
-    </p>
+            <select id="weight-gulab-jamun">
+                <option value="0.25">250g</option>
+                <option value="0.5">500g</option>
+                <option value="1" selected>1 kg</option>
+            </select>
 
-    <select id="weight-gulab-jamun">
-        <option value="0.25">250g</option>
-        <option value="0.5">500g</option>
-        <option value="1" selected>1 kg</option>
-    </select>
+            <button
+                type="button"
+                onclick="addWeightedProduct(
+                    'Gulab Jamun',
+                    350,
+                    'weight-gulab-jamun'
+                )">
+                🛒 Add to Cart
+            </button>
 
-    <button onclick="addWeightedProduct('Gulab Jamun',350,'weight-gulab-jamun')">
-        🛒 Add to Cart
-    </button>
+        </div>
 
-</div>
 
-<div class="card" data-category="sweets">
+        <!-- RASGULLA -->
 
-    <span class="badge">
-        Fresh
-    </span>
+        <div class="card" data-category="sweets">
 
-    <img src="images/rasgulla.jpg" alt="Rasgulla">
+            <span class="badge">Fresh</span>
 
-    <h3>Rasgulla</h3>
+            <img
+                src="images/rasgulla.jpg"
+                alt="Rasgulla"
+                loading="lazy">
 
-    <div class="rating">
-        ⭐⭐⭐⭐⭐
-    </div>
+            <h3>Rasgulla</h3>
 
-    <p class="price">
-        ₹380 / kg
-    </p>
+            <p class="price">₹380 / kg</p>
 
-    <p class="offer">
-        15% OFF
-    </p>
+            <p class="offer">15% OFF</p>
 
-    <select id="weight-rasgulla">
-        <option value="0.25">250g</option>
-        <option value="0.5">500g</option>
-        <option value="1" selected>1 kg</option>
-    </select>
+            <select id="weight-rasgulla">
+                <option value="0.25">250g</option>
+                <option value="0.5">500g</option>
+                <option value="1" selected>1 kg</option>
+            </select>
 
-    <button onclick="addWeightedProduct('Rasgulla',380,'weight-rasgulla')">
-        🛒 Add to Cart
-    </button>
+            <button
+                type="button"
+                onclick="addWeightedProduct(
+                    'Rasgulla',
+                    380,
+                    'weight-rasgulla'
+                )">
+                🛒 Add to Cart
+            </button>
 
-</div>
+        </div>
 
-<div class="card" data-category="sweets">
 
-    <span class="badge">
-        Popular
-    </span>
+        <!-- MOTICHOOR LADDU -->
 
-    <img src="images/motichoor-laddu.jpg" alt="Motichoor Laddu">
+        <div class="card" data-category="sweets">
 
-    <h3>Motichoor Laddu</h3>
+            <span class="badge">Popular</span>
 
-    <div class="rating">
-        ⭐⭐⭐⭐⭐
-    </div>
+            <img
+                src="images/motichoor-laddu.jpg"
+                alt="Motichoor Laddu"
+                loading="lazy">
 
-    <p class="price">
-        ₹420 / kg
-    </p>
+            <h3>Motichoor Laddu</h3>
 
-    <p class="offer">
-        12% OFF
-    </p>
+            <p class="price">₹420 / kg</p>
 
-    <select id="weight-motichoor-laddu">
-        <option value="0.25">250g</option>
-        <option value="0.5">500g</option>
-        <option value="1" selected>1 kg</option>
-    </select>
+            <p class="offer">12% OFF</p>
 
-    <button onclick="addWeightedProduct('Motichoor Laddu',420,'weight-motichoor-laddu')">
-        🛒 Add to Cart
-    </button>
+            <select id="weight-motichoor-laddu">
+                <option value="0.25">250g</option>
+                <option value="0.5">500g</option>
+                <option value="1" selected>1 kg</option>
+            </select>
 
-</div>
+            <button
+                type="button"
+                onclick="addWeightedProduct(
+                    'Motichoor Laddu',
+                    420,
+                    'weight-motichoor-laddu'
+                )">
+                🛒 Add to Cart
+            </button>
 
-        <!-- Product 2 -->
+        </div>
+
+
+        <!-- CHOCOLATE CAKE -->
 
         <div class="card" data-category="cakes">
 
-    <span class="badge">
-        Popular
-    </span>
+            <span class="badge">Popular</span>
 
-    <img src="images/chocolate-cake.jpg" alt="Chocolate Cake">
+            <img
+                src="images/chocolate-cake.jpg"
+                alt="Chocolate Cake"
+                loading="lazy">
 
-    <h3>Chocolate Cake</h3>
+            <h3>Chocolate Cake</h3>
 
-    <div class="rating">
-        ⭐⭐⭐⭐⭐
-    </div>
+            <p class="price">₹599 / kg</p>
 
-    <p class="price">
-        ₹599 / kg
-    </p>
+            <p class="offer">20% OFF</p>
 
-    <p class="offer">
-        20% OFF
-    </p>
+            <select id="weight-chocolate-cake">
+                <option value="0.5">0.5 kg</option>
+                <option value="1" selected>1 kg</option>
+                <option value="1.5">1.5 kg</option>
+                <option value="2">2 kg</option>
+            </select>
 
-    <select id="weight-chocolate-cake">
-        <option value="0.5">0.5 kg</option>
-        <option value="1" selected>1 kg</option>
-        <option value="1.5">1.5 kg</option>
-        <option value="2">2 kg</option>
-    </select>
+            <button
+                type="button"
+                onclick="addWeightedProduct(
+                    'Chocolate Cake',
+                    599,
+                    'weight-chocolate-cake'
+                )">
+                🛒 Add to Cart
+            </button>
 
-    <button onclick="addWeightedProduct('Chocolate Cake',599,'weight-chocolate-cake')">
-        🛒 Add to Cart
-    </button>
+        </div>
 
-</div>
+
+        <!-- BLACK FOREST -->
+
         <div class="card" data-category="cakes">
 
-    <span class="badge">
-        Best Seller
-    </span>
+            <span class="badge">Best Seller</span>
 
-    <img src="images/black-forest.jpg" alt="Black Forest Cake">
+            <img
+                src="images/black-forest.jpg"
+                alt="Black Forest Cake"
+                loading="lazy">
 
-    <h3>Black Forest Cake</h3>
+            <h3>Black Forest Cake</h3>
 
-    <div class="rating">
-        ⭐⭐⭐⭐⭐
+            <p class="price">₹699 / kg</p>
+
+            <p class="offer">15% OFF</p>
+
+            <select id="weight-black-forest">
+                <option value="0.5">0.5 kg</option>
+                <option value="1" selected>1 kg</option>
+                <option value="1.5">1.5 kg</option>
+                <option value="2">2 kg</option>
+            </select>
+
+            <button
+                type="button"
+                onclick="addWeightedProduct(
+                    'Black Forest Cake',
+                    699,
+                    'weight-black-forest'
+                )">
+                🛒 Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- RED VELVET -->
+
+        <div class="card" data-category="cakes">
+
+            <span class="badge">Premium</span>
+
+            <img
+                src="images/red-velvet.jpg"
+                alt="Red Velvet Cake"
+                loading="lazy">
+
+            <h3>Red Velvet Cake</h3>
+
+            <p class="price">₹799 / kg</p>
+
+            <p class="offer">10% OFF</p>
+
+            <select id="weight-red-velvet">
+                <option value="0.5">0.5 kg</option>
+                <option value="1" selected>1 kg</option>
+                <option value="1.5">1.5 kg</option>
+                <option value="2">2 kg</option>
+            </select>
+
+            <button
+                type="button"
+                onclick="addWeightedProduct(
+                    'Red Velvet Cake',
+                    799,
+                    'weight-red-velvet'
+                )">
+                🛒 Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- BUTTERSCOTCH -->
+
+        <div class="card" data-category="cakes">
+
+            <span class="badge">Popular</span>
+
+            <img
+                src="images/butterscotch-cake.jpg"
+                alt="Butterscotch Cake"
+                loading="lazy">
+
+            <h3>Butterscotch Cake</h3> 
+
+            <p class="price">₹649 / kg</p>
+
+            <p class="offer">20% OFF</p>
+
+            <select id="weight-butterscotch">
+                <option value="0.5">0.5 kg</option>
+                <option value="1" selected>1 kg</option>
+                <option value="1.5">1.5 kg</option>
+                <option value="2">2 kg</option>
+            </select>
+
+            <button
+                type="button"
+                onclick="addWeightedProduct(
+                    'Butterscotch Cake',
+                    649,
+                    'weight-butterscotch'
+                )">
+                🛒 Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- MIX FARSAN -->
+
+        <div class="card" data-category="farsan">
+
+            <span class="badge">Fresh Today</span>
+
+            <img
+                src="images/mix-farsan.jpg"
+                alt="Mix Farsan"
+                loading="lazy">
+
+            <h3>Mix Farsan</h3>
+
+            <p class="price">₹320 / kg</p>
+
+            <p class="offer">10% OFF</p>
+
+            <select id="weight-mix-farsan">
+                <option value="0.25">250g</option>
+                <option value="0.5">500g</option>
+                <option value="1" selected>1 kg</option>
+            </select>
+
+            <button
+                type="button"
+                onclick="addWeightedProduct(
+                    'Mix Farsan',
+                    320,
+                    'weight-mix-farsan'
+                )">
+                🛒 Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- SEV -->
+
+        <div class="card" data-category="farsan">
+
+            <span class="badge">Fresh</span>
+
+            <img
+                src="images/sev.jpg"
+                alt="Sev"
+                loading="lazy">
+
+            <h3>Sev</h3>
+
+            <p class="price">₹220 / kg</p>
+
+            <p class="offer">10% OFF</p>
+
+            <select id="weight-sev">
+                <option value="0.25">250g</option>
+                <option value="0.5">500g</option>
+                <option value="1" selected>1 kg</option>
+            </select>
+
+            <button
+                type="button"
+                onclick="addWeightedProduct(
+                    'Sev',
+                    220,
+                    'weight-sev'
+                )">
+                🛒 Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- BHAKARWADI -->
+
+        <div class="card" data-category="farsan">
+
+            <span class="badge">Best Seller</span>
+
+            <img
+                src="images/bhakarwadi.jpg"
+                alt="Bhakarwadi"
+                loading="lazy">
+
+            <h3>Bhakarwadi</h3>
+
+            <p class="price">₹280 / kg</p>
+
+            <p class="offer">15% OFF</p>
+
+            <select id="weight-bhakarwadi">
+                <option value="0.25">250g</option>
+                <option value="0.5">500g</option>
+                <option value="1" selected>1 kg</option>
+            </select>
+
+            <button
+                type="button"
+                onclick="addWeightedProduct(
+                    'Bhakarwadi',
+                    280,
+                    'weight-bhakarwadi'
+                )">
+                🛒 Add to Cart
+            </button>
+
+        </div>
+
+
+        <!-- CHIVDA -->
+
+        <div class="card" data-category="farsan">
+
+            <span class="badge">Popular</span>
+
+            <img
+                src="images/chivda.jpg"
+                alt="Chivda"
+                loading="lazy">
+
+            <h3>Chivda</h3>
+
+            <p class="price">₹240 / kg</p>
+
+            <p class="offer">12% OFF</p>
+
+            <select id="weight-chivda">
+                <option value="0.25">250g</option>
+                <option value="0.5">500g</option>
+                <option value="1" selected>1 kg</option>
+            </select>
+
+            <button
+                type="button"
+                onclick="addWeightedProduct(
+                    'Chivda',
+                    240,
+                    'weight-chivda'
+                )">
+                🛒 Add to Cart
+            </button>
+
+        </div>
+
     </div>
-
-    <p class="price">
-        ₹699 / kg
-    </p>
-
-    <p class="offer">
-        15% OFF
-    </p>
-
-    <select id="weight-black-forest">
-        <option value="0.5">0.5 kg</option>
-        <option value="1" selected>1 kg</option>
-        <option value="1.5">1.5 kg</option>
-        <option value="2">2 kg</option>
-    </select>
-
-    <button onclick="addWeightedProduct('Black Forest Cake',699,'weight-black-forest')">
-        🛒 Add to Cart
-    </button>
-
-</div>
-<div class="card" data-category="cakes">
-
-    <span class="badge">
-        Premium
-    </span>
-
-    <img src="images/red-velvet.jpg" alt="Red Velvet Cake">
-
-    <h3>Red Velvet Cake</h3>
-
-    <div class="rating">
-        ⭐⭐⭐⭐⭐
-    </div>
-
-    <p class="price">
-        ₹799 / kg
-    </p>
-
-    <p class="offer">
-        10% OFF
-    </p>
-
-    <select id="weight-red-velvet">
-        <option value="0.5">0.5 kg</option>
-        <option value="1" selected>1 kg</option>
-        <option value="1.5">1.5 kg</option>
-        <option value="2">2 kg</option>
-    </select>
-
-    <button onclick="addWeightedProduct('Red Velvet Cake',799,'weight-red-velvet')">
-        🛒 Add to Cart
-    </button>
-
-</div>
-
-<div class="card" data-category="cakes">
-
-    <span class="badge">
-        Popular
-    </span>
-
-    <img src="images/butterscotch-cake.jpg" alt="Butterscotch Cake">
-
-    <h3>Butterscotch Cake</h3>
-
-    <div class="rating">
-        ⭐⭐⭐⭐⭐
-    </div>
-
-    <p class="price">
-        ₹649 / kg
-    </p>
-
-    <p class="offer">
-        20% OFF
-    </p>
-
-    <select id="weight-butterscotch">
-        <option value="0.5">0.5 kg</option>
-        <option value="1" selected>1 kg</option>
-        <option value="1.5">1.5 kg</option>
-        <option value="2">2 kg</option>
-    </select>
-
-    <button onclick="addWeightedProduct('Butterscotch Cake',649,'weight-butterscotch')">
-        🛒 Add to Cart
-    </button>
-
-</div>
-
-        <!-- Product 3 -->
-
-       <div class="card" data-category="farsan">
-
-    <span class="badge">
-        Fresh Today
-    </span>
-
-    <img src="images/mix-farsan.jpg" alt="Mix Farsan">
-
-    <h3>Mix Farsan</h3>
-
-    <div class="rating">
-        ⭐⭐⭐⭐⭐
-    </div>
-
-    <p class="price">
-        ₹320 / kg
-    </p>
-
-    <p class="offer">
-        10% OFF
-    </p>
-
-    <select id="weight-mix-farsan">
-        <option value="0.25">250g</option>
-        <option value="0.5">500g</option>
-        <option value="1" selected>1 kg</option>
-    </select>
-
-    <button onclick="addWeightedProduct('Mix Farsan',320,'weight-mix-farsan')">
-        🛒 Add to Cart
-    </button>
-
-</div>
-
-   
-    <div class="card" data-category="farsan">
-
-    <span class="badge">
-        Fresh
-    </span>
-
-    <img src="images/sev.jpg" alt="Sev">
-
-    <h3>Sev</h3>
-
-    <div class="rating">
-        ⭐⭐⭐⭐⭐
-    </div>
-
-    <p class="price">
-        ₹220 / kg
-    </p>
-
-    <p class="offer">
-        10% OFF
-    </p>
-
-    <select id="weight-sev">
-        <option value="0.25">250g</option>
-        <option value="0.5">500g</option>
-        <option value="1" selected>1 kg</option>
-    </select>
-
-    <button onclick="addWeightedProduct('Sev',220,'weight-sev')">
-        🛒 Add to Cart
-    </button>
-
-</div>
-
-<div class="card" data-category="farsan">
-
-    <span class="badge">
-        Best Seller
-    </span>
-
-    <img src="images/bhakarwadi.jpg" alt="Bhakarwadi">
-
-    <h3>Bhakarwadi</h3>
-
-    <div class="rating">
-        ⭐⭐⭐⭐⭐
-    </div>
-
-    <p class="price">
-        ₹280 / kg
-    </p>
-
-    <p class="offer">
-        15% OFF
-    </p>
-
-    <select id="weight-bhakarwadi">
-        <option value="0.25">250g</option>
-        <option value="0.5">500g</option>
-        <option value="1" selected>1 kg</option>
-    </select>
-
-    <button onclick="addWeightedProduct('Bhakarwadi',280,'weight-bhakarwadi')">
-        🛒 Add to Cart
-    </button>
-
-</div>
-
-<div class="card" data-category="farsan">
-
-    <span class="badge">
-        Popular
-    </span>
-
-    <img src="images/chivda.jpg" alt="Chivda">
-
-    <h3>Chivda</h3>
-
-    <div class="rating">
-        ⭐⭐⭐⭐⭐
-    </div>
-
-    <p class="price">
-        ₹240 / kg
-    </p>
-
-    <p class="offer">
-        12% OFF
-    </p>
-
-    <select id="weight-chivda">
-        <option value="0.25">250g</option>
-        <option value="0.5">500g</option>
-        <option value="1" selected>1 kg</option>
-    </select>
-
-    <button onclick="addWeightedProduct('Chivda',240,'weight-chivda')">
-        🛒 Add to Cart
-    </button>
-
-</div>
-
-</section>
-<!-- ================= CART ================= -->
-
-<section class="cart" id="cart">
-
-    <h2>Your Cart 🛒</h2>
-
-    <div id="cartItems">
-        Cart is empty
-    </div>
-
-    <h3>Total: ₹<span id="total">0</span></h3>
 
 </section>
 
-<!-- ================= ORDER SUMMARY ================= -->
 
-<section class="order-summary">
+<!-- ================= CART + ORDER SUMMARY ================= -->
 
-    <h2>Order Summary 🧾</h2>
+<section class="cart-summary-card" id="cart">
 
-    <div id="summaryItems">
-        No items added
+    <!-- CART -->
+
+    <div class="cart-section">
+
+        <div class="cart-section-header">
+            <div>
+                <span class="cart-label">YOUR ORDER</span>
+                <h2>🛒 Your Cart</h2>
+            </div>
+            
+        </div>
+
+        <div id="cartItems" class="cart-items">
+            <div class="empty-cart">
+                <span>🛒</span>
+                <p>Your cart is empty</p>
+                <small>Add some delicious items from our menu.</small>
+            </div>
+        </div>
+
     </div>
 
-    <h3>Total: ₹<span id="summaryTotal">0</span></h3>
+
+    <!-- DOTTED SEPARATOR -->
+
+    <div class="cart-summary-divider">
+        <span></span>
+        <strong>ORDER SUMMARY</strong>
+        <span></span>
+    </div>
+
+
+    <!-- ORDER SUMMARY -->
+
+    <div class="summary-section">
+
+        <div id="summaryItems" class="summary-items">
+            No items added
+        </div>
+
+        <div class="summary-total-row">
+            <span>Total Amount</span>
+
+            <strong>
+                ₹<span id="summaryTotal">0</span>
+            </strong>
+        </div>
+
+        <!-- Existing total ID kept for JavaScript compatibility -->
+
+        <span id="total" hidden>0</span>
+
+    </div>
 
 </section>
 
 <!-- ================= CHECKOUT ================= -->
 
-<section class="checkout">
+<section class="checkout" id="checkout">
 
-<h2>Checkout</h2>
+    <div class="checkout-heading">
+        <span>COMPLETE YOUR ORDER</span>
+        <h2>Checkout</h2>
+        <p>Cart → Details → Payment → Place Order</p>
+    </div>
 
-<form id="checkoutForm">
 
-<input
-type="text"
-id="customerName"
-placeholder="Your Name"
-required>
+    <form id="checkoutForm">
 
-<input
-type="text"
-id="customerAddress"
-placeholder="Your Address"
-required>
+        <!-- ================= STEP 1 ================= -->
 
-<input
-type="tel"
-id="customerPhone"
-placeholder="Phone Number"
-required>
+        <div class="checkout-step">
 
-<div class="payment">
+            <div class="step-heading">
+                <span class="step-number">1</span>
 
-<h3>Payment Method</h3>
+                <div>
+                    <span class="step-label">STEP 1</span>
+                    <h3>Customer Details</h3>
+                </div>
+            </div>
 
-<label>
-<input type="radio" name="payment" value="UPI" checked>
-UPI Payment
-</label>
 
-<br><br>
+            <div class="checkout-fields">
 
-<label>
-<input type="radio" name="payment" value="COD">
-Cash On Delivery
-</label>
+                <div class="checkout-field">
+                    <label for="customerName">
+                        Full Name
+                    </label>
 
-</div>
+                    <input
+                        type="text"
+                        id="customerName"
+                        placeholder="Enter your name"
+                        required>
+                </div>
 
-<div class="upi-payment">
 
-<h3>Scan & Pay UPI</h3>
+                <div class="checkout-field">
+                    <label for="customerPhone">
+                        Phone Number
+                    </label>
 
-<img src="images/qr.png" alt="UPI QR Code">
+                    <input
+                        type="tel"
+                        id="customerPhone"
+                        placeholder="10-digit phone number"
+                        pattern="[0-9]{10}"
+                        maxlength="10"
+                        required>
+                </div>
 
-<p>UPI ID: zaidssweethouse@upi</p>
 
-</div>
+                <div class="checkout-field full-width">
+                    <label for="customerAddress">
+                        Delivery Address
+                    </label>
 
-<button type="submit">
-Place Order
-</button>
+                    <textarea
+                        id="customerAddress"
+                        rows="3"
+                        placeholder="Enter complete delivery address"
+                        required></textarea>
+                </div>
 
-</form>
+            </div>
 
-</section><!-- ================= GALLERY ================= -->
+        </div>
+
+
+        <!-- ================= STEP 2 ================= -->
+
+        <div class="checkout-step">
+
+            <div class="step-heading">
+
+                <span class="step-number">2</span>
+
+                <div>
+                    <span class="step-label">STEP 2</span>
+                    <h3>Payment Method</h3>
+                </div>
+
+            </div>
+
+
+            <div class="payment-options">
+
+                <label class="payment-option">
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="UPI"
+                        checked>
+
+                    <span class="payment-option-content">
+                        <strong>📱 UPI Payment</strong>
+                        <small>Pay securely using UPI</small>
+                    </span>
+
+                </label>
+
+
+                <label class="payment-option">
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="COD">
+
+                    <span class="payment-option-content">
+                        <strong>💵 Cash on Delivery</strong>
+                        <small>Pay when your order arrives</small>
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <!-- UPI -->
+
+            <div class="upi-payment" hidden>
+
+                <h4>Scan & Pay</h4>
+
+                <img
+                    src="images/qr.png"
+                    alt="UPI QR Code">
+
+                <p>
+                    UPI ID:
+                    <strong>zaidssweethouse@upi</strong>
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= STEP 3 ================= -->
+
+        <div class="checkout-step place-order-step">
+
+            <div class="step-heading">
+
+                <span class="step-number">3</span>
+
+                <div>
+                    <span class="step-label">STEP 3</span>
+                    <h3>Place Your Order</h3>
+                </div>
+
+            </div>
+
+
+            <p class="place-order-info">
+                Please check your cart, customer details and
+                payment method before placing the order.
+            </p>
+
+
+            <button
+                type="submit"
+                class="place-order-btn">
+
+                🛒 Place Order
+
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<!-- ================= GALLERY ================= -->
 
 <section class="gallery" id="gallery">
 
@@ -702,15 +887,22 @@ Place Order
 
     <div class="gallery-container">
 
-        <img src="images/sweets.jpg" alt="Fresh Sweets">
+        <img src="images/sweets.jpg"
+             alt="Fresh Sweets"
+             loading="lazy">
 
-        <img src="images/cake.jpg" alt="Cake">
+        <img src="images/cake.jpg"
+             alt="Fresh Cake"
+             loading="lazy">
 
-        <img src="images/farsan.jpg" alt="Farsan">
+        <img src="images/farsan.jpg"
+             alt="Fresh Farsan"
+             loading="lazy">
 
     </div>
 
 </section>
+
 
 <!-- ================= CUSTOMER BILL ================= -->
 
@@ -771,7 +963,6 @@ Place Order
         <table>
 
             <thead>
-
                 <tr>
                     <th>Product</th>
                     <th>Weight</th>
@@ -779,7 +970,6 @@ Place Order
                     <th>Price</th>
                     <th>Total</th>
                 </tr>
-
             </thead>
 
             <tbody id="billItems">
@@ -836,61 +1026,31 @@ Place Order
 
     <div class="bill-footer">
 
-        <p>Thank you for ordering from Zaid's Sweet House ❤️</p>
+        <p>
+            Thank you for ordering from
+            Zaid's Sweet House ❤️
+        </p>
 
-        <p>Freshness & Quality You Can Trust</p>
+        <p>
+            Freshness & Quality You Can Trust
+        </p>
+
+    </div>
+
+    <div class="bill-actions">
+
+    <button type="button" onclick="downloadBillPDF()">
+        📥 Download PDF
+    </button>
+
+    <button type="button" onclick="printBill()">
+        🖨️ Print Bill
+    </button>
 
     </div>
 
 </section>
 
-<!-- ================= REVIEWS ================= -->
-
-<section class="reviews">
-
-<h2>Customer Reviews</h2>
-
-<div class="review-container">
-
-<div class="review-card">
-
-<img src="images/user.png" alt="Customer">
-
-<h3>⭐⭐⭐⭐⭐</h3>
-
-<p>"Fresh sweets and amazing quality. Highly recommended!"</p>
-
-<h4>- Ahmed Khan</h4>
-
-</div>
-
-<div class="review-card">
-
-<img src="images/user.png" alt="Customer">
-
-<h3>⭐⭐⭐⭐⭐</h3>
-
-<p>"Chocolate cake was delicious. Delivery was quick."</p>
-
-<h4>- Ayesha Ali</h4>
-
-</div>
-
-<div class="review-card">
-
-<img src="images/user.png" alt="Customer">
-
-<h3>⭐⭐⭐⭐⭐</h3>
-
-<p>"Best farsan in the city. Will order again."</p>
-
-<h4>- Rahul Sharma</h4>
-
-</div>
-
-</div>
-
-</section>
 
 
 <!-- ================= ABOUT ================= -->
@@ -901,76 +1061,164 @@ Place Order
 
         <div class="about-text">
 
-            <h2>About Zaid's Sweet House</h2>
+            <h2>
+                About Zaid's Sweet House
+            </h2>
 
             <p>
-                Welcome to Zaid's Sweet House. We prepare fresh sweets,
-                delicious cakes and tasty farsan every day using premium
-                quality ingredients.
+                Welcome to Zaid's Sweet House.
+                We prepare fresh sweets,
+                delicious cakes and tasty farsan
+                every day using premium quality
+                ingredients.
             </p>
 
             <p>
-                Our mission is to deliver fresh, hygienic and affordable
-                products with the best customer experience.
+                Our mission is to deliver fresh,
+                hygienic and affordable products
+                with the best customer experience.
             </p>
 
             <a href="#contact">
-            <button>Know More</button>
+                <button>
+                    Know More
+                </button>
             </a>
 
         </div>
-
-    
 
     </div>
 
 </section>
 
+
 <!-- ================= CONTACT ================= -->
 
 <section class="contact" id="contact">
 
-    <h2>Contact Us</h2>
+    <div class="section-heading">
+        <span>GET IN TOUCH</span>
+        <h2>Contact Us</h2>
+        <p>
+            Have a question or need help with your order?
+            We're here to help.
+        </p>
+    </div>
 
-    <form id="contactForm">
 
-        <input
-            type="text"
-            placeholder="Your Name"
-            required>
+    <div class="contact-container">
 
-        <input
-            type="email"
-            placeholder="Your Email"
-            required>
+        <!-- CONTACT FORM -->
 
-        <input
-            type="tel"
-            placeholder="Your Phone">
+        <div class="contact-card contact-form-card">
 
-        <textarea
-            rows="5"
-            placeholder="Write Your Message..."
-            required></textarea>
+            <h3>💬 Send Us a Message</h3>
 
-        <button type="submit">
-            Send Message
-        </button>
+            <p class="contact-card-text">
+                Fill in your details and we'll get back to you.
+            </p>
 
-    </form>
+            <form id="contactForm">
 
-    <br><br>
+                <input
+                    type="text"
+                    placeholder="Your Name"
+                    required>
 
-    <h3>📍 Zaid's Sweet House</h3>
+                <input
+                    type="email"
+                    placeholder="Your Email"
+                    required>
 
-    <p>Nagpur, Maharashtra, India</p>
+                <input
+                    type="tel"
+                    placeholder="Your Phone">
 
-    <p>📞 +91 9424708856</p>
+                <textarea
+                    rows="5"
+                    placeholder="Write Your Message..."
+                    required></textarea>
 
-    <p>📧 zaidssweethouse@gmail.c
-    om</p>
+                <button type="submit">
+                    📩 Send Message
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- SHOP INFORMATION -->
+
+        <div class="contact-card contact-info-card">
+
+            <h3>🏪 Visit Our Shop</h3>
+
+            <p class="contact-card-text">
+                Fresh sweets, cakes and farsan —
+                prepared with quality and care.
+            </p>
+
+
+            <div class="contact-info-item">
+
+                <span>📍</span>
+
+                <div>
+                    <strong>Address</strong>
+                    <p>
+                        Nagpur, Maharashtra, India
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="contact-info-item">
+
+                <span>📞</span>
+
+                <div>
+                    <strong>Phone</strong>
+                    <p>
+                        +91 9424708856
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="contact-info-item">
+
+                <span>📧</span>
+
+                <div>
+                    <strong>Email</strong>
+                    <p>
+                        zaidssweethouse@gmail.com
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="contact-note">
+
+                <strong>🍬 Zaid's Sweet House</strong>
+
+                <p>
+                    Your trusted destination for
+                    delicious sweets and treats.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </section>
+
 
 <!-- ================= WEBSITE DEVELOPER ================= -->
 
@@ -987,16 +1235,23 @@ Place Order
         </h2>
 
         <p>
-            Professional Website Development & Web Solutions
+            Professional Website Development
+            & Web Solutions
         </p>
 
         <div class="developer-services">
 
-            <span>💻 Business Websites</span>
+            <span>
+                💻 Business Websites
+            </span>
 
-            <span>📱 Responsive Design</span>
+            <span>
+                📱 Responsive Design
+            </span>
 
-            <span>🚀 Hosting & Deployment</span>
+            <span>
+                🚀 Hosting & Deployment
+            </span>
 
         </div>
 
@@ -1016,53 +1271,95 @@ Place Order
 
 </section>
 
+
 <!-- ================= FOOTER ================= -->
 
 <footer>
 
-<h2>Zaid's Sweet House</h2>
+    <h2>
+        Zaid's Sweet House
+    </h2>
 
-<p>Fresh Sweets | Cakes | Farsan</p>
+    <p>
+        Fresh Sweets | Cakes | Farsan
+    </p>
 
-<p>
-    Email:
-     <a 
-href="mailto:zaidssweethouse@gmail.com">
-        zaidssweethouse@gmail.com
+    <p>
+        Email:
+        <a href="mailto:zaidssweethouse@gmail.com">
+            zaidssweethouse@gmail.com
         </a>
-</p>
+    </p>
 
-<p>
-Phone:
-<a href="tel:+919424708856">
-    +91 9424708856</a>
-</p>
+    <p>
+        Phone:
+        <a href="tel:+919424708856">
+            +91 9424708856
+        </a>
+    </p>
 
-<p>Address:<a
-href="https://maps.com/?q=Nagpur,Maharashtra"
-target="_blank">
-    Nagpur, Maharashtra, India
-</a>
-</p>
+    <p>
+        Address:
+        <a
+            href="https://maps.com/?q=Nagpur,Maharashtra"
+            target="_blank">
+            Nagpur, Maharashtra, India
+        </a>
+    </p>
 
-<p>© 2026 Zaid's Sweet House. All Rights Reserved.</p>
+    <p>
+        © 2026 Zaid's Sweet House.
+        All Rights Reserved.
+    </p>
 
 </footer>
-
 
 
 <!-- ================= LOADER ================= -->
 
 <div class="loader">
 
-<div class="loader-circle"></div>
+    <div class="loader-circle"></div>
 
 </div>
 
+
 <!-- ================= JAVASCRIPT ================= -->
 
-<script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+<script type="module" src="firebase-config.js"></script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+        getFirestore,
+        collection,
+        addDoc
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+    const app = initializeApp(window.firebaseConfig);
+
+    const db = getFirestore(app);
+
+    window.db = db;
+
+    window.saveOrderToFirestore = async function(order) {
+
+        return await addDoc(
+            collection(db, "orders"),
+            order
+        );
+
+    };
+
+    console.log(
+        "Firebase Firestore connected successfully"
+    );
+</script>
+
+<script src="script.js"></script>
 </body>
 
 </html>

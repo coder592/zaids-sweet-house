@@ -3,70 +3,310 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Admin Login | Zaid's Sweet House</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<link rel="stylesheet" href="style.css">
+    <title>Admin Login | Zaid's Sweet House</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
-<body>
 
-<section class="admin-login">
+<body class="admin-login-page">
 
-<h2>Admin Login</h2>
 
-<form id="adminLoginForm">
+    <!-- ==========================================
+         ADMIN LOGIN
+    =========================================== -->
 
-<input
-type="text"
-id="username"
-placeholder="Enter Username"
-required>
+    <main class="admin-login-container">
 
-<input
-type="password"
-id="password"
-placeholder="Enter Password"
-required>
 
-<button type="submit">
-Login
-</button>
+        <section class="admin-login-card">
 
-</form>
 
-</section>
+            <!-- LOGO -->
 
+            <div class="admin-login-logo">
+
+                <img
+                    src="images/logo.png"
+                    alt="Zaid's Sweet House Logo"
+                >
+
+            </div>
+
+
+            <!-- TITLE -->
+
+            <h1>
+                Zaid's Sweet House
+            </h1>
+
+
+            <p class="admin-login-subtitle">
+                Admin Dashboard
+            </p>
+
+
+            <div class="admin-login-divider"></div>
+
+
+            <!-- LOGIN FORM -->
+
+            <form id="adminLoginForm">
+
+
+                <div class="admin-input-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Enter username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="admin-input-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="admin-login-button"
+                >
+
+                    🔐 Login to Dashboard
+
+                </button>
+
+
+            </form>
+
+
+            <!-- BACK TO HOME -->
+
+            <a
+                href="index.html"
+                class="admin-back-home"
+            >
+                ← Back to Website
+            </a>
+
+
+            <!-- FOOTER -->
+
+            <p class="admin-login-footer">
+                Zaid Web Solutions
+            </p>
+
+
+        </section>
+
+
+    </main>
+
+    <script>
+function showAdminMessage(
+    title,
+    message,
+    type = "success",
+    callback = null
+) {
+
+    const old =
+        document.getElementById("adminMessage");
+
+    if (old) {
+        old.remove();
+    }
+
+    const box =
+        document.createElement("div");
+
+    box.id = "adminMessage";
+
+    box.className =
+        "admin-message " + type;
+
+    box.innerHTML = `
+        <div class="admin-message-icon">
+            ${type === "success" ? "✓" : "!"}
+        </div>
+
+        <div class="admin-message-content">
+            <h3>${title}</h3>
+            <p>${message}</p>
+        </div>
+
+        <button
+            type="button"
+            class="admin-message-close"
+            onclick="closeAdminMessage()"
+        >
+            ×
+        </button>
+    `;
+
+    document.body.appendChild(box);
+
+    requestAnimationFrame(function () {
+        box.classList.add("show");
+    });
+
+    setTimeout(function () {
+
+        closeAdminMessage();
+
+        if (callback) {
+            setTimeout(callback, 250);
+        }
+
+    }, 1500);
+}
+
+
+function closeAdminMessage() {
+
+    const box =
+        document.getElementById("adminMessage");
+
+    if (!box) {
+        return;
+    }
+
+    box.classList.remove("show");
+
+    setTimeout(function () {
+        box.remove();
+    }, 250);
+}
+</script>
+
+<script src="firebase-config.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import {
+        getAuth,
+        signInWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+    const app = initializeApp(window.firebaseConfig);
+    const auth = getAuth(app);
+
+    window.firebaseAdminLogin = async function(password) {
+        return await signInWithEmailAndPassword(
+            auth,
+            "mdzaidqureshi28@gmail.com",
+            password
+        );
+    };
+
+    console.log("Firebase Admin Authentication ready");
+</script>
+
+
+
+    <!-- ==========================================
+         LOGIN JAVASCRIPT
+    =========================================== -->
 <script>
 
-document.getElementById("adminLoginForm")
-.addEventListener("submit",function(e){
+document
+    .getElementById("adminLoginForm")
+    .addEventListener("submit", async function (e) {
 
-e.preventDefault();
-
-let username =document.getElementById("username").value;
-
-let password =sdocument.getElementById("password").value;
+        e.preventDefault();
 
 
-/* Temporary Login */
-if(username==="admin" && password==="1234"){
+        const username =
+            document
+                .getElementById("username")
+                .value
+                .trim();
 
-alert("Login Successful ✅");
 
-window.location.href="dashboard.html";
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        
+        try {
+
+    await window.firebaseAdminLogin(password);
+
+    sessionStorage.setItem(
+        "adminLoggedIn",
+        "true"
+    );
+
+    sessionStorage.setItem(
+        "adminLoginTime",
+        Date.now().toString()
+    );
+
+    showAdminMessage(
+        "Login Successful",
+        "Welcome to the Admin Dashboard.",
+        "success",
+        function () {
+
+            window.location.replace(
+                "dashboard.html"
+            );
+
+        }
+    );
+
+} catch (error) {
+
+    console.error(
+        "Firebase Admin Login Error:",
+        error
+    );
+
+    showAdminMessage(
+        "Login Failed",
+        "Invalid admin password.",
+        "error"
+    );
 
 }
-else{
 
-alert("Invalid Username or Password ❌");
+    });
 
-}
-});
 </script>
+    
 
 </body>
 

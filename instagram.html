@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Zaid's Sweet House | Fresh Sweets & Cakes
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #faf7f5;
+            color: #3f2924;
+            line-height: 1.6;
+        }
+
+
+        /* ==========================================
+           HERO
+        ========================================== */
+
+        .landing-hero {
+
+            min-height: 92vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            padding: 40px 20px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    rgba(75, 28, 22, 0.72),
+                    rgba(75, 28, 22, 0.72)
+                ),
+                url("images/hero.jpg")
+                center / cover no-repeat;
+        }
+
+
+        .landing-content {
+
+            width: 100%;
+            max-width: 720px;
+
+            color: #fff;
+        }
+
+
+        .landing-logo {
+
+            width: 90px;
+            height: 90px;
+
+            object-fit: contain;
+
+            margin-bottom: 20px;
+
+            filter:
+                drop-shadow(
+                    0 5px 15px
+                    rgba(0,0,0,0.3)
+                );
+        }
+
+
+        .landing-content h1 {
+
+            font-size: 48px;
+            line-height: 1.15;
+
+            margin-bottom: 15px;
+
+            font-weight: 800;
+        }
+
+
+        .landing-content h1 span {
+            color: #ffd9a0;
+        }
+
+
+        .landing-content p {
+
+            max-width: 600px;
+
+            margin: 0 auto 30px;
+
+            font-size: 18px;
+
+            color: #fff;
+
+            opacity: 0.95;
+        }
+
+
+        /* ==========================================
+           BUTTONS
+        ========================================== */
+
+        .landing-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 12px;
+        }
+
+
+        .landing-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            min-width: 170px;
+
+            padding: 13px 22px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            transition: 0.25s ease;
+        }
+
+
+        .website-btn {
+
+            background: #fff;
+
+            color: #7b2d26;
+        }
+
+
+        .whatsapp-btn {
+
+            background: #198754;
+
+            color: #fff;
+        }
+
+
+        .instagram-btn {
+
+            background: #c13584;
+
+            color: #fff;
+        }
+
+
+        .landing-btn:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 8px 20px
+                rgba(0,0,0,0.2);
+        }
+
+
+        /* ==========================================
+           FEATURE SECTION
+        ========================================== */
+
+        .landing-section {
+
+            padding: 55px 20px;
+
+            text-align: center;
+        }
+
+
+        .landing-section h2 {
+
+            font-size: 30px;
+
+            color: #6b1f1f;
+
+            margin-bottom: 10px;
+        }
+
+
+        .landing-section > p {
+
+            color: #706562;
+
+            margin-bottom: 30px;
+        }
+
+
+        .feature-grid {
+
+            max-width: 1000px;
+
+            margin: auto;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+        }
+
+
+        .feature-card {
+
+            background: #fff;
+
+            padding: 25px 18px;
+
+            border-radius: 14px;
+
+            border:
+                1px solid #eaded8;
+
+            box-shadow:
+                0 5px 18px
+                rgba(0,0,0,0.06);
+        }
+
+
+        .feature-card .icon {
+
+            font-size: 34px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .feature-card h3 {
+
+            margin-bottom: 7px;
+
+            color: #5a3028;
+        }
+
+
+        .feature-card p {
+
+            color: #706562;
+
+            font-size: 14px;
+        }
+
+
+        /* ==========================================
+           FOOTER
+        ========================================== */
+
+        .landing-footer {
+
+            padding: 25px 20px;
+
+            text-align: center;
+
+            background: #4b241d;
+
+            color: #fff;
+
+            font-size: 13px;
+        }
+
+
+        /* ==========================================
+           MOBILE
+        ========================================== */
+
+        @media (max-width: 700px) {
+
+            .landing-hero {
+
+                min-height: 88vh;
+
+                padding: 35px 16px;
+            }
+
+
+            .landing-logo {
+
+                width: 75px;
+                height: 75px;
+            }
+
+
+            .landing-content h1 {
+
+                font-size: 34px;
+            }
+
+
+            .landing-content p {
+
+                font-size: 15px;
+
+                margin-bottom: 25px;
+            }
+
+
+            .landing-buttons {
+
+                flex-direction: column;
+
+                align-items: center;
+            }
+
+
+            .landing-btn {
+
+                width: 100%;
+
+                max-width: 320px;
+            }
+
+
+            .landing-section {
+
+                padding: 45px 16px;
+            }
+
+
+            .landing-section h2 {
+
+                font-size: 26px;
+            }
+
+
+            .feature-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        /* ==========================================
+   PRODUCTS
+========================================== */
+
+.landing-products {
+    padding: 55px 20px;
+    background: #fff;
+    text-align: center;
+}
+
+.landing-products h2 {
+    font-size: 30px;
+    color: #6b1f1f;
+    margin-bottom: 10px;
+}
+
+.landing-products-subtitle {
+    color: #706562;
+    margin-bottom: 30px;
+}
+
+.product-grid {
+    max-width: 1000px;
+    margin: auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.product-card {
+    background: #faf7f5;
+
+    border: 1px solid #eaded8;
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 5px 18px
+        rgba(0,0,0,0.06);
+
+    transition: 0.25s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(0,0,0,0.10);
+}
+
+.product-card img {
+    width: 100%;
+    height: 190px;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+.product-card-content {
+    padding: 18px;
+}
+
+.product-card h3 {
+    margin-bottom: 6px;
+    color: #5a3028;
+}
+
+.product-card p {
+    font-size: 14px;
+    color: #706562;
+}
+
+.view-menu-btn {
+    display: inline-block;
+
+    margin-top: 30px;
+
+    padding: 12px 25px;
+
+    border-radius: 8px;
+
+    background: #7b2d26;
+    color: #fff;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    transition: 0.25s ease;
+}
+
+.view-menu-btn:hover {
+    background: #54201b;
+    transform: translateY(-2px);
+}
+
+
+/* MOBILE PRODUCTS */
+
+@media (max-width: 700px) {
+
+    .landing-products {
+        padding: 45px 16px;
+    }
+
+    .landing-products h2 {
+        font-size: 26px;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .product-card img {
+        height: 200px;
+    }
+
+}
+
+/* ==========================================
+   FINAL CTA
+========================================== */
+
+.landing-cta {
+    padding: 60px 20px;
+    text-align: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6b1f1f,
+            #9b3d2f
+        );
+
+    color: #fff;
+}
+
+.landing-cta h2 {
+    margin: 0 0 10px;
+
+    font-size: 30px;
+}
+
+.landing-cta p {
+    max-width: 600px;
+
+    margin: 0 auto 25px;
+
+    font-size: 15px;
+
+    opacity: 0.92;
+}
+
+.landing-cta-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+}
+
+.cta-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 170px;
+
+    padding: 13px 22px;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    transition: 0.25s ease;
+}
+
+.cta-order {
+    background: #198754;
+    color: #fff;
+}
+
+.cta-website {
+    background: #fff;
+    color: #7b2d26;
+}
+
+.cta-btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(0,0,0,0.2);
+}
+
+
+@media (max-width: 700px) {
+
+    .landing-cta {
+        padding: 45px 16px;
+    }
+
+    .landing-cta h2 {
+        font-size: 26px;
+    }
+
+    .landing-cta-buttons {
+        flex-direction: column;
+
+        align-items: center;
+    }
+
+    .cta-btn {
+        width: 100%;
+        max-width: 320px;
+    }
+
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================
+         HERO
+    ========================================== -->
+
+    <section class="landing-hero">
+
+        <div class="landing-content">
+
+
+            <img
+                src="images/logo.png"
+                alt="Zaid's Sweet House"
+                class="landing-logo"
+            >
+
+
+            <h1>
+
+                Zaid's
+                <span>Sweet House</span>
+
+            </h1>
+
+
+            <p>
+
+                Delicious sweets, cakes and
+                special treats made for every
+                celebration.
+
+            </p>
+
+
+            <div class="landing-buttons">
+
+
+                <!-- WEBSITE -->
+
+                <a
+                    href="index.html"
+                    class="landing-btn website-btn"
+                >
+
+                    🍬 Visit Our Website
+
+                </a>
+
+
+                <!-- WHATSAPP -->
+
+                <!-- Replace # with client's WhatsApp link later -->
+
+                <a
+                    href="#"
+                    class="landing-btn whatsapp-btn"
+                >
+
+                    💬 Order on WhatsApp
+
+                </a>
+
+
+                <!-- INSTAGRAM -->
+
+                <!-- Replace # with client's Instagram link later -->
+
+                <a
+                    href="https://www.instagram.com//therisktaker_67"
+                    class="landing-btn instagram-btn"
+                >
+
+                    📸 Follow on Instagram
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==========================================
+         FEATURES
+    ========================================== -->
+
+    <section class="landing-section">
+
+        <h2>
+            Why Choose Zaid's Sweet House?
+        </h2>
+
+
+        <p>
+            A simple place for sweets,
+            cakes and celebrations.
+        </p>
+
+
+        <div class="feature-grid">
+
+
+            <div class="feature-card">
+
+                <div class="icon">
+                    🍬
+                </div>
+
+                <h3>
+                    Fresh Sweets
+                </h3>
+
+                <p>
+                    Freshly prepared sweets
+                    for everyday cravings
+                    and special occasions.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="icon">
+                    🎂
+                </div>
+
+                <h3>
+                    Cakes
+                </h3>
+
+                <p>
+                    Beautiful and delicious
+                    cakes for birthdays and
+                    celebrations.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="icon">
+                    🎁
+                </div>
+
+                <h3>
+                    Special Occasions
+                </h3>
+
+                <p>
+                    Sweets and treats for
+                    festivals, parties and
+                    memorable moments.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+    <!-- ==========================================
+     PRODUCTS
+========================================== -->
+
+<section class="landing-products">
+
+    <h2>
+        Our Specialties
+    </h2>
+
+    <p class="landing-products-subtitle">
+        Fresh and delicious treats for every occasion.
+    </p>
+
+
+    <div class="product-grid">
+
+
+        <div class="product-card">
+
+            <img
+                src="images/kaju-katli.jpg"
+                alt="Kaju Katli"
+            >
+
+            <div class="product-card-content">
+
+                <h3>
+                    Kaju Katli
+                </h3>
+
+                <p>
+                    A classic sweet made for
+                    celebrations and special moments.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="product-card">
+
+            <img
+                src="images/cake.jpg"
+                alt="Fresh Cake"
+            >
+
+            <div class="product-card-content">
+
+                <h3>
+                    Fresh Cakes
+                </h3>
+
+                <p>
+                    Delicious cakes for birthdays
+                    and celebrations.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="product-card">
+
+            <img
+                src="images/farsan.jpg"
+                alt="Fresh Farsan"
+            >
+
+            <div class="product-card-content">
+
+                <h3>
+                    Fresh Farsan
+                </h3>
+
+                <p>
+                    Freshly prepared farsan for
+                    everyday enjoyment and occasions.
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <a
+        href="index.html#menu"
+        class="view-menu-btn"
+    >
+        🍬 View Full Menu
+    </a>
+
+</section>
+
+<!-- ==========================================
+     FINAL CTA
+========================================== -->
+
+<section class="landing-cta">
+
+    <h2>
+        Ready to Order?
+    </h2>
+
+    <p>
+        Explore our sweets, cakes and special
+        treats, or contact us directly for your order.
+    </p>
+
+    <div class="landing-cta-buttons">
+
+        <!-- Replace # with client's WhatsApp link later -->
+
+        <a
+            href="#"
+            class="cta-btn cta-order"
+        >
+            💬 Order on WhatsApp
+        </a>
+
+
+        <a
+            href="index.html"
+            class="cta-btn cta-website"
+        >
+            🍬 Visit Full Website
+        </a>
+
+    </div>
+
+</section>
+
+    <!-- ==========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="landing-footer">
+
+        © 2026 Zaid's Sweet House
+
+    </footer>
+
+
+</body>
+
+</html>

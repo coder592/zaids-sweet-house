@@ -1,6 +1,6 @@
 /* ==========================================
    ZAID'S SWEET HOUSE
-   COMPLETE FIXED SCRIPT.JS
+   COMPLETE SCRIPT.JS - FIXED
 ========================================== */
 
 
@@ -12,14 +12,15 @@ let cart = [];
 
 
 /* ==========================================
-   LOAD CART FROM LOCAL STORAGE
+   LOAD CART
 ========================================== */
 
 function loadCart() {
 
     try {
 
-        const savedCart = localStorage.getItem("zaidsSweetHouseCart");
+        const savedCart =
+            localStorage.getItem("zaidsSweetHouseCart");
 
         if (savedCart) {
 
@@ -28,6 +29,10 @@ function loadCart() {
             if (!Array.isArray(cart)) {
                 cart = [];
             }
+
+        } else {
+
+            cart = [];
 
         }
 
@@ -65,24 +70,45 @@ function saveCart() {
 
 
 /* ==========================================
+   ESCAPE HTML
+========================================== */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* ==========================================
    ADD WEIGHTED PRODUCT
 ========================================== */
 
 function addWeightedProduct(name, pricePerKg, weightId) {
 
-    const weightSelect = document.getElementById(weightId);
+    const weightSelect =
+        document.getElementById(weightId);
 
     if (!weightSelect) {
 
-        console.error("Weight selector not found:", weightId);
+        console.error(
+            "Weight selector not found:",
+            weightId
+        );
 
         return;
 
     }
 
-    const weight = parseFloat(weightSelect.value);
+    const weight =
+        parseFloat(weightSelect.value);
 
-    if (isNaN(weight) || weight <= 0) {
+    if (!Number.isFinite(weight) || weight <= 0) {
 
         alert("Please select a valid weight.");
 
@@ -96,17 +122,24 @@ function addWeightedProduct(name, pricePerKg, weightId) {
             : `${weight * 1000}g`;
 
     const finalPrice =
-        Math.round(Number(pricePerKg) * weight);
+        Math.round(
+            Number(pricePerKg) * weight
+        );
 
-    const item = cart.find(
-        product =>
-            product.name === name &&
-            product.weight === weightText
-    );
+    const existingItem =
+        cart.find(function(item) {
 
-    if (item) {
+            return (
+                item.name === name &&
+                item.weight === weightText
+            );
 
-        item.quantity++;
+        });
+
+    if (existingItem) {
+
+        existingItem.quantity =
+            Number(existingItem.quantity || 0) + 1;
 
     } else {
 
@@ -137,25 +170,34 @@ function addWeightedProduct(name, pricePerKg, weightId) {
 
 function addToCart(name, price) {
 
-    const numericPrice = Number(price);
+    const numericPrice =
+        Number(price);
 
-    if (isNaN(numericPrice)) {
+    if (!Number.isFinite(numericPrice)) {
 
-        console.error("Invalid product price:", price);
+        console.error(
+            "Invalid product price:",
+            price
+        );
 
         return;
 
     }
 
-    const item = cart.find(
-        product =>
-            product.name === name &&
-            !product.weight
-    );
+    const existingItem =
+        cart.find(function(item) {
 
-    if (item) {
+            return (
+                item.name === name &&
+                !item.weight
+            );
 
-        item.quantity++;
+        });
+
+    if (existingItem) {
+
+        existingItem.quantity =
+            Number(existingItem.quantity || 0) + 1;
 
     } else {
 
@@ -200,34 +242,42 @@ function displayCart() {
         document.getElementById("summaryTotal");
 
 
-    /* ---------- CART COUNT ---------- */
+    /* CART COUNT */
 
     if (cartCount) {
 
-        const count = cart.reduce(
-            (sum, item) =>
-                sum + Number(item.quantity || 0),
-            0
-        );
+        const count =
+            cart.reduce(function(sum, item) {
+
+                return (
+                    sum +
+                    Number(item.quantity || 0)
+                );
+
+            }, 0);
 
         cartCount.innerText =
-            count > 0 ? `(${count})` : "(0)";
+            `(${count})`;
 
     }
 
 
-    /* ---------- CLEAR OLD CONTENT ---------- */
+    /* CLEAR OLD CONTENT */
 
     if (cartBox) {
+
         cartBox.innerHTML = "";
+
     }
 
     if (summaryBox) {
+
         summaryBox.innerHTML = "";
+
     }
 
 
-    /* ---------- EMPTY CART ---------- */
+    /* EMPTY CART */
 
     if (cart.length === 0) {
 
@@ -262,11 +312,12 @@ function displayCart() {
     }
 
 
-    /* ---------- DISPLAY ITEMS ---------- */
-
     let total = 0;
 
-    cart.forEach((item, index) => {
+
+    /* DISPLAY ITEMS */
+
+    cart.forEach(function(item, index) {
 
         const price =
             Number(item.price) || 0;
@@ -280,26 +331,35 @@ function displayCart() {
         total += itemTotal;
 
 
-        /* ---------- CART ITEM ---------- */
+        /* CART ITEM */
 
         if (cartBox) {
 
             const cartItem =
                 document.createElement("div");
 
-            cartItem.className = "cart-item";
+            cartItem.className =
+                "cart-item";
 
             cartItem.innerHTML = `
 
-                <h3>${escapeHTML(item.name)}</h3>
+                <h3>
+                    ${escapeHTML(item.name)}
+                </h3>
 
                 <p>
-                    ${item.weight
-                        ? escapeHTML(item.weight) + " × "
-                        : ""
-                    }
-                    ₹${price} × ${quantity}
-                </p>
+    ${
+        item.weight
+            ? `Weight: ${escapeHTML(item.weight)} &nbsp; | &nbsp; `
+            : ""
+    }
+
+    Rate: ₹${price}
+    &nbsp; | &nbsp;
+    Qty: ${quantity}
+    &nbsp; | &nbsp;
+    Total: ₹${itemTotal}
+</p>
 
                 <button
                     type="button"
@@ -329,7 +389,7 @@ function displayCart() {
         }
 
 
-        /* ---------- ORDER SUMMARY ---------- */
+        /* ORDER SUMMARY */
 
         if (summaryBox) {
 
@@ -339,7 +399,8 @@ function displayCart() {
             summaryItem.innerText =
                 `${item.name}` +
                 `${item.weight ? ` (${item.weight})` : ""}` +
-                ` × ${quantity} = ₹${itemTotal}`;
+                ` × ${quantity}` +
+                ` = ₹${itemTotal}`;
 
             summaryBox.appendChild(summaryItem);
 
@@ -348,17 +409,19 @@ function displayCart() {
     });
 
 
-    /* ---------- TOTAL ---------- */
+    /* TOTAL */
 
     if (totalBox) {
 
-        totalBox.innerText = total;
+        totalBox.innerText =
+            total;
 
     }
 
     if (summaryTotal) {
 
-        summaryTotal.innerText = total;
+        summaryTotal.innerText =
+            total;
 
     }
 
@@ -378,8 +441,8 @@ function changeQuantity(index, change) {
     }
 
     cart[index].quantity =
-        Number(cart[index].quantity) + Number(change);
-
+        Number(cart[index].quantity || 0) +
+        Number(change);
 
     if (cart[index].quantity <= 0) {
 
@@ -416,17 +479,20 @@ function removeItem(index) {
 
 
 /* ==========================================
-   ESCAPE HTML
+   BILL TEXT HELPER
 ========================================== */
 
-function escapeHTML(value) {
+function setBillText(id, value) {
 
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+
+        element.innerText =
+            value;
+
+    }
 
 }
 
@@ -443,12 +509,12 @@ if (checkoutForm) {
 
     checkoutForm.addEventListener(
         "submit",
-        function (e) {
+        async function(e) {
 
             e.preventDefault();
 
 
-            /* ---------- EMPTY CART ---------- */
+            /* EMPTY CART */
 
             if (cart.length === 0) {
 
@@ -459,7 +525,7 @@ if (checkoutForm) {
             }
 
 
-            /* ---------- CUSTOMER DETAILS ---------- */
+            /* CUSTOMER DETAILS */
 
             const nameInput =
                 document.getElementById("customerName");
@@ -498,7 +564,7 @@ if (checkoutForm) {
             }
 
 
-            /* ---------- PAYMENT ---------- */
+            /* PAYMENT */
 
             const paymentInput =
                 document.querySelector(
@@ -521,12 +587,10 @@ if (checkoutForm) {
                 paymentInput.value;
 
 
-            /* ==========================================
-               ORDER ID + DATE + TIME
-            ========================================== */
+            /* ORDER ID */
 
-            const now = new Date();
-
+            const now =
+                new Date();
 
             const orderId =
                 "ZSH-" +
@@ -534,10 +598,8 @@ if (checkoutForm) {
                     .toString()
                     .slice(-6);
 
-
             const billDate =
                 now.toLocaleDateString("en-IN");
-
 
             const billTime =
                 now.toLocaleTimeString(
@@ -549,44 +611,41 @@ if (checkoutForm) {
                 );
 
 
-            /* ==========================================
-               CALCULATE ORDER
-            ========================================== */
+            /* ORDER ITEMS */
 
             let subtotal = 0;
 
             let order = "";
 
 
-            cart.forEach(item => {
+            cart.forEach(function(item) {
 
                 const itemTotal =
-                    Number(item.price) *
-                    Number(item.quantity);
-
+                    Number(item.price || 0) *
+                    Number(item.quantity || 0);
 
                 subtotal += itemTotal;
 
 
+                /* IMPORTANT:
+                   THIS WAS THE SYNTAX ERROR
+                */
+
                 order +=
-`${item.name}
-${item.weight
-    ? `Weight : ${item.weight}\n`
-    : ""
-}Qty : ${item.quantity}
-Price : ₹${itemTotal}
+                    `🍬 ${item.name}
+${item.weight ? `⚖️ Weight: ${item.weight}\n` : ""}🔢 Qty: ${item.quantity}
+💰 Total: ₹${itemTotal}
 
 `;
 
             });
 
 
-            /* ---------- FUTURE READY ---------- */
+            /* CHARGES */
 
             const discount = 0;
 
             const deliveryCharge = 0;
-
 
             const grandTotal =
                 subtotal -
@@ -595,44 +654,185 @@ Price : ₹${itemTotal}
 
 
             /* ==========================================
+               SAVE ORDER
+            ========================================== */
+
+            const newOrder = {
+
+                orderId: orderId,
+
+                date: `${billDate} | ${billTime}`,
+
+                customerName: name,
+
+                customerPhone: phone,
+
+                customerAddress: address,
+
+                paymentMethod: paymentMethod,
+
+                items: cart.map(function(item) {
+
+                    return {
+
+                        name: item.name,
+
+                        weight: item.weight || "",
+
+                        quantity:
+                            Number(item.quantity || 0),
+
+                        price:
+                            Number(item.price || 0)
+
+                    };
+
+                }),
+
+                subtotal: subtotal,
+
+                discount: discount,
+
+                deliveryCharge: deliveryCharge,
+
+                grandTotal: grandTotal,
+
+                status: "Pending"
+
+            };
+
+
+            let orders = [];
+
+
+            try {
+
+                orders =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "zaidsSweetHouseOrders"
+                        )
+                    ) || [];
+
+                if (!Array.isArray(orders)) {
+
+                    orders = [];
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Order loading error:",
+                    error
+                );
+
+                orders = [];
+
+            }
+
+
+            orders.push(newOrder);
+
+
+            localStorage.setItem(
+                "zaidsSweetHouseOrders",
+                JSON.stringify(orders)
+            );
+            try {
+
+    if (window.saveOrderToFirestore) {
+
+        await window.saveOrderToFirestore(newOrder);
+
+        console.log(
+            "Order saved to Firestore:",
+            orderId
+        );
+
+    } else {
+
+        console.error(
+            "Firestore save function not available."
+        );
+
+    }
+
+} catch (error) {
+
+    console.error(
+        "Firestore order save error:",
+        error
+    );
+
+    alert(
+        "Order saved locally, but Firebase order sync failed."
+    );
+
+}
+
+
+            /* ==========================================
                WHATSAPP MESSAGE
             ========================================== */
 
             const message =
-`New Order - Zaid's Sweet House
+`🧾 *NEW ORDER - ZAID'S SWEET HOUSE*
 
-Order ID : ${orderId}
+━━━━━━━━━━━━━━━━━━
+📌 *ORDER DETAILS*
+━━━━━━━━━━━━━━━━━━
 
-Name : ${name}
+🆔 Order ID: ${orderId}
+📅 Date: ${billDate}
+⏰ Time: ${billTime}
 
-Address : ${address}
+👤 *CUSTOMER DETAILS*
+Name: ${name}
+📞 Phone: ${phone}
+📍 Address: ${address}
 
-Phone : ${phone}
+💳 Payment: ${paymentMethod}
 
-Payment : ${paymentMethod}
-
-Date : ${billDate}
-Time : ${billTime}
-
--------------------------
+━━━━━━━━━━━━━━━━━━
+🛒 *ORDER ITEMS*
+━━━━━━━━━━━━━━━━━━
 
 ${order}
 
--------------------------
+━━━━━━━━━━━━━━━━━━
+💰 *PAYMENT SUMMARY*
+━━━━━━━━━━━━━━━━━━
 
-Subtotal : ₹${subtotal}
-Discount : ₹${discount}
-Delivery : ₹${deliveryCharge}
+Subtotal: ₹${subtotal}
+Discount: ₹${discount}
+Delivery: ₹${deliveryCharge}
 
-Grand Total : ₹${grandTotal}`;
+*GRAND TOTAL: ₹${grandTotal}*
+
+━━━━━━━━━━━━━━━━━━
+📦 *ORDER STATUS*
+━━━━━━━━━━━━━━━━━━
+
+🕐 Status: *Pending*
+
+📞 We will contact you shortly
+to confirm your order.
+
+Thank you for choosing
+*Zaid's Sweet House* ❤️
+
+━━━━━━━━━━━━━━━━━━`;
 
 
             const whatsappURL =
-                `https://wa.me/919424708856?text=${encodeURIComponent(message)}`;
+                `https://wa.me/919424708856?text=${
+                    encodeURIComponent(message)
+                }`;
 
 
             /* ==========================================
-               CUSTOMER DIGITAL BILL
+               DIGITAL BILL
             ========================================== */
 
             setBillText(
@@ -666,10 +866,6 @@ Grand Total : ₹${grandTotal}`;
             );
 
 
-            /* ==========================================
-               BILL ITEMS
-            ========================================== */
-
             const billItems =
                 document.getElementById("billItems");
 
@@ -679,11 +875,11 @@ Grand Total : ₹${grandTotal}`;
                 billItems.innerHTML = "";
 
 
-                cart.forEach(item => {
+                cart.forEach(function(item) {
 
                     const itemTotal =
-                        Number(item.price) *
-                        Number(item.quantity);
+                        Number(item.price || 0) *
+                        Number(item.quantity || 0);
 
 
                     const row =
@@ -697,9 +893,11 @@ Grand Total : ₹${grandTotal}`;
                         </td>
 
                         <td>
-                            ${escapeHTML(
-                                item.weight || "-"
-                            )}
+                            ${
+                                item.weight
+                                    ? escapeHTML(item.weight)
+                                    : "-"
+                            }
                         </td>
 
                         <td>
@@ -724,10 +922,6 @@ Grand Total : ₹${grandTotal}`;
             }
 
 
-            /* ==========================================
-               BILL TOTALS
-            ========================================== */
-
             setBillText(
                 "billSubtotal",
                 subtotal
@@ -749,19 +943,18 @@ Grand Total : ₹${grandTotal}`;
             );
 
 
-            /* ==========================================
-               SHOW DIGITAL BILL
-            ========================================== */
+            /* SHOW BILL */
 
             const customerBill =
-                document.getElementById("customerBill");
+                document.getElementById(
+                    "customerBill"
+                );
 
 
             if (customerBill) {
 
                 customerBill.style.display =
                     "block";
-
 
                 customerBill.scrollIntoView({
                     behavior: "smooth",
@@ -771,9 +964,7 @@ Grand Total : ₹${grandTotal}`;
             }
 
 
-            /* ==========================================
-               OPEN WHATSAPP
-            ========================================== */
+            /* OPEN WHATSAPP */
 
             window.open(
                 whatsappURL,
@@ -781,9 +972,7 @@ Grand Total : ₹${grandTotal}`;
             );
 
 
-            /* ==========================================
-               CLEAR CART
-            ========================================== */
+            /* CLEAR CART */
 
             cart = [];
 
@@ -792,33 +981,17 @@ Grand Total : ₹${grandTotal}`;
             displayCart();
 
 
-            /* ==========================================
-               RESET CHECKOUT FORM
-            ========================================== */
+            /* RESET FORM */
 
             checkoutForm.reset();
 
+            setTimeout(
+                updatePaymentDisplay,
+                0
+            );
+
         }
     );
-
-}
-
-
-/* ==========================================
-   BILL TEXT HELPER
-========================================== */
-
-function setBillText(id, value) {
-
-    const element =
-        document.getElementById(id);
-
-
-    if (element) {
-
-        element.innerText = value;
-
-    }
 
 }
 
@@ -841,122 +1014,714 @@ function printBill() {
 
     }
 
-
     window.print();
 
 }
 
 
 /* ==========================================
-   SEARCH PRODUCTS
+   DOWNLOAD BILL PDF
 ========================================== */
+
+function downloadBillPDF() {
+
+    if (!window.jspdf) {
+
+        alert(
+            "PDF system is not loaded. Please refresh the page."
+        );
+
+        return;
+
+    }
+
+
+    const { jsPDF } =
+        window.jspdf;
+
+
+    const pdf =
+        new jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: "a4"
+        });
+
+
+    const getText =
+        function(id, fallback = "---") {
+
+            const element =
+                document.getElementById(id);
+
+            return element
+                ? element.innerText.trim()
+                : fallback;
+
+        };
+
+
+    const orderId =
+        getText("billOrderId");
+
+    const date =
+        getText("billDate");
+
+    const customerName =
+        getText("billCustomerName");
+
+    const customerPhone =
+        getText("billCustomerPhone");
+
+    const customerAddress =
+        getText("billCustomerAddress");
+
+    const paymentMethod =
+        getText("billPaymentMethod");
+
+    const subtotal =
+        getText("billSubtotal", "0");
+
+    const discount =
+        getText("billDiscount", "0");
+
+    const delivery =
+        getText("billDelivery", "0");
+
+    const grandTotal =
+        getText("billGrandTotal", "0");
+
+
+    const left = 15;
+
+
+    /* HEADER */
+
+    pdf.setDrawColor(80, 50, 30);
+
+    pdf.setLineWidth(0.5);
+
+    pdf.roundedRect(
+        12,
+        10,
+        186,
+        42,
+        3,
+        3
+    );
+
+
+    const logo =
+        document.querySelector(
+            "#customerBill img"
+        );
+
+
+    if (logo && logo.complete) {
+
+        try {
+
+            pdf.addImage(
+                logo,
+                "PNG",
+                18,
+                16,
+                28,
+                28
+            );
+
+        } catch (error) {
+
+            console.warn(
+                "Logo could not be added.",
+                error
+            );
+
+        }
+
+    }
+
+
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    pdf.setFontSize(20);
+
+    pdf.text(
+        "ZAID'S SWEET HOUSE",
+        105,
+        22,
+        {
+            align: "center"
+        }
+    );
+
+
+    pdf.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    pdf.setFontSize(10);
+
+    pdf.text(
+        "Fresh Sweets | Cakes | Farsan",
+        105,
+        29,
+        {
+            align: "center"
+        }
+    );
+
+    pdf.text(
+        "Nagpur, Maharashtra, India",
+        105,
+        35,
+        {
+            align: "center"
+        }
+    );
+
+    pdf.text(
+        "Phone: +91 9424708856",
+        105,
+        41,
+        {
+            align: "center"
+        }
+    );
+
+    pdf.text(
+        "Email: zaidssweethouse@gmail.com",
+        105,
+        47,
+        {
+            align: "center"
+        }
+    );
+
+
+    /* TITLE */
+
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    pdf.setFontSize(16);
+
+    pdf.text(
+        "CUSTOMER ORDER BILL",
+        105,
+        62,
+        {
+            align: "center"
+        }
+    );
+
+
+    /* ORDER INFORMATION */
+
+    pdf.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    pdf.setFontSize(10);
+
+    pdf.text(
+        `Order ID: ${orderId}`,
+        left,
+        72
+    );
+
+    pdf.text(
+        `Date: ${date}`,
+        130,
+        72
+    );
+
+
+    /* CUSTOMER */
+
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    pdf.setFontSize(11);
+
+    pdf.text(
+        "CUSTOMER DETAILS",
+        left,
+        84
+    );
+
+
+    pdf.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    pdf.setFontSize(10);
+
+    pdf.text(
+        `Name: ${customerName}`,
+        left,
+        92
+    );
+
+    pdf.text(
+        `Phone: ${customerPhone}`,
+        left,
+        99
+    );
+
+
+    const addressLines =
+        pdf.splitTextToSize(
+            `Address: ${customerAddress}`,
+            175
+        );
+
+
+    pdf.text(
+        addressLines,
+        left,
+        106
+    );
+
+
+    let tableY =
+        116 +
+        Math.max(
+            0,
+            (addressLines.length - 1) * 5
+        );
+
+
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    pdf.setFontSize(11);
+
+    pdf.text(
+        "ORDER ITEMS",
+        left,
+        tableY
+    );
+
+
+    tableY += 6;
+
+
+    /* TABLE HEADER */
+
+    pdf.setFillColor(
+        235,
+        220,
+        200
+    );
+
+    pdf.rect(
+        left,
+        tableY,
+        180,
+        9,
+        "F"
+    );
+
+    pdf.rect(
+        left,
+        tableY,
+        180,
+        9
+    );
+
+
+    pdf.setFontSize(9);
+
+    pdf.text(
+        "Product",
+        18,
+        tableY + 6
+    );
+
+    pdf.text(
+        "Weight",
+        85,
+        tableY + 6
+    );
+
+    pdf.text(
+        "Qty",
+        117,
+        tableY + 6
+    );
+
+    pdf.text(
+        "Price",
+        140,
+        tableY + 6
+    );
+
+    pdf.text(
+        "Total",
+        170,
+        tableY + 6
+    );
+
+
+    tableY += 9;
+
+
+    /* TABLE ROWS */
+
+    const rows =
+        document.querySelectorAll(
+            "#billItems tr"
+        );
+
+
+    pdf.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    pdf.setFontSize(9);
+
+
+    rows.forEach(function(row) {
+
+        const cells =
+            row.querySelectorAll("td");
+
+
+        if (cells.length !== 5) {
+
+            return;
+
+        }
+
+
+        const product =
+            cells[0].innerText.trim();
+
+        const weight =
+            cells[1].innerText.trim();
+
+        const qty =
+            cells[2].innerText.trim();
+
+        const price =
+            cells[3].innerText.trim();
+
+        const total =
+            cells[4].innerText.trim();
+
+
+        pdf.rect(
+            left,
+            tableY,
+            180,
+            8
+        );
+
+
+        pdf.text(
+            product.substring(0, 30),
+            18,
+            tableY + 5
+        );
+
+        pdf.text(
+            weight,
+            85,
+            tableY + 5
+        );
+
+        pdf.text(
+            qty,
+            117,
+            tableY + 5
+        );
+
+        pdf.text(
+            price,
+            140,
+            tableY + 5
+        );
+
+        pdf.text(
+            total,
+            170,
+            tableY + 5
+        );
+
+
+        tableY += 8;
+
+    });
+
+
+    /* SUMMARY */
+
+    tableY += 8;
+
+    pdf.setFontSize(10);
+
+    pdf.text(
+        `Subtotal: Rs. ${subtotal}`,
+        130,
+        tableY
+    );
+
+    tableY += 7;
+
+    pdf.text(
+        `Discount: Rs. ${discount}`,
+        130,
+        tableY
+    );
+
+    tableY += 7;
+
+    pdf.text(
+        `Delivery: Rs. ${delivery}`,
+        130,
+        tableY
+    );
+
+    tableY += 9;
+
+
+    /* GRAND TOTAL */
+
+    pdf.setFont(
+        "helvetica",
+        "bold"
+    );
+
+    pdf.setFontSize(13);
+
+    pdf.rect(
+        125,
+        tableY - 6,
+        70,
+        12
+    );
+
+    pdf.text(
+        `Grand Total: Rs. ${grandTotal}`,
+        130,
+        tableY + 2
+    );
+
+
+    /* PAYMENT */
+
+    tableY += 22;
+
+    pdf.setFont(
+        "helvetica",
+        "normal"
+    );
+
+    pdf.setFontSize(10);
+
+    pdf.text(
+        `Payment Method: ${paymentMethod}`,
+        left,
+        tableY
+    );
+
+    tableY += 7;
+
+    pdf.text(
+        "Order Status: Pending",
+        left,
+        tableY
+    );
+
+
+    /* FOOTER */
+
+    pdf.line(
+        left,
+        265,
+        195,
+        265
+    );
+
+    pdf.setFontSize(9);
+
+    pdf.text(
+        "Thank you for ordering from Zaid's Sweet House",
+        105,
+        273,
+        {
+            align: "center"
+        }
+    );
+
+    pdf.text(
+        "Freshness & Quality You Can Trust",
+        105,
+        280,
+        {
+            align: "center"
+        }
+    );
+
+    pdf.text(
+        "Zaid Web Solutions",
+        105,
+        287,
+        {
+            align: "center"
+        }
+    );
+
+
+    pdf.save(
+        `${orderId}-Zaid-Sweet-House-Bill.pdf`
+    );
+
+}
+
+
+/* ==========================================
+   SEARCH + CATEGORY FILTER
+========================================== */
+
+let selectedCategory = "all";
+
 
 const searchFood =
     document.getElementById("searchFood");
+
+
+function applyProductFilters() {
+
+    const cards =
+        document.querySelectorAll(
+            "#menu .menu-container .card"
+        );
+
+
+    const searchValue =
+        searchFood
+            ? searchFood.value.trim().toLowerCase()
+            : "";
+
+
+    cards.forEach(function(card) {
+
+        const titleElement =
+            card.querySelector("h3");
+
+
+        const productName =
+            titleElement
+                ? titleElement.textContent
+                    .trim()
+                    .toLowerCase()
+                : "";
+
+
+        const category =
+            String(
+                card.dataset.category || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        const categoryMatch =
+            selectedCategory === "all" ||
+            category === selectedCategory;
+
+
+        const searchMatch =
+            searchValue === "" ||
+            productName.includes(searchValue);
+
+
+        card.style.display =
+            categoryMatch && searchMatch
+                ? ""
+                : "none";
+
+    });
+
+}
 
 
 if (searchFood) {
 
     searchFood.addEventListener(
         "input",
-        function () {
-
-            const value =
-                searchFood.value
-                    .trim()
-                    .toLowerCase();
-
-
-            const cards =
-                document.querySelectorAll(
-                    "#menu .card, .menu-container .card"
-                );
-
-
-            cards.forEach(function (card) {
-
-                const titleElement =
-                    card.querySelector("h3");
-
-
-                if (!titleElement) {
-
-                    return;
-
-                }
-
-
-                const productName =
-                    titleElement.innerText
-                        .toLowerCase();
-
-
-                card.style.display =
-                    productName.includes(value)
-                        ? ""
-                        : "none";
-
-            });
-
-        }
+        applyProductFilters
     );
 
 }
 
-
-/* ==========================================
-   CATEGORY FILTER
-========================================== */
 
 function filterFood(category) {
 
-    const container = document.querySelector("#menu .menu-container");
-    const cards = document.querySelectorAll("#menu .menu-container .card");
+    selectedCategory =
+        category || "all";
 
-    if (!container) return;
 
-    if (category === "all") {
+    /* UPDATE ACTIVE FILTER BUTTON */
 
-        container.classList.remove("filtered");
+    const filterButtons =
+        document.querySelectorAll(
+            ".filter-btn"
+        );
 
-    } else {
 
-        container.classList.add("filtered");
+    filterButtons.forEach(function(button) {
 
-    }
-
-    cards.forEach(function(card) {
-
-        const itemCategory = card.getAttribute("data-category");
-
-        if (
-            category === "all" ||
-            itemCategory === category
-        ) {
-
-            card.style.display = "";
-
-        } else {
-
-            card.style.display = "none";
-
-        }
+        button.classList.remove("active");
 
     });
 
-}
 
-/* ==========================================
-   INSTAGRAM AD CATEGORY
-========================================== */
+    const activeButton =
+        document.querySelector(
+            `.filter-btn[onclick="filterFood('${selectedCategory}')"]`
+        );
+
+
+    if (activeButton) {
+
+        activeButton.classList.add("active");
+
+    }
+
+
+    /* APPLY PRODUCT FILTER */
+
+    applyProductFilters();
+
+}
 
 function applyCategoryFromURL() {
 
-    const params = new URLSearchParams(
-        window.location.search
-    );
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
 
-    const category = params.get("category");
+
+    const category =
+        params.get("category");
+
 
     const validCategories = [
         "all",
@@ -965,13 +1730,16 @@ function applyCategoryFromURL() {
         "farsan"
     ];
 
-    if (validCategories.includes(category)) {
 
-        filterFood(category);
+    selectedCategory =
+    category &&
+    validCategories.includes(category)
+        ? category
+        : "all";
 
-    }
-
+filterFood(selectedCategory);
 }
+
 
 /* ==========================================
    MOBILE MENU
@@ -979,7 +1747,6 @@ function applyCategoryFromURL() {
 
 const menuBtn =
     document.getElementById("menuBtn");
-
 
 const navMenu =
     document.querySelector("nav ul");
@@ -989,22 +1756,23 @@ if (menuBtn && navMenu) {
 
     menuBtn.addEventListener(
         "click",
-        function () {
+        function() {
 
-            navMenu.classList.toggle("active");
+            navMenu.classList.toggle(
+                "active"
+            );
 
         }
     );
 
 
-    /* ---------- CLOSE MENU AFTER CLICK ---------- */
-
-    navMenu.querySelectorAll("a").forEach(
-        function (link) {
+    navMenu
+        .querySelectorAll("a")
+        .forEach(function(link) {
 
             link.addEventListener(
                 "click",
-                function () {
+                function() {
 
                     navMenu.classList.remove(
                         "active"
@@ -1013,8 +1781,7 @@ if (menuBtn && navMenu) {
                 }
             );
 
-        }
-    );
+        });
 
 }
 
@@ -1025,11 +1792,10 @@ if (menuBtn && navMenu) {
 
 window.addEventListener(
     "load",
-    function () {
+    function() {
 
         const loader =
             document.querySelector(".loader");
-
 
         if (loader) {
 
@@ -1054,7 +1820,7 @@ if (contactForm) {
 
     contactForm.addEventListener(
         "submit",
-        function (e) {
+        function(e) {
 
             e.preventDefault();
 
@@ -1064,18 +1830,15 @@ if (contactForm) {
                     'input[type="text"]'
                 );
 
-
             const emailInput =
                 contactForm.querySelector(
                     'input[type="email"]'
                 );
 
-
             const phoneInput =
                 contactForm.querySelector(
                     'input[type="tel"]'
                 );
-
 
             const messageInput =
                 contactForm.querySelector(
@@ -1088,26 +1851,23 @@ if (contactForm) {
                     ? nameInput.value.trim()
                     : "";
 
-
             const email =
                 emailInput
                     ? emailInput.value.trim()
                     : "";
-
 
             const phone =
                 phoneInput
                     ? phoneInput.value.trim()
                     : "";
 
-
-            const message =
+            const messageText =
                 messageInput
                     ? messageInput.value.trim()
                     : "";
 
 
-            if (!name || !phone || !message) {
+            if (!name || !phone || !messageText) {
 
                 alert(
                     "Please fill all required fields."
@@ -1128,13 +1888,13 @@ Email: ${email}
 Phone: ${phone}
 
 Message:
-${message}`;
+${messageText}`;
 
 
             const whatsappURL =
-                `https://wa.me/919424708856?text=${encodeURIComponent(
-                    whatsappMessage
-                )}`;
+                `https://wa.me/919424708856?text=${
+                    encodeURIComponent(whatsappMessage)
+                }`;
 
 
             window.open(
@@ -1157,20 +1917,18 @@ ${message}`;
 
 if (!window.location.hash) {
 
-    history.scrollRestoration = "manual";
+    history.scrollRestoration =
+        "manual";
 
 
     window.addEventListener(
         "load",
-        function () {
+        function() {
 
             setTimeout(
-                function () {
+                function() {
 
-                    window.scrollTo(
-                        0,
-                        0
-                    );
+                    window.scrollTo(0, 0);
 
                 },
                 100
@@ -1183,7 +1941,63 @@ if (!window.location.hash) {
 
 
 /* ==========================================
-   INITIALIZE CART
+   PAYMENT METHOD TOGGLE
+========================================== */
+
+function updatePaymentDisplay() {
+
+    const upiBox =
+        document.querySelector(".upi-payment");
+
+    const selectedPayment =
+        document.querySelector(
+            'input[name="payment"]:checked'
+        );
+
+    if (!upiBox) {
+        return;
+    }
+
+    if (
+        selectedPayment &&
+        selectedPayment.value === "UPI"
+    ) {
+
+        upiBox.hidden = false;
+        upiBox.style.display = "block";
+
+    } else {
+
+        upiBox.hidden = true;
+        upiBox.style.display = "none";
+
+    }
+}
+
+
+/* PAYMENT RADIO BUTTONS */
+
+const paymentRadios =
+    document.querySelectorAll(
+        'input[name="payment"]'
+    );
+
+paymentRadios.forEach(function (radio) {
+
+    radio.addEventListener(
+        "change",
+        updatePaymentDisplay
+    );
+
+});
+
+
+/* INITIAL STATE */
+
+updatePaymentDisplay();
+
+/* ==========================================
+   INITIALIZE
 ========================================== */
 
 loadCart();
