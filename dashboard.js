@@ -1,29 +1,26 @@
 /* ==========================================
    ZAID'S SWEET HOUSE
    ADMIN DASHBOARD JAVASCRIPT
-   FINAL FIREBASE VERSION
+   FINAL CLEAN VERSION
    PART 1 / 4
+
+   FEATURES:
+   - Firebase orders
+   - Total orders
+   - Total sales
+   - Search orders
+   - Delete order
+   - View bill
+   - Logout
+   - NO STATUS SYSTEM
 ========================================== */
 
 
 /* ==========================================
-   GLOBAL FIREBASE ORDERS
+   GLOBAL ORDERS
 ========================================== */
 
 let firebaseOrders = [];
-
-
-/* ==========================================
-   VALID ORDER STATUSES
-========================================== */
-
-const VALID_STATUSES = [
-    "Pending",
-    "Confirmed",
-    "Preparing",
-    "Delivered",
-    "Cancelled"
-];
 
 
 /* ==========================================
@@ -33,14 +30,11 @@ const VALID_STATUSES = [
 (function protectAdminDashboard() {
 
     if (
-        sessionStorage.getItem(
-            "adminLoggedIn"
-        ) !== "true"
+        sessionStorage.getItem("adminLoggedIn") !==
+        "true"
     ) {
 
-        window.location.replace(
-            "admin.html"
-        );
+        window.location.replace("admin.html");
 
         return;
 
@@ -66,28 +60,6 @@ function escapeAdminHTML(value) {
 
 
 /* ==========================================
-   STATUS CLASS
-========================================== */
-
-function getStatusClass(status) {
-
-    if (
-        !VALID_STATUSES.includes(status)
-    ) {
-
-        return "status-pending";
-
-    }
-
-    return (
-        "status-" +
-        status.toLowerCase()
-    );
-
-}
-
-
-/* ==========================================
    ADMIN MESSAGE
 ========================================== */
 
@@ -102,8 +74,11 @@ function showAdminMessage(
             "adminMessage"
         );
 
+
     if (old) {
+
         old.remove();
+
     }
 
 
@@ -127,11 +102,10 @@ function showAdminMessage(
 
                 ${
                     type === "success"
-                    ? "✅"
-                    : type === "warning"
-                    ? "⚠️"
-                    : "❌"
-
+                        ? "✅"
+                        : type === "warning"
+                        ? "⚠️"
+                        : "❌"
                 }
 
             </div>
@@ -166,6 +140,13 @@ function showAdminMessage(
     document.body.appendChild(box);
 
 
+    requestAnimationFrame(function () {
+
+        box.classList.add("show");
+
+    });
+
+
     setTimeout(function () {
 
         closeAdminMessage();
@@ -188,11 +169,24 @@ function closeAdminMessage() {
 
 
     if (!box) {
+
         return;
+
     }
 
 
-    box.remove();
+    box.classList.remove("show");
+
+
+    setTimeout(function () {
+
+        if (box) {
+
+            box.remove();
+
+        }
+
+    }, 250);
 
 }
 
@@ -209,8 +203,6 @@ function waitForFirebase(
     const ready =
         window.firebaseDB &&
         typeof window.firebaseGetOrders ===
-            "function" &&
-        typeof window.firebaseUpdateDoc ===
             "function" &&
         typeof window.firebaseDeleteDoc ===
             "function" &&
@@ -262,7 +254,7 @@ function waitForFirebase(
 
 
 /* ==========================================
-   GET CURRENT FIREBASE ORDERS
+   GET CURRENT ORDERS
 ========================================== */
 
 function getOrders() {
@@ -308,10 +300,7 @@ function normalizeOrder(
         ...data,
 
         firestoreId:
-            docSnapshot.id,
-
-        status:
-            data.status || "Pending"
+            docSnapshot.id
 
     };
 
@@ -339,7 +328,7 @@ async function loadAdminOrders() {
                 <div class="no-orders">
 
                     <h3>
-                        ⏳ All orders loading...
+                        ⏳ Orders loading...
                     </h3>
 
                     <p>
@@ -353,7 +342,6 @@ async function loadAdminOrders() {
         }
 
 
-        
         const snapshot =
             await window.firebaseGetOrders();
 
@@ -428,7 +416,7 @@ async function loadAdminOrders() {
         showAdminMessage(
             "Orders Loading Failed",
             error.message ||
-            "Could not load orders from Firebase.",
+                "Could not load orders from Firebase.",
             "error"
         );
 
@@ -447,10 +435,6 @@ function updateStatistics(
 
     let sales = 0;
 
-    let pending = 0;
-
-    let completed = 0;
-
 
     orders.forEach(
         function (order) {
@@ -458,29 +442,6 @@ function updateStatistics(
             sales += Number(
                 order.grandTotal || 0
             );
-
-
-            const status =
-                order.status ||
-                "Pending";
-
-
-            if (
-                status === "Pending"
-            ) {
-
-                pending++;
-
-            }
-
-
-            if (
-                status === "Delivered"
-            ) {
-
-                completed++;
-
-            }
 
         }
     );
@@ -498,18 +459,6 @@ function updateStatistics(
         );
 
 
-    const pendingOrders =
-        document.getElementById(
-            "pendingOrders"
-        );
-
-
-    const completedOrders =
-        document.getElementById(
-            "completedOrders"
-        );
-
-
     if (totalOrders) {
 
         totalOrders.innerText =
@@ -524,22 +473,6 @@ function updateStatistics(
             sales.toLocaleString(
                 "en-IN"
             );
-
-    }
-
-
-    if (pendingOrders) {
-
-        pendingOrders.innerText =
-            pending;
-
-    }
-
-
-    if (completedOrders) {
-
-        completedOrders.innerText =
-            completed;
 
     }
 
@@ -561,7 +494,9 @@ function displayAdminOrders(
 
 
     if (!ordersList) {
+
         return;
+
     }
 
 
@@ -605,11 +540,6 @@ function displayAdminOrders(
 
             card.className =
                 "admin-order-card";
-
-
-            const status =
-                order.status ||
-                "Pending";
 
 
             let itemsHTML = "";
@@ -656,10 +586,10 @@ function displayAdminOrders(
 
                                         ${
                                             item.weight
-                                            ? ` (${escapeAdminHTML(
-                                                item.weight
-                                            )})`
-                                            : ""
+                                                ? ` (${escapeAdminHTML(
+                                                    item.weight
+                                                )})`
+                                                : ""
                                         }
 
                                     </span>
@@ -819,82 +749,19 @@ function displayAdminOrders(
                         🛒 Order Items
                     </h4>
 
+
                     ${itemsHTML}
 
                 </div>
 
 
-                <p
-                    class="order-status-row"
-                >
-
-                    <strong>
-                        Status:
-                    </strong>
-
-
-                    <span
-                        class="order-status ${getStatusClass(
-                            status
-                        )}"
-                    >
-
-                        ${escapeAdminHTML(
-                            status
-                        )}
-
-                    </span>
-
-                </p>
-
+                <!-- ==================================
+                     ACTIONS
+                =================================== -->
 
                 <div
                     class="order-actions"
                 >
-
-                    <button
-                        type="button"
-                        onclick="updateOrderStatus(
-                            '${escapeAdminHTML(orderId)}',
-                            'Confirmed'
-                        )"
-                    >
-                        ✅ Confirm
-                    </button>
-
-
-                    <button
-                        type="button"
-                        onclick="updateOrderStatus(
-                            '${escapeAdminHTML(orderId)}',
-                            'Preparing'
-                        )"
-                    >
-                        🍳 Preparing
-                    </button>
-
-
-                    <button
-                        type="button"
-                        onclick="updateOrderStatus(
-                            '${escapeAdminHTML(orderId)}',
-                            'Delivered'
-                        )"
-                    >
-                        🚚 Delivered
-                    </button>
-
-
-                    <button
-                        type="button"
-                        onclick="updateOrderStatus(
-                            '${escapeAdminHTML(orderId)}',
-                            'Cancelled'
-                        )"
-                    >
-                        ❌ Cancel
-                    </button>
-
 
                     <button
                         type="button"
@@ -929,8 +796,12 @@ function displayAdminOrders(
 
 }
 
+
 /* ==========================================
-   SEARCH + FILTER ORDERS
+   PART 1 END
+========================================== */
+/* ==========================================
+   SEARCH ORDERS
 ========================================== */
 
 function filterAdminOrders() {
@@ -941,24 +812,12 @@ function filterAdminOrders() {
         );
 
 
-    const statusFilter =
-        document.getElementById(
-            "adminStatusFilter"
-        );
-
-
     const search =
         searchInput
             ? searchInput.value
                 .trim()
                 .toLowerCase()
             : "";
-
-
-    const selectedStatus =
-        statusFilter
-            ? statusFilter.value
-            : "all";
 
 
     const filtered =
@@ -983,28 +842,11 @@ function filterAdminOrders() {
                     ).toLowerCase();
 
 
-                const status =
-                    String(
-                        order.status ||
-                        "Pending"
-                    );
-
-
-                const searchMatch =
+                return (
                     search === "" ||
                     orderId.includes(search) ||
                     customer.includes(search) ||
-                    phone.includes(search);
-
-
-                const statusMatch =
-                    selectedStatus === "all" ||
-                    status === selectedStatus;
-
-
-                return (
-                    searchMatch &&
-                    statusMatch
+                    phone.includes(search)
                 );
 
             }
@@ -1019,206 +861,6 @@ function filterAdminOrders() {
 
 
 /* ==========================================
-   UPDATE ORDER STATUS - FIREBASE
-========================================== */
-
-async function updateOrderStatus(orderId, newStatus) {
-
-    console.log(
-        "Updating order:",
-        orderId,
-        "to:",
-        newStatus
-    );
-
-    try {
-
-        /* ------------------------------------------
-           CHECK FIREBASE CONNECTION
-        ------------------------------------------ */
-
-        if (!window.firebaseDB) {
-
-            throw new Error(
-                "Firebase database is not connected."
-            );
-
-        }
-
-
-        if (
-            typeof window.firebaseUpdateDoc !==
-            "function"
-        ) {
-
-            throw new Error(
-                "Firebase update function is missing."
-            );
-
-        }
-
-
-        if (
-            typeof window.firebaseDoc !==
-            "function"
-        ) {
-
-            throw new Error(
-                "Firebase document function is missing."
-            );
-
-        }
-
-
-        /* ------------------------------------------
-           VALID STATUS CHECK
-        ------------------------------------------ */
-
-        if (
-            !VALID_STATUSES.includes(newStatus)
-        ) {
-
-            throw new Error(
-                "Invalid order status."
-            );
-
-        }
-
-
-        /* ------------------------------------------
-           FIND ORDER IN CURRENT FIREBASE DATA
-        ------------------------------------------ */
-
-        const order =
-            firebaseOrders.find(
-                function (item) {
-
-                    return String(
-                        item.orderId || ""
-                    ) === String(orderId);
-
-                }
-            );
-
-
-        if (!order) {
-
-            throw new Error(
-                "Order not found in the dashboard."
-            );
-
-        }
-
-
-        /* ------------------------------------------
-           FIRESTORE DOCUMENT ID
-        ------------------------------------------ */
-
-        const firestoreId =
-            order.firestoreId;
-
-
-        if (!firestoreId) {
-
-            throw new Error(
-                "Firestore document ID is missing."
-            );
-
-        }
-
-
-        console.log(
-            "Firestore document:",
-            firestoreId
-        );
-
-
-        /* ------------------------------------------
-           UPDATE FIRESTORE
-        ------------------------------------------ */
-
-        await window.firebaseUpdateDoc(
-
-            window.firebaseDoc(
-                window.firebaseDB,
-                "orders",
-                firestoreId
-            ),
-
-            {
-                status: newStatus
-            }
-
-        );
-
-
-        /* ------------------------------------------
-           UPDATE LOCAL DASHBOARD DATA
-        ------------------------------------------ */
-
-        order.status =
-            newStatus;
-
-
-        /* ------------------------------------------
-           UPDATE STATISTICS
-        ------------------------------------------ */
-
-        updateStatistics(
-            firebaseOrders
-        );
-
-
-        /* ------------------------------------------
-           REFRESH DISPLAY
-        ------------------------------------------ */
-
-        displayAdminOrders(
-            firebaseOrders
-        );
-
-
-        /* ------------------------------------------
-           SUCCESS MESSAGE
-        ------------------------------------------ */
-
-        showAdminMessage(
-            "Status Updated",
-            "Order " +
-                orderId +
-                " is now " +
-                newStatus +
-                ".",
-            "success"
-        );
-
-
-        console.log(
-            "Order status successfully updated:",
-            orderId,
-            newStatus
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Firebase status update error:",
-            error
-        );
-
-
-        showAdminMessage(
-            "Update Failed",
-            error.message ||
-                "Could not update order status.",
-            "error"
-        );
-
-    }
-
-}
-/* ==========================================
    DELETE ORDER
 ========================================== */
 
@@ -1228,15 +870,11 @@ async function deleteOrder(
 
     showConfirmModal(
         "Delete Order?",
-        "This order will be permanently removed from Firebase.",
+        "This order will be permanently deleted from Firebase.",
         "Delete Order",
         async function () {
 
             try {
-
-                /* ------------------------------
-                   CHECK FIREBASE
-                ------------------------------ */
 
                 if (
                     !window.firebaseDB ||
@@ -1253,22 +891,8 @@ async function deleteOrder(
                 }
 
 
-                /* ------------------------------
-                   FIND ORDER
-                ------------------------------ */
-
                 const order =
-                    firebaseOrders.find(
-                        function (item) {
-
-                            return String(
-                                item.orderId || ""
-                            ) === String(
-                                orderId
-                            );
-
-                        }
-                    );
+                    findOrder(orderId);
 
 
                 if (!order) {
@@ -1280,10 +904,6 @@ async function deleteOrder(
                 }
 
 
-                /* ------------------------------
-                   FIRESTORE DOCUMENT ID
-                ------------------------------ */
-
                 if (
                     !order.firestoreId
                 ) {
@@ -1294,10 +914,6 @@ async function deleteOrder(
 
                 }
 
-
-                /* ------------------------------
-                   DELETE FROM FIRESTORE
-                ------------------------------ */
 
                 const orderRef =
                     window.firebaseDoc(
@@ -1312,27 +928,18 @@ async function deleteOrder(
                 );
 
 
-                /* ------------------------------
-                   REMOVE FROM DASHBOARD ARRAY
-                ------------------------------ */
-
                 firebaseOrders =
                     firebaseOrders.filter(
                         function (item) {
 
                             return String(
                                 item.orderId || ""
-                            ) !== String(
-                                orderId
-                            );
+                            ) !==
+                            String(orderId);
 
                         }
                     );
 
-
-                /* ------------------------------
-                   REFRESH
-                ------------------------------ */
 
                 updateStatistics(
                     firebaseOrders
@@ -1344,13 +951,13 @@ async function deleteOrder(
 
                 showAdminMessage(
                     "Order Deleted",
-                    `Order ${orderId} has been permanently deleted.`,
+                    `Order ${orderId} has been deleted successfully.`,
                     "success"
                 );
 
 
                 console.log(
-                    "Order deleted from Firestore:",
+                    "Order deleted:",
                     orderId
                 );
 
@@ -1358,7 +965,7 @@ async function deleteOrder(
             } catch (error) {
 
                 console.error(
-                    "Firestore delete error:",
+                    "Delete order error:",
                     error
                 );
 
@@ -1366,7 +973,7 @@ async function deleteOrder(
                 showAdminMessage(
                     "Delete Failed",
                     error.message ||
-                    "Could not delete the order.",
+                        "Could not delete the order.",
                     "error"
                 );
 
@@ -1423,48 +1030,52 @@ async function clearAllOrders() {
                 }
 
 
-                /* DELETE EACH FIRESTORE ORDER */
+                const deletePromises =
+                    [];
 
-                for (
-                    const order
-                    of firebaseOrders
-                ) {
 
-                    if (
-                        !order.firestoreId
-                    ) {
+                firebaseOrders.forEach(
+                    function (order) {
 
-                        console.warn(
-                            "Skipping order without Firestore ID:",
-                            order.orderId
+                        if (
+                            !order.firestoreId
+                        ) {
+
+                            console.warn(
+                                "Skipping order without Firestore ID:",
+                                order.orderId
+                            );
+
+                            return;
+
+                        }
+
+
+                        const orderRef =
+                            window.firebaseDoc(
+                                window.firebaseDB,
+                                "orders",
+                                order.firestoreId
+                            );
+
+
+                        deletePromises.push(
+                            window.firebaseDeleteDoc(
+                                orderRef
+                            )
                         );
-
-                        continue;
 
                     }
+                );
 
 
-                    const orderRef =
-                        window.firebaseDoc(
-                            window.firebaseDB,
-                            "orders",
-                            order.firestoreId
-                        );
+                await Promise.all(
+                    deletePromises
+                );
 
-
-                    await window.firebaseDeleteDoc(
-                        orderRef
-                    );
-
-                }
-
-
-                /* CLEAR DASHBOARD ARRAY */
 
                 firebaseOrders = [];
 
-
-                /* REFRESH SCREEN */
 
                 updateStatistics(
                     firebaseOrders
@@ -1478,7 +1089,7 @@ async function clearAllOrders() {
 
                 showAdminMessage(
                     "Orders Cleared",
-                    "All customer orders have been removed from Firebase.",
+                    "All customer orders have been deleted.",
                     "success"
                 );
 
@@ -1499,7 +1110,7 @@ async function clearAllOrders() {
                 showAdminMessage(
                     "Clear Failed",
                     error.message ||
-                    "Could not clear all orders.",
+                        "Could not delete all orders.",
                     "error"
                 );
 
@@ -1512,197 +1123,7 @@ async function clearAllOrders() {
 
 
 /* ==========================================
-   PART 2 END
-========================================== */
-/* ==========================================
-   DELETE ORDER
-========================================== */
-
-async function deleteOrder(orderId) {
-
-    try {
-
-        if (!window.firebaseDB) {
-            throw new Error("Firebase connection missing.");
-        }
-
-        const snapshot =
-            await window.firebaseGetOrders();
-
-        let firestoreDocId = null;
-
-        snapshot.forEach(function(docSnapshot) {
-
-            const data = docSnapshot.data();
-
-            if (
-                String(data.orderId || "") ===
-                String(orderId || "")
-            ) {
-                firestoreDocId = docSnapshot.id;
-            }
-
-        });
-
-        if (!firestoreDocId) {
-
-            showAdminMessage(
-                "Order Not Found",
-                "This order was not found in Firebase.",
-                "warning"
-            );
-
-            return;
-        }
-
-
-        await window.firebaseDeleteDoc(
-            window.firebaseDoc(
-                window.firebaseDB,
-                "orders",
-                firestoreDocId
-            )
-        );
-
-
-        showAdminMessage(
-            "Order Deleted",
-            `Order ${orderId} has been deleted successfully.`,
-            "success"
-        );
-
-
-        await loadAdminOrders();
-
-
-    } catch (error) {
-
-        console.error(
-            "Firestore delete error:",
-            error
-        );
-
-        showAdminMessage(
-            "Delete Failed",
-            "Could not delete the order from Firebase.",
-            "error"
-        );
-
-    }
-
-}
-
-
-/* ==========================================
-   CLEAR ALL ORDERS
-========================================== */
-
-async function clearAllOrders() {
-
-    try {
-
-        if (!window.firebaseDB) {
-            throw new Error("Firebase connection missing.");
-        }
-
-        const snapshot =
-            await window.firebaseGetOrders();
-
-
-        if (snapshot.empty) {
-
-            showAdminMessage(
-                "No Orders",
-                "There are no orders to clear.",
-                "warning"
-            );
-
-            return;
-        }
-
-
-        showConfirmModal(
-            "Clear All Orders?",
-            "All customer orders will be permanently deleted from Firebase.",
-            "Clear All",
-            async function() {
-
-                try {
-
-                    const deletePromises = [];
-
-
-                    snapshot.forEach(
-                        function(docSnapshot) {
-
-                            deletePromises.push(
-                                window.firebaseDeleteDoc(
-                                    window.firebaseDoc(
-                                        window.firebaseDB,
-                                        "orders",
-                                        docSnapshot.id
-                                    )
-                                )
-                            );
-
-                        }
-                    );
-
-
-                    await Promise.all(
-                        deletePromises
-                    );
-
-
-                    showAdminMessage(
-                        "Orders Cleared",
-                        "All customer orders have been deleted.",
-                        "success"
-                    );
-
-
-                    await loadAdminOrders();
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Clear orders error:",
-                        error
-                    );
-
-                    showAdminMessage(
-                        "Clear Failed",
-                        "Could not delete all orders.",
-                        "error"
-                    );
-
-                }
-
-            }
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Clear orders Firebase error:",
-            error
-        );
-
-        showAdminMessage(
-            "Error",
-            "Could not access Firebase orders.",
-            "error"
-        );
-
-    }
-
-}
-
-
-/* ==========================================
-   CONFIRM MODAL
+   CONFIRMATION MODAL
 ========================================== */
 
 function showConfirmModal(
@@ -1717,16 +1138,21 @@ function showConfirmModal(
             "adminConfirmModal"
         );
 
+
     if (oldModal) {
+
         oldModal.remove();
+
     }
 
 
     const modal =
         document.createElement("div");
 
+
     modal.id =
         "adminConfirmModal";
+
 
     modal.className =
         "admin-confirm-overlay";
@@ -1740,15 +1166,20 @@ function showConfirmModal(
                 ⚠️
             </div>
 
+
             <h3>
                 ${escapeAdminHTML(title)}
             </h3>
+
 
             <p>
                 ${escapeAdminHTML(message)}
             </p>
 
-            <div class="admin-confirm-actions">
+
+            <div
+                class="admin-confirm-actions"
+            >
 
                 <button
                     type="button"
@@ -1757,6 +1188,7 @@ function showConfirmModal(
                 >
                     Cancel
                 </button>
+
 
                 <button
                     type="button"
@@ -1773,13 +1205,16 @@ function showConfirmModal(
     `;
 
 
-    document.body.appendChild(modal);
+    document.body.appendChild(
+        modal
+    );
 
 
     const cancelButton =
         document.getElementById(
             "cancelAdminAction"
         );
+
 
     const confirmButton =
         document.getElementById(
@@ -1801,376 +1236,10 @@ function showConfirmModal(
 
         confirmButton.addEventListener(
             "click",
-            async function() {
-
-                closeConfirmModal();
-
-                await onConfirm();
-
-            }
-        );
-
-    }
-
-
-    requestAnimationFrame(function() {
-
-        modal.classList.add("show");
-
-    });
-
-}
-
-
-/* ==========================================
-   CLOSE CONFIRM MODAL
-========================================== */
-
-function closeConfirmModal() {
-
-    const modal =
-        document.getElementById(
-            "adminConfirmModal"
-        );
-
-    if (!modal) {
-        return;
-    }
-
-
-    modal.classList.remove("show");
-
-
-    setTimeout(function() {
-
-        if (modal) {
-            modal.remove();
-        }
-
-    }, 200);
-
-}
-/* ==========================================
-   DELETE ORDER
-========================================== */
-
-async function deleteOrder(orderId) {
-
-    try {
-
-        const db = window.firebaseDB;
-
-        if (!db) {
-            throw new Error("Firebase is not connected.");
-        }
-
-        const snapshot =
-            await window.firebaseGetOrders();
-
-        let firestoreDocId = null;
-
-        snapshot.forEach(function (docSnapshot) {
-
-            const data = docSnapshot.data();
-
-            if (
-                String(data.orderId) ===
-                String(orderId)
-            ) {
-                firestoreDocId = docSnapshot.id;
-            }
-
-        });
-
-        if (!firestoreDocId) {
-
-            showAdminMessage(
-                "Order Not Found",
-                "This order was not found in Firebase.",
-                "warning"
-            );
-
-            return;
-        }
-
-
-        showConfirmModal(
-            "Delete Order?",
-            "This order will be permanently deleted.",
-            "Delete Order",
-            async function () {
-
-                try {
-
-                    await window.firebaseDeleteDoc(
-                        window.firebaseDoc(
-                            db,
-                            "orders",
-                            firestoreDocId
-                        )
-                    );
-
-
-                    showAdminMessage(
-                        "Order Deleted",
-                        `Order ${orderId} has been deleted.`,
-                        "success"
-                    );
-
-
-                    await loadAdminOrders();
-
-                } catch (error) {
-
-                    console.error(
-                        "Firestore delete error:",
-                        error
-                    );
-
-                    showAdminMessage(
-                        "Delete Failed",
-                        "Could not delete the order from Firebase.",
-                        "error"
-                    );
-
-                }
-
-            }
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Delete order error:",
-            error
-        );
-
-        showAdminMessage(
-            "Delete Failed",
-            "Could not process the delete request.",
-            "error"
-        );
-
-    }
-
-}
-
-
-/* ==========================================
-   CLEAR ALL ORDERS
-========================================== */
-
-async function clearAllOrders() {
-
-    try {
-
-        const db = window.firebaseDB;
-
-        if (!db) {
-            throw new Error("Firebase is not connected.");
-        }
-
-
-        const snapshot =
-            await window.firebaseGetOrders();
-
-
-        if (snapshot.empty) {
-
-            showAdminMessage(
-                "No Orders",
-                "There are no orders to clear.",
-                "warning"
-            );
-
-            return;
-        }
-
-
-        showConfirmModal(
-            "Clear All Orders?",
-            "All customer orders will be permanently deleted from Firebase.",
-            "Clear All",
-            async function () {
-
-                try {
-
-                    const deletePromises = [];
-
-                    snapshot.forEach(
-                        function (docSnapshot) {
-
-                            deletePromises.push(
-                                window.firebaseDeleteDoc(
-                                    window.firebaseDoc(
-                                        db,
-                                        "orders",
-                                        docSnapshot.id
-                                    )
-                                )
-                            );
-
-                        }
-                    );
-
-
-                    await Promise.all(
-                        deletePromises
-                    );
-
-
-                    showAdminMessage(
-                        "Orders Cleared",
-                        "All customer orders have been deleted.",
-                        "success"
-                    );
-
-
-                    await loadAdminOrders();
-
-                } catch (error) {
-
-                    console.error(
-                        "Clear orders error:",
-                        error
-                    );
-
-                    showAdminMessage(
-                        "Clear Failed",
-                        "Could not delete all orders from Firebase.",
-                        "error"
-                    );
-
-                }
-
-            }
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Clear all orders error:",
-            error
-        );
-
-        showAdminMessage(
-            "Error",
-            "Could not access Firebase orders.",
-            "error"
-        );
-
-    }
-
-}
-
-
-/* ==========================================
-   CONFIRM MODAL
-========================================== */
-
-function showConfirmModal(
-    title,
-    message,
-    confirmText,
-    onConfirm
-) {
-
-    const oldModal =
-        document.getElementById(
-            "adminConfirmModal"
-        );
-
-    if (oldModal) {
-        oldModal.remove();
-    }
-
-
-    const modal =
-        document.createElement("div");
-
-    modal.id =
-        "adminConfirmModal";
-
-    modal.className =
-        "admin-confirm-overlay";
-
-
-    modal.innerHTML = `
-
-        <div class="admin-confirm-box">
-
-            <div class="admin-confirm-icon">
-                ⚠️
-            </div>
-
-            <h3>
-                ${escapeAdminHTML(title)}
-            </h3>
-
-            <p>
-                ${escapeAdminHTML(message)}
-            </p>
-
-            <div class="admin-confirm-actions">
-
-                <button
-                    type="button"
-                    class="admin-confirm-cancel"
-                    id="cancelAdminAction"
-                >
-                    Cancel
-                </button>
-
-                <button
-                    type="button"
-                    class="admin-confirm-delete"
-                    id="confirmAdminAction"
-                >
-                    ${escapeAdminHTML(confirmText)}
-                </button>
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    document.body.appendChild(modal);
-
-
-    const cancelButton =
-        document.getElementById(
-            "cancelAdminAction"
-        );
-
-    const confirmButton =
-        document.getElementById(
-            "confirmAdminAction"
-        );
-
-
-    if (cancelButton) {
-
-        cancelButton.addEventListener(
-            "click",
-            function () {
-
-                closeConfirmModal();
-
-            }
-        );
-
-    }
-
-
-    if (confirmButton) {
-
-        confirmButton.addEventListener(
-            "click",
             async function () {
 
                 closeConfirmModal();
+
 
                 await onConfirm();
 
@@ -2183,7 +1252,9 @@ function showConfirmModal(
     requestAnimationFrame(
         function () {
 
-            modal.classList.add("show");
+            modal.classList.add(
+                "show"
+            );
 
         }
     );
@@ -2192,7 +1263,7 @@ function showConfirmModal(
 
 
 /* ==========================================
-   CLOSE CONFIRM MODAL
+   CLOSE CONFIRMATION MODAL
 ========================================== */
 
 function closeConfirmModal() {
@@ -2202,19 +1273,26 @@ function closeConfirmModal() {
             "adminConfirmModal"
         );
 
+
     if (!modal) {
+
         return;
+
     }
 
 
-    modal.classList.remove("show");
+    modal.classList.remove(
+        "show"
+    );
 
 
     setTimeout(
         function () {
 
             if (modal) {
+
                 modal.remove();
+
             }
 
         },
@@ -2222,6 +1300,11 @@ function closeConfirmModal() {
     );
 
 }
+
+
+/* ==========================================
+   PART 2 END
+========================================== */
 /* ==========================================
    VIEW ADMIN BILL
 ========================================== */
@@ -2230,26 +1313,53 @@ async function viewAdminBill(orderId) {
 
     try {
 
+        if (
+            !window.firebaseDB ||
+            typeof window.firebaseGetOrders !== "function"
+        ) {
+
+            throw new Error(
+                "Firebase connection is missing."
+            );
+
+        }
+
+
+        /* ==========================================
+           FIND ORDER
+        ========================================== */
+
         const snapshot =
             await window.firebaseGetOrders();
 
+
         let order = null;
 
-        snapshot.forEach(function (docSnapshot) {
 
-            const data =
-                docSnapshot.data();
+        snapshot.forEach(
+            function (docSnapshot) {
 
-            if (
-                String(data.orderId) ===
-                String(orderId)
-            ) {
+                const data =
+                    docSnapshot.data();
 
-                order = data;
+
+                if (
+                    String(
+                        data.orderId || ""
+                    ) ===
+                    String(orderId || "")
+                ) {
+
+                    order = {
+                        ...data,
+                        firestoreId:
+                            docSnapshot.id
+                    };
+
+                }
 
             }
-
-        });
+        );
 
 
         if (!order) {
@@ -2264,6 +1374,10 @@ async function viewAdminBill(orderId) {
 
         }
 
+
+        /* ==========================================
+           ORDER ITEMS
+        ========================================== */
 
         let itemsHTML = "";
 
@@ -2282,13 +1396,27 @@ async function viewAdminBill(orderId) {
                                 item.quantity
                             ) || 0;
 
+
                         const price =
                             Number(
                                 item.price
                             ) || 0;
 
+
                         const total =
                             quantity * price;
+
+
+                        let productName =
+                            item.name || "---";
+
+
+                        if (item.weight) {
+
+                            productName +=
+                                ` (${item.weight})`;
+
+                        }
 
 
                         return `
@@ -2297,17 +1425,8 @@ async function viewAdminBill(orderId) {
 
                                 <td>
                                     ${escapeAdminHTML(
-                                        item.name || "---"
+                                        productName
                                     )}
-
-                                    ${
-                                        item.weight
-                                        ? ` (${escapeAdminHTML(
-                                            item.weight
-                                        )})`
-                                        : ""
-                                    }
-
                                 </td>
 
                                 <td>
@@ -2339,7 +1458,10 @@ async function viewAdminBill(orderId) {
 
                 <tr>
 
-                    <td colspan="4">
+                    <td
+                        colspan="4"
+                        style="text-align:center;"
+                    >
                         No item details available.
                     </td>
 
@@ -2349,6 +1471,10 @@ async function viewAdminBill(orderId) {
 
         }
 
+
+        /* ==========================================
+           OPEN BILL WINDOW
+        ========================================== */
 
         const billWindow =
             window.open(
@@ -2370,6 +1496,10 @@ async function viewAdminBill(orderId) {
 
         }
 
+
+        /* ==========================================
+           BILL WINDOW
+        ========================================== */
 
         billWindow.document.write(`
 
@@ -2393,13 +1523,16 @@ async function viewAdminBill(orderId) {
     )}
 </title>
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 
 <style>
 
 * {
     box-sizing: border-box;
 }
+
 
 body {
 
@@ -2417,6 +1550,7 @@ body {
     color: #222;
 
 }
+
 
 .bill {
 
@@ -2438,6 +1572,7 @@ body {
 
 }
 
+
 .bill-header {
 
     text-align: center;
@@ -2451,6 +1586,7 @@ body {
 
 }
 
+
 .bill-header h1 {
 
     margin: 0;
@@ -2461,13 +1597,36 @@ body {
 
 }
 
+
 .bill-header p {
 
     margin: 6px 0 0;
 
-    color: #666;
+    color: #198754;
+
+    font-weight: bold;
 
 }
+
+
+.confirmed-message {
+
+    text-align: center;
+
+    background: #e9f7ef;
+
+    color: #198754;
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    margin-bottom: 22px;
+
+    font-weight: bold;
+
+}
+
 
 .details {
 
@@ -2484,11 +1643,13 @@ body {
 
 }
 
+
 .details div {
 
     word-break: break-word;
 
 }
+
 
 table {
 
@@ -2499,6 +1660,7 @@ table {
     margin-top: 10px;
 
 }
+
 
 th,
 td {
@@ -2514,6 +1676,7 @@ td {
 
 }
 
+
 th {
 
     background: #7b2d26;
@@ -2521,6 +1684,7 @@ th {
     color: #fff;
 
 }
+
 
 .bill-total {
 
@@ -2536,6 +1700,7 @@ th {
 
 }
 
+
 .bill-total-row {
 
     display: flex;
@@ -2548,6 +1713,7 @@ th {
         1px solid #eee;
 
 }
+
 
 .grand-total {
 
@@ -2566,6 +1732,7 @@ th {
 
 }
 
+
 .bill-actions {
 
     display: flex;
@@ -2577,6 +1744,7 @@ th {
     margin-top: 30px;
 
 }
+
 
 .bill-actions button {
 
@@ -2594,11 +1762,13 @@ th {
 
 }
 
+
 .download-btn {
 
     background: #198754;
 
 }
+
 
 .close-btn {
 
@@ -2606,59 +1776,96 @@ th {
 
 }
 
+
 @media (max-width: 600px) {
 
     body {
+
         padding: 8px;
+
     }
+
 
     .bill {
+
         padding: 14px;
+
     }
+
 
     .bill-header h1 {
+
         font-size: 21px;
+
     }
 
+
     .details {
+
         grid-template-columns: 1fr;
+
     }
+
 
     th,
     td {
+
         padding: 7px 4px;
+
         font-size: 11px;
+
         word-break: break-word;
+
     }
+
 
     .bill-total {
+
         width: 100%;
+
     }
+
 
     .bill-actions {
+
         flex-direction: column;
+
     }
 
+
     .bill-actions button {
+
         width: 100%;
+
     }
 
 }
 
+
 @media print {
 
     body {
+
         background: #fff;
+
         padding: 0;
+
     }
+
 
     .bill {
+
         max-width: none;
+
         box-shadow: none;
+
     }
 
+
     .bill-actions {
+
         display: none !important;
+
     }
 
 }
@@ -2667,9 +1874,12 @@ th {
 
 </head>
 
+
 <body>
 
+
 <div class="bill">
+
 
     <div class="bill-header">
 
@@ -2678,8 +1888,15 @@ th {
         </h1>
 
         <p>
-            Customer Order Bill
+            Order Confirmed Successfully
         </p>
+
+    </div>
+
+
+    <div class="confirmed-message">
+
+        ✅ Your order has been confirmed successfully.
 
     </div>
 
@@ -2687,52 +1904,80 @@ th {
     <div class="details">
 
         <div>
-            <strong>Order ID:</strong>
+
+            <strong>
+                Order ID:
+            </strong>
+
             ${escapeAdminHTML(
                 order.orderId || "---"
             )}
+
         </div>
 
+
         <div>
-            <strong>Date:</strong>
+
+            <strong>
+                Date:
+            </strong>
+
             ${escapeAdminHTML(
                 order.date || "---"
             )}
+
         </div>
 
+
         <div>
-            <strong>Customer:</strong>
+
+            <strong>
+                Customer:
+            </strong>
+
             ${escapeAdminHTML(
                 order.customerName || "---"
             )}
+
         </div>
 
+
         <div>
-            <strong>Phone:</strong>
+
+            <strong>
+                Phone:
+            </strong>
+
             ${escapeAdminHTML(
                 order.customerPhone || "---"
             )}
+
         </div>
 
+
         <div>
-            <strong>Payment:</strong>
+
+            <strong>
+                Payment:
+            </strong>
+
             ${escapeAdminHTML(
                 order.paymentMethod || "---"
             )}
+
         </div>
 
-        <div>
-            <strong>Status:</strong>
-            ${escapeAdminHTML(
-                order.status || "Pending"
-            )}
-        </div>
 
         <div>
-            <strong>Address:</strong>
+
+            <strong>
+                Address:
+            </strong>
+
             ${escapeAdminHTML(
                 order.customerAddress || "---"
             )}
+
         </div>
 
     </div>
@@ -2744,17 +1989,26 @@ th {
 
             <tr>
 
-                <th>Product</th>
+                <th>
+                    Product
+                </th>
 
-                <th>Qty</th>
+                <th>
+                    Qty
+                </th>
 
-                <th>Price</th>
+                <th>
+                    Price
+                </th>
 
-                <th>Total</th>
+                <th>
+                    Total
+                </th>
 
             </tr>
 
         </thead>
+
 
         <tbody>
 
@@ -2767,9 +2021,12 @@ th {
 
     <div class="bill-total">
 
+
         <div class="bill-total-row">
 
-            <span>Subtotal</span>
+            <span>
+                Subtotal
+            </span>
 
             <strong>
                 ₹${Number(
@@ -2782,7 +2039,9 @@ th {
 
         <div class="bill-total-row">
 
-            <span>Discount</span>
+            <span>
+                Discount
+            </span>
 
             <strong>
                 ₹${Number(
@@ -2795,7 +2054,9 @@ th {
 
         <div class="bill-total-row">
 
-            <span>Delivery</span>
+            <span>
+                Delivery
+            </span>
 
             <strong>
                 ₹${Number(
@@ -2806,9 +2067,13 @@ th {
         </div>
 
 
-        <div class="bill-total-row grand-total">
+        <div
+            class="bill-total-row grand-total"
+        >
 
-            <span>Grand Total</span>
+            <span>
+                Grand Total
+            </span>
 
             <strong>
                 ₹${Number(
@@ -2817,6 +2082,7 @@ th {
             </strong>
 
         </div>
+
 
     </div>
 
@@ -2831,6 +2097,7 @@ th {
             📄 Download PDF
         </button>
 
+
         <button
             type="button"
             class="close-btn"
@@ -2840,6 +2107,7 @@ th {
         </button>
 
     </div>
+
 
 </div>
 
@@ -2882,6 +2150,7 @@ function downloadBillPDF() {
         "bold"
     );
 
+
     pdf.setFontSize(20);
 
 
@@ -2900,6 +2169,7 @@ function downloadBillPDF() {
 
     pdf.setFontSize(12);
 
+
     pdf.setFont(
         "helvetica",
         "normal"
@@ -2907,7 +2177,23 @@ function downloadBillPDF() {
 
 
     pdf.text(
-        "Customer Order Bill",
+        "Order Confirmed Successfully",
+        105,
+        y,
+        {
+            align: "center"
+        }
+    );
+
+
+    y += 8;
+
+
+    pdf.setFontSize(10);
+
+
+    pdf.text(
+        "Your order has been confirmed successfully.",
         105,
         y,
         {
@@ -2971,13 +2257,6 @@ function downloadBillPDF() {
         ],
 
         [
-            "Status",
-            ${JSON.stringify(
-                order.status || "Pending"
-            )}
-        ],
-
-        [
             "Address",
             ${JSON.stringify(
                 order.customerAddress || "---"
@@ -3028,17 +2307,20 @@ function downloadBillPDF() {
         y
     );
 
+
     pdf.text(
         "Qty",
         105,
         y
     );
 
+
     pdf.text(
         "Price",
         135,
         y
     );
+
 
     pdf.text(
         "Total",
@@ -3081,13 +2363,16 @@ function downloadBillPDF() {
                     item.quantity
                 ) || 0;
 
+
             const price =
                 Number(
                     item.price
                 ) || 0;
 
+
             const total =
-                quantity * price;
+                quantity *
+                price;
 
 
             let productName =
@@ -3257,6 +2542,7 @@ function downloadBillPDF() {
         "bold"
     );
 
+
     pdf.setFontSize(13);
 
 
@@ -3282,6 +2568,7 @@ function downloadBillPDF() {
 
 </script>
 
+
 </body>
 
 </html>
@@ -3291,12 +2578,14 @@ function downloadBillPDF() {
 
         billWindow.document.close();
 
+
     } catch (error) {
 
         console.error(
             "View bill error:",
             error
         );
+
 
         showAdminMessage(
             "Bill Error",
@@ -3310,6 +2599,9 @@ function downloadBillPDF() {
 
 
 /* ==========================================
+   PART 3 END
+========================================== */
+/* ==========================================
    EVENT LISTENERS
 ========================================== */
 
@@ -3317,10 +2609,16 @@ document.addEventListener(
     "DOMContentLoaded",
     function () {
 
+
+        /* ==========================================
+           SEARCH
+        ========================================== */
+
         const searchInput =
             document.getElementById(
                 "adminOrderSearch"
             );
+
 
         if (searchInput) {
 
@@ -3332,25 +2630,15 @@ document.addEventListener(
         }
 
 
-        const statusFilter =
-            document.getElementById(
-                "adminStatusFilter"
-            );
-
-        if (statusFilter) {
-
-            statusFilter.addEventListener(
-                "change",
-                filterAdminOrders
-            );
-
-        }
-
+        /* ==========================================
+           CLEAR ALL ORDERS
+        ========================================== */
 
         const clearButton =
             document.getElementById(
                 "clearOrdersBtn"
             );
+
 
         if (clearButton) {
 
@@ -3362,10 +2650,15 @@ document.addEventListener(
         }
 
 
+        /* ==========================================
+           LOGOUT
+        ========================================== */
+
         const logoutButton =
             document.getElementById(
                 "logoutAdminBtn"
             );
+
 
         if (logoutButton) {
 
@@ -3373,19 +2666,28 @@ document.addEventListener(
                 "click",
                 function () {
 
+
                     showConfirmModal(
                         "Logout?",
                         "Are you sure you want to logout from the Admin Dashboard?",
                         "Logout",
                         function () {
 
+
                             sessionStorage.removeItem(
                                 "adminLoggedIn"
                             );
 
+
                             sessionStorage.removeItem(
                                 "adminLoginTime"
                             );
+
+
+                            /* Clear local dashboard data */
+
+                            firebaseOrders = [];
+
 
                             window.location.replace(
                                 "admin.html"
@@ -3399,13 +2701,12 @@ document.addEventListener(
 
         }
 
-
     }
 );
 
 
 /* ==========================================
-   BACK CACHE PROTECTION
+   BACK BUTTON / CACHE PROTECTION
 ========================================== */
 
 window.addEventListener(
@@ -3427,3 +2728,25 @@ window.addEventListener(
 
     }
 );
+
+
+/* ==========================================
+   DASHBOARD INITIALIZATION
+========================================== */
+
+window.loadAdminOrders =
+    loadAdminOrders;
+
+
+/* ==========================================
+   FINAL DASHBOARD READY
+========================================== */
+
+console.log(
+    "Admin Dashboard JavaScript loaded successfully."
+);
+
+
+/* ==========================================
+   PART 4 END
+========================================== */

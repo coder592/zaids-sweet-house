@@ -23,118 +23,129 @@
 <body class="admin-login-page">
 
 
-    <!-- ==========================================
-         ADMIN LOGIN
-    =========================================== -->
+<!-- ==========================================
+     ADMIN LOGIN
+========================================== -->
 
-    <main class="admin-login-container">
-
-
-        <section class="admin-login-card">
+<main class="admin-login-container">
 
 
-            <!-- LOGO -->
+    <section class="admin-login-card">
 
-            <div class="admin-login-logo">
 
-                <img
-                    src="images/logo.png"
-                    alt="Zaid's Sweet House Logo"
+        <!-- LOGO -->
+
+        <div class="admin-login-logo">
+
+            <img
+                src="images/logo.png"
+                alt="Zaid's Sweet House Logo"
+            >
+
+        </div>
+
+
+
+        <!-- TITLE -->
+
+        <h1>
+            Zaid's Sweet House
+        </h1>
+
+
+        <p class="admin-login-subtitle">
+            Admin Dashboard
+        </p>
+
+
+        <div class="admin-login-divider"></div>
+
+
+
+        <!-- LOGIN FORM -->
+
+        <form id="adminLoginForm">
+
+
+            <div class="admin-input-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter username"
+                    autocomplete="username"
+                    required
                 >
 
             </div>
 
 
-            <!-- TITLE -->
 
-            <h1>
-                Zaid's Sweet House
-            </h1>
+            <div class="admin-input-group">
 
+                <label for="password">
+                    Password
+                </label>
 
-            <p class="admin-login-subtitle">
-                Admin Dashboard
-            </p>
-
-
-            <div class="admin-login-divider"></div>
-
-
-            <!-- LOGIN FORM -->
-
-            <form id="adminLoginForm">
-
-
-                <div class="admin-input-group">
-
-                    <label for="username">
-                        Username
-                    </label>
-
-                    <input
-                        type="text"
-                        id="username"
-                        placeholder="Enter username"
-                        autocomplete="username"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="admin-input-group">
-
-                    <label for="password">
-                        Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Enter password"
-                        autocomplete="current-password"
-                        required
-                    >
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="admin-login-button"
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter password"
+                    autocomplete="current-password"
+                    required
                 >
 
-                    🔐 Login to Dashboard
-
-                </button>
+            </div>
 
 
-            </form>
 
-
-            <!-- BACK TO HOME -->
-
-            <a
-                href="index.html"
-                class="admin-back-home"
+            <button
+                type="submit"
+                class="admin-login-button"
             >
-                ← Back to Website
-            </a>
+                🔐 Login to Dashboard
+            </button>
 
 
-            <!-- FOOTER -->
-
-            <p class="admin-login-footer">
-                Zaid Web Solutions
-            </p>
+        </form>
 
 
-        </section>
+
+        <!-- BACK TO HOME -->
+
+        <a
+            href="index.html"
+            class="admin-back-home"
+        >
+            ← Back to Website
+        </a>
 
 
-    </main>
 
-    <script>
+        <!-- FOOTER -->
+
+        <p class="admin-login-footer">
+            Zaid Web Solutions
+        </p>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ==========================================
+     ADMIN MESSAGE
+========================================== -->
+
+<script>
+
 function showAdminMessage(
     title,
     message,
@@ -143,29 +154,53 @@ function showAdminMessage(
 ) {
 
     const old =
-        document.getElementById("adminMessage");
+        document.getElementById(
+            "adminMessage"
+        );
+
 
     if (old) {
         old.remove();
     }
 
+
     const box =
         document.createElement("div");
 
-    box.id = "adminMessage";
+
+    box.id =
+        "adminMessage";
+
 
     box.className =
         "admin-message " + type;
 
+
     box.innerHTML = `
+
         <div class="admin-message-icon">
-            ${type === "success" ? "✓" : "!"}
+
+            ${
+                type === "success"
+                    ? "✓"
+                    : "!"
+            }
+
         </div>
 
+
         <div class="admin-message-content">
-            <h3>${title}</h3>
-            <p>${message}</p>
+
+            <h3>
+                ${title}
+            </h3>
+
+            <p>
+                ${message}
+            </p>
+
         </div>
+
 
         <button
             type="button"
@@ -174,139 +209,264 @@ function showAdminMessage(
         >
             ×
         </button>
+
     `;
+
 
     document.body.appendChild(box);
 
-    requestAnimationFrame(function () {
-        box.classList.add("show");
-    });
 
-    setTimeout(function () {
+    requestAnimationFrame(
+        function () {
 
-        closeAdminMessage();
+            box.classList.add("show");
 
-        if (callback) {
-            setTimeout(callback, 250);
         }
+    );
 
-    }, 1500);
+
+    setTimeout(
+        function () {
+
+            closeAdminMessage();
+
+
+            if (callback) {
+
+                setTimeout(
+                    callback,
+                    250
+                );
+
+            }
+
+        },
+        1500
+    );
+
 }
+
 
 
 function closeAdminMessage() {
 
     const box =
-        document.getElementById("adminMessage");
+        document.getElementById(
+            "adminMessage"
+        );
+
 
     if (!box) {
         return;
     }
 
+
     box.classList.remove("show");
 
-    setTimeout(function () {
-        box.remove();
-    }, 250);
+
+    setTimeout(
+        function () {
+
+            if (box) {
+                box.remove();
+            }
+
+        },
+        250
+    );
+
 }
+
 </script>
 
+
+
+<!-- ==========================================
+     FIREBASE CONFIG
+========================================== -->
+
 <script src="firebase-config.js"></script>
+
+
+
+<!-- ==========================================
+     FIREBASE AUTHENTICATION
+========================================== -->
+
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+        initializeApp
+    } from
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+
     import {
         getAuth,
         signInWithEmailAndPassword
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    } from
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-    const app = initializeApp(window.firebaseConfig);
-    const auth = getAuth(app);
 
-    window.firebaseAdminLogin = async function(password) {
-        return await signInWithEmailAndPassword(
-            auth,
-            "mdzaidqureshi28@gmail.com",
-            password
+
+    const app =
+        initializeApp(
+            window.firebaseConfig
         );
-    };
 
-    console.log("Firebase Admin Authentication ready");
+
+    const auth =
+        getAuth(app);
+
+
+
+    window.firebaseAdminLogin =
+        async function (password) {
+
+            return await signInWithEmailAndPassword(
+                auth,
+                "mdzaidqureshi28@gmail.com",
+                password
+            );
+
+        };
+
+
+
+    console.log(
+        "Firebase Admin Authentication ready"
+    );
+
 </script>
 
 
 
-    <!-- ==========================================
-         LOGIN JAVASCRIPT
-    =========================================== -->
+<!-- ==========================================
+     LOGIN JAVASCRIPT
+========================================== -->
+
 <script>
 
 document
-    .getElementById("adminLoginForm")
-    .addEventListener("submit", async function (e) {
+    .getElementById(
+        "adminLoginForm"
+    )
+    .addEventListener(
+        "submit",
+        async function (e) {
 
-        e.preventDefault();
-
-
-        const username =
-            document
-                .getElementById("username")
-                .value
-                .trim();
+            e.preventDefault();
 
 
-        const password =
-            document
-                .getElementById("password")
-                .value;
+            const username =
+                document
+                    .getElementById(
+                        "username"
+                    )
+                    .value
+                    .trim();
 
 
-        
-        try {
+            const password =
+                document
+                    .getElementById(
+                        "password"
+                    )
+                    .value;
 
-    await window.firebaseAdminLogin(password);
 
-    sessionStorage.setItem(
-        "adminLoggedIn",
-        "true"
-    );
 
-    sessionStorage.setItem(
-        "adminLoginTime",
-        Date.now().toString()
-    );
+            /* ==========================================
+               USERNAME CHECK
+            ========================================== */
 
-    showAdminMessage(
-        "Login Successful",
-        "Welcome to the Admin Dashboard.",
-        "success",
-        function () {
+            if (
+                username !==
+                "mdzaidqureshi28@gmail.com"
+            ) {
 
-            window.location.replace(
-                "dashboard.html"
-            );
+                showAdminMessage(
+                    "Login Failed",
+                    "Invalid admin username.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+
+            if (!password) {
+
+                showAdminMessage(
+                    "Login Failed",
+                    "Please enter your password.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+
+            try {
+
+                await window.firebaseAdminLogin(
+                    password
+                );
+
+
+
+                sessionStorage.setItem(
+                    "adminLoggedIn",
+                    "true"
+                );
+
+
+                sessionStorage.setItem(
+                    "adminLoginTime",
+                    Date.now().toString()
+                );
+
+
+
+                showAdminMessage(
+                    "Login Successful",
+                    "Welcome to the Admin Dashboard.",
+                    "success",
+                    function () {
+
+                        window.location.replace(
+                            "dashboard.html"
+                        );
+
+                    }
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Firebase Admin Login Error:",
+                    error
+                );
+
+
+                showAdminMessage(
+                    "Login Failed",
+                    "Invalid admin username or password.",
+                    "error"
+                );
+
+            }
 
         }
     );
 
-} catch (error) {
-
-    console.error(
-        "Firebase Admin Login Error:",
-        error
-    );
-
-    showAdminMessage(
-        "Login Failed",
-        "Invalid admin password.",
-        "error"
-    );
-
-}
-
-    });
-
 </script>
-    
+
 
 </body>
 

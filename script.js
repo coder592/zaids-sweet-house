@@ -83,13 +83,50 @@ function escapeHTML(value) {
         .replace(/'/g, "&#039;");
 
 }
+/* ==========================================
+   CUSTOMER ORDER STATUS DISPLAY
+========================================== */
 
+window.updateCustomerOrderStatus = function(status) {
+
+    const statusBox =
+        document.getElementById("billOrderStatus");
+
+    if (!statusBox) {
+        return;
+    }
+
+    const validStatuses = [
+        "Pending",
+        "Confirmed",
+        "Preparing",
+        "Delivered",
+        "Cancelled"
+    ];
+
+    if (!validStatuses.includes(status)) {
+        status = "Pending";
+    }
+
+    statusBox.innerText = status;
+
+    statusBox.className =
+        "order-status status-" +
+        status.toLowerCase();
+
+};
 
 /* ==========================================
    ADD WEIGHTED PRODUCT
+   PRODUCT-CARD QUANTITY CONTROL
 ========================================== */
 
-function addWeightedProduct(name, pricePerKg, weightId) {
+function addWeightedProduct(
+    name,
+    pricePerKg,
+    weightId,
+    buttonElement
+) {
 
     const weightSelect =
         document.getElementById(weightId);
@@ -105,28 +142,38 @@ function addWeightedProduct(name, pricePerKg, weightId) {
 
     }
 
+
     const weight =
         parseFloat(weightSelect.value);
 
-    if (!Number.isFinite(weight) || weight <= 0) {
 
-        alert("Please select a valid weight.");
+    if (
+        !Number.isFinite(weight) ||
+        weight <= 0
+    ) {
+
+        alert(
+            "Please select a valid weight."
+        );
 
         return;
 
     }
+
 
     const weightText =
         weight === 1
             ? "1 kg"
             : `${weight * 1000}g`;
 
+
     const finalPrice =
         Math.round(
             Number(pricePerKg) * weight
         );
 
-    const existingItem =
+
+    let existingItem =
         cart.find(function(item) {
 
             return (
@@ -136,10 +183,13 @@ function addWeightedProduct(name, pricePerKg, weightId) {
 
         });
 
+
     if (existingItem) {
 
         existingItem.quantity =
-            Number(existingItem.quantity || 0) + 1;
+            Number(
+                existingItem.quantity || 0
+            ) + 1;
 
     } else {
 
@@ -157,13 +207,348 @@ function addWeightedProduct(name, pricePerKg, weightId) {
 
     }
 
+
+    /* SAVE + UPDATE CART */
+
     saveCart();
 
     displayCart();
 
+
+    /* ==========================================
+       PRODUCT CARD QUANTITY CONTROL
+    ========================================== */
+
+    const productKey =
+        getProductKey(name);
+
+
+    const quantityBox =
+        document.getElementById(
+            `qty-${productKey}`
+        );
+
+
+    const countBox =
+        document.getElementById(
+            `count-${productKey}`
+        );
+
+
+    if (quantityBox) {
+
+        quantityBox.style.display =
+        "flex";
+        quantityBox.style.visibility =
+        "visible";
+        quantityBox.style.opacity =
+        "1";
+        quantityBox.style.pointerEvents =
+        "auto";
+
+    }
+
+
+    if (countBox) {
+
+        const currentItem =
+            cart.find(function(item) {
+
+                return (
+                    item.name === name &&
+                    item.weight === weightText
+                );
+
+            });
+
+
+        countBox.innerText =
+            currentItem
+                ? currentItem.quantity
+                : 1;
+
+    }
+
+
+    /* ==========================================
+       ADD BUTTON FEEDBACK
+    ========================================== */
+
+    if (buttonElement) {
+
+        const oldText =
+            buttonElement.innerHTML;
+
+
+        buttonElement.innerHTML =
+            "✓ Added";
+
+
+        buttonElement.classList.add(
+            "added"
+        );
+
+
+        setTimeout(
+            function() {
+
+                buttonElement.innerHTML =
+                    oldText;
+
+                buttonElement.classList.remove(
+                    "added"
+                );
+
+            },
+            1000
+        );
+
+    }
+
+
+    /* ==========================================
+       CART FEEDBACK
+    ========================================== */
+
+    showCartAddedMessage(
+        `${name} added to cart 🛒`
+    );
+
 }
 
 
+/* ==========================================
+   PRODUCT KEY
+========================================== */
+
+function getProductKey(name) {
+
+    return String(name)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+
+}
+
+
+/* ==========================================
+   CHANGE PRODUCT QUANTITY
+========================================== */
+
+function changeProductQuantity(
+    name,
+    change,
+    weightId
+) {
+
+    const weightSelect =
+        document.getElementById(weightId);
+
+
+    if (!weightSelect) {
+
+        return;
+
+    }
+
+
+    const weight =
+        parseFloat(weightSelect.value);
+
+
+    if (
+        !Number.isFinite(weight) ||
+        weight <= 0
+    ) {
+
+        return;
+
+    }
+
+
+    const weightText =
+        weight === 1
+            ? "1 kg"
+            : `${weight * 1000}g`;
+
+
+    const itemIndex =
+        cart.findIndex(function(item) {
+
+            return (
+                item.name === name &&
+                item.weight === weightText
+            );
+
+        });
+
+
+    if (itemIndex === -1) {
+
+        return;
+
+    }
+
+
+    cart[itemIndex].quantity =
+        Number(
+            cart[itemIndex].quantity || 0
+        ) + Number(change);
+
+
+    /* ==========================================
+       REMOVE WHEN QUANTITY REACHES ZERO
+    ========================================== */
+
+    if (
+        cart[itemIndex].quantity <= 0
+    ) {
+
+        cart.splice(
+            itemIndex,
+            1
+        );
+
+
+        const productKey =
+            getProductKey(name);
+
+
+        const quantityBox =
+            document.getElementById(
+                `qty-${productKey}`
+            );
+
+
+        if (quantityBox) {
+
+            quantityBox.style.display =
+            "flex";
+            quantityBox.style.visibility =
+            "hiddem";
+            quantityBox.style.opacity =
+            "0";
+            quantityBox.style.pointerEvents =
+            "none";
+
+        }
+
+    }
+
+
+    saveCart();
+
+    displayCart();
+
+
+    /* UPDATE CARD COUNT */
+
+    const productKey =
+        getProductKey(name);
+
+
+    const countBox =
+        document.getElementById(
+            `count-${productKey}`
+        );
+
+
+    const currentItem =
+        cart.find(function(item) {
+
+            return (
+                item.name === name &&
+                item.weight === weightText
+            );
+
+        });
+
+
+    if (countBox) {
+
+        countBox.innerText =
+            currentItem
+                ? currentItem.quantity
+                : "0";
+
+    }
+
+}
+
+
+/* ==========================================
+   CART ADDED MESSAGE
+========================================== */
+
+function showCartAddedMessage(message) {
+
+    const oldToast =
+        document.getElementById(
+            "cartAddedToast"
+        );
+
+
+    if (oldToast) {
+
+        oldToast.remove();
+
+    }
+
+
+    const toast =
+        document.createElement("div");
+
+
+    toast.id =
+        "cartAddedToast";
+
+
+    toast.className =
+        "cart-added-toast";
+
+
+    toast.innerText =
+        message;
+
+
+    document.body.appendChild(
+        toast
+    );
+
+
+    requestAnimationFrame(
+        function() {
+
+            toast.classList.add(
+                "show"
+            );
+
+        }
+    );
+
+
+    setTimeout(
+        function() {
+
+            toast.classList.remove(
+                "show"
+            );
+
+
+            setTimeout(
+                function() {
+
+                    toast.remove();
+
+                },
+                300
+            );
+
+        },
+        1800
+    );
+
+}
 /* ==========================================
    ADD NORMAL PRODUCT
 ========================================== */
@@ -221,7 +606,7 @@ function addToCart(name, price) {
 
 
 /* ==========================================
-   DISPLAY CART
+   FINAL DISPLAY CART
 ========================================== */
 
 function displayCart() {
@@ -242,33 +627,39 @@ function displayCart() {
         document.getElementById("summaryTotal");
 
 
-    /* CART COUNT */
+    /* ==========================================
+       CART COUNT
+    ========================================== */
+
+    const totalQuantity =
+        cart.reduce(function(sum, item) {
+
+            return (
+                sum +
+                Number(item.quantity || 0)
+            );
+
+        }, 0);
+
 
     if (cartCount) {
 
-        const count =
-            cart.reduce(function(sum, item) {
-
-                return (
-                    sum +
-                    Number(item.quantity || 0)
-                );
-
-            }, 0);
-
         cartCount.innerText =
-            `(${count})`;
+            `(${totalQuantity})`;
 
     }
 
 
-    /* CLEAR OLD CONTENT */
+    /* ==========================================
+       CLEAR OLD CART
+    ========================================== */
 
     if (cartBox) {
 
         cartBox.innerHTML = "";
 
     }
+
 
     if (summaryBox) {
 
@@ -277,23 +668,34 @@ function displayCart() {
     }
 
 
-    /* EMPTY CART */
+    /* ==========================================
+       EMPTY CART
+    ========================================== */
 
-    if (cart.length === 0) {
+    if (!Array.isArray(cart) || cart.length === 0) {
 
         if (cartBox) {
 
-            cartBox.innerHTML =
-                "<h3>Your cart is empty 🛒</h3>";
+            cartBox.innerHTML = `
+                <div class="empty-cart">
+                    <span>🛒</span>
+                    <p>Your cart is empty</p>
+                    <small>
+                        Add some delicious items from our menu.
+                    </small>
+                </div>
+            `;
 
         }
+
 
         if (summaryBox) {
 
-            summaryBox.innerHTML =
+            summaryBox.innerText =
                 "No items added";
 
         }
+
 
         if (totalBox) {
 
@@ -301,115 +703,180 @@ function displayCart() {
 
         }
 
+
         if (summaryTotal) {
 
             summaryTotal.innerText = "0";
 
         }
 
+
         return;
 
     }
 
 
+    /* ==========================================
+       TOTAL
+    ========================================== */
+
     let total = 0;
 
 
-    /* DISPLAY ITEMS */
+    /* ==========================================
+       DISPLAY CART ITEMS
+    ========================================== */
 
     cart.forEach(function(item, index) {
 
         const price =
             Number(item.price) || 0;
 
+
         const quantity =
             Number(item.quantity) || 0;
+
 
         const itemTotal =
             price * quantity;
 
+
         total += itemTotal;
 
 
-        /* CART ITEM */
+        /* --------------------------------------
+           CART ITEM
+        -------------------------------------- */
+
+        const cartItem =
+            document.createElement("div");
+
+
+        cartItem.className =
+            "cart-item";
+
+
+        /* --------------------------------------
+           ITEM INFO
+        -------------------------------------- */
+
+        const itemInfo =
+            document.createElement("div");
+
+
+        itemInfo.className =
+            "cart-item-info";
+
+
+        const itemName =
+            document.createElement("h3");
+
+
+        itemName.innerText =
+            item.name;
+
+
+        const itemDetails =
+            document.createElement("p");
+
+
+        itemDetails.innerText =
+            `${item.weight ? "Weight: " + item.weight + " | " : ""}` +
+            `Qty: ${quantity} | ` +
+            `₹${price} each | ` +
+            `Total: ₹${itemTotal}`;
+
+
+        itemInfo.appendChild(
+            itemName
+        );
+
+
+        itemInfo.appendChild(
+            itemDetails
+        );
+
+
+        /* --------------------------------------
+           REMOVE BUTTON
+        -------------------------------------- */
+
+        const removeButton =
+            document.createElement("button");
+
+
+        removeButton.type =
+            "button";
+
+
+        removeButton.className =
+            "cart-remove-btn";
+
+
+        removeButton.innerText =
+            "Remove";
+
+
+        removeButton.onclick =
+            function() {
+
+                removeCartItem(index);
+
+            };
+
+
+        /* --------------------------------------
+           ADD TO CART ITEM
+        -------------------------------------- */
+
+        cartItem.appendChild(
+            itemInfo
+        );
+
+
+        cartItem.appendChild(
+            removeButton
+        );
+
 
         if (cartBox) {
 
-            const cartItem =
-                document.createElement("div");
-
-            cartItem.className =
-                "cart-item";
-
-            cartItem.innerHTML = `
-
-                <h3>
-                    ${escapeHTML(item.name)}
-                </h3>
-
-                <p>
-    ${
-        item.weight
-            ? `Weight: ${escapeHTML(item.weight)} &nbsp; | &nbsp; `
-            : ""
-    }
-
-    Rate: ₹${price}
-    &nbsp; | &nbsp;
-    Qty: ${quantity}
-    &nbsp; | &nbsp;
-    Total: ₹${itemTotal}
-</p>
-
-                <button
-                    type="button"
-                    onclick="changeQuantity(${index}, -1)"
-                >
-                    −
-                </button>
-
-                <button
-                    type="button"
-                    onclick="changeQuantity(${index}, 1)"
-                >
-                    +
-                </button>
-
-                <button
-                    type="button"
-                    onclick="removeItem(${index})"
-                >
-                    ❌ Remove
-                </button>
-
-            `;
-
-            cartBox.appendChild(cartItem);
+            cartBox.appendChild(
+                cartItem
+            );
 
         }
 
 
-        /* ORDER SUMMARY */
+        /* ======================================
+           ORDER SUMMARY
+        ====================================== */
 
         if (summaryBox) {
 
             const summaryItem =
                 document.createElement("p");
 
+
             summaryItem.innerText =
                 `${item.name}` +
-                `${item.weight ? ` (${item.weight})` : ""}` +
+                `${item.weight ? " (" + item.weight + ")" : ""}` +
                 ` × ${quantity}` +
                 ` = ₹${itemTotal}`;
 
-            summaryBox.appendChild(summaryItem);
+
+            summaryBox.appendChild(
+                summaryItem
+            );
 
         }
 
     });
 
 
-    /* TOTAL */
+    /* ==========================================
+       TOTAL UPDATE
+    ========================================== */
 
     if (totalBox) {
 
@@ -417,6 +884,7 @@ function displayCart() {
             total;
 
     }
+
 
     if (summaryTotal) {
 
@@ -427,6 +895,104 @@ function displayCart() {
 
 }
 
+
+/* ==========================================
+   REMOVE COMPLETE PRODUCT FROM CART
+========================================== */
+
+function removeCartItem(index) {
+
+    if (
+        !Number.isInteger(index) ||
+        index < 0 ||
+        index >= cart.length
+    ) {
+
+        return;
+
+    }
+
+
+    const removedItem =
+        cart[index];
+
+
+    /* ------------------------------------------
+       REMOVE FROM CART ARRAY
+    ------------------------------------------ */
+
+    cart.splice(
+        index,
+        1
+    );
+
+
+    /* ------------------------------------------
+       SAVE CART
+    ------------------------------------------ */
+
+    saveCart();
+
+
+    /* ------------------------------------------
+       HIDE QUANTITY CONTROL
+       FOR ONLY THAT PRODUCT
+    ------------------------------------------ */
+
+    if (removedItem) {
+
+        const productKey =
+            getProductKey(
+                removedItem.name
+            );
+
+
+        const quantityBox =
+            document.getElementById(
+                `qty-${productKey}`
+            );
+
+
+        const countBox =
+            document.getElementById(
+                `count-${productKey}`
+            );
+
+
+        if (quantityBox) {
+
+            quantityBox.style.display =
+                "flex";
+
+            quantityBox.style.visibility =
+                "hidden";
+
+            quantityBox.style.opacity =
+                "0";
+
+            quantityBox.style.pointerEvents =
+                "none";
+
+        }
+
+
+        if (countBox) {
+
+            countBox.innerText =
+                "0";
+
+        }
+
+    }
+
+
+    /* ------------------------------------------
+       REFRESH CART
+    ------------------------------------------ */
+
+    displayCart();
+
+}
 
 /* ==========================================
    CHANGE QUANTITY
@@ -598,6 +1164,10 @@ if (checkoutForm) {
                     .toString()
                     .slice(-6);
 
+            localStorage.setItem(
+                "zaidCurrentOrderId",
+                orderId
+            );        
             const billDate =
                 now.toLocaleDateString("en-IN");
 
@@ -697,7 +1267,6 @@ ${item.weight ? `⚖️ Weight: ${item.weight}\n` : ""}🔢 Qty: ${item.quantity
 
                 grandTotal: grandTotal,
 
-                status: "Pending"
 
             };
 
@@ -811,13 +1380,10 @@ Delivery: ₹${deliveryCharge}
 *GRAND TOTAL: ₹${grandTotal}*
 
 ━━━━━━━━━━━━━━━━━━
-📦 *ORDER STATUS*
-━━━━━━━━━━━━━━━━━━
-
-🕐 Status: *Pending*
+✅ *ORDER CONFIRMED SUCCESSFULLY*
 
 📞 We will contact you shortly
-to confirm your order.
+regarding your order.
 
 Thank you for choosing
 *Zaid's Sweet House* ❤️
@@ -865,7 +1431,7 @@ Thank you for choosing
                 paymentMethod
             );
 
-
+            
             const billItems =
                 document.getElementById("billItems");
 
@@ -943,6 +1509,10 @@ Thank you for choosing
             );
 
 
+           /* ==========================================
+   CUSTOMER ORDER STATUS
+========================================== */
+           
             /* SHOW BILL */
 
             const customerBill =
@@ -1539,15 +2109,7 @@ function downloadBillPDF() {
         tableY
     );
 
-    tableY += 7;
-
-    pdf.text(
-        "Order Status: Pending",
-        left,
-        tableY
-    );
-
-
+    
     /* FOOTER */
 
     pdf.line(
@@ -2005,3 +2567,61 @@ loadCart();
 displayCart();
 
 applyCategoryFromURL();
+
+/* ==========================================
+   NAVBAR ACTIVE BUTTON
+========================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const navLinks =
+        document.querySelectorAll("nav ul li a");
+
+    const sections =
+        document.querySelectorAll("section[id], header[id]");
+
+    function updateActiveNav() {
+
+        let currentSection = "";
+
+        sections.forEach(function (section) {
+
+            const sectionTop =
+                section.offsetTop - 120;
+
+            if (window.scrollY >= sectionTop) {
+
+                currentSection =
+                    section.getAttribute("id");
+
+            }
+
+        });
+
+        navLinks.forEach(function (link) {
+
+            link.classList.remove("active");
+
+            const href =
+                link.getAttribute("href");
+
+            if (
+                href === "#" + currentSection
+            ) {
+
+                link.classList.add("active");
+
+            }
+
+        });
+
+    }
+
+    window.addEventListener(
+        "scroll",
+        updateActiveNav
+    );
+
+    updateActiveNav();
+
+});

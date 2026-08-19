@@ -23,11 +23,11 @@
 <body>
 
 
-<script>
+<!-- ==========================================
+     ADMIN DASHBOARD SECURITY
+========================================== -->
 
-/* ==========================================
-   ADMIN DASHBOARD SECURITY
-========================================== */
+<script>
 
 (function () {
 
@@ -116,6 +116,10 @@ window.addEventListener(
 
 
 
+<!-- ==========================================
+     ADMIN HEADER
+========================================== -->
+
 <header class="admin-header">
 
     <div>
@@ -142,6 +146,10 @@ window.addEventListener(
 
 
 
+<!-- ==========================================
+     MAIN DASHBOARD
+========================================== -->
+
 <main class="admin-dashboard">
 
 
@@ -158,6 +166,8 @@ window.addEventListener(
     <div class="admin-stats">
 
 
+        <!-- TOTAL ORDERS -->
+
         <div class="admin-stat-card">
 
             <h3>
@@ -172,6 +182,8 @@ window.addEventListener(
 
 
 
+        <!-- TOTAL SALES -->
+
         <div class="admin-stat-card">
 
             <h3>
@@ -180,34 +192,6 @@ window.addEventListener(
 
             <p>
                 ₹<span id="totalSales">0</span>
-            </p>
-
-        </div>
-
-
-
-        <div class="admin-stat-card">
-
-            <h3>
-                ⏳ Pending Orders
-            </h3>
-
-            <p id="pendingOrders">
-                0
-            </p>
-
-        </div>
-
-
-
-        <div class="admin-stat-card">
-
-            <h3>
-                ✅ Completed Orders
-            </h3>
-
-            <p id="completedOrders">
-                0
             </p>
 
         </div>
@@ -243,11 +227,10 @@ window.addEventListener(
 
 
         <!-- ==========================================
-             SEARCH & FILTER
+             SEARCH
         =========================================== -->
 
         <div class="admin-search">
-
 
             <input
                 type="text"
@@ -255,42 +238,12 @@ window.addEventListener(
                 placeholder="🔎 Search Order ID, customer or phone..."
             >
 
-
-            <select id="adminStatusFilter">
-
-                <option value="all">
-                    All Orders
-                </option>
-
-                <option value="Pending">
-                    Pending
-                </option>
-
-                <option value="Confirmed">
-                    Confirmed
-                </option>
-
-                <option value="Preparing">
-                    Preparing
-                </option>
-
-                <option value="Delivered">
-                    Delivered
-                </option>
-
-                <option value="Cancelled">
-                    Cancelled
-                </option>
-
-            </select>
-
-
         </div>
 
 
 
         <!-- ==========================================
-             ORDERS
+             ORDERS LIST
         =========================================== -->
 
         <div id="ordersList">
@@ -319,166 +272,208 @@ window.addEventListener(
 
 <!-- ==========================================
      FIREBASE CONFIG
-=========================================== -->
+========================================== -->
 
 <script src="firebase-config.js"></script>
 
+
+<!-- ==========================================
+     FIREBASE
+========================================== -->
+
 <script type="module">
 
-    import { initializeApp } from
-        "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
-    import {
-        getAuth,
-        onAuthStateChanged
-    } from
-        "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-    import {
-        getFirestore,
-        collection,
-        getDocs,
-        updateDoc,
-        deleteDoc,
-        doc
-    } from
-        "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import {
+    initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 
-    /* ==========================================
-       FIREBASE INITIALIZATION
-    ========================================== */
+import {
+    getAuth,
+    onAuthStateChanged
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-    const app =
-        initializeApp(
-            window.firebaseConfig
+
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    deleteDoc,
+    doc
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+
+/* ==========================================
+   FIREBASE INITIALIZATION
+========================================== */
+
+const app =
+    initializeApp(
+        window.firebaseConfig
+    );
+
+
+
+/* ==========================================
+   FIREBASE AUTH
+========================================== */
+
+const auth =
+    getAuth(app);
+
+
+
+/* ==========================================
+   FIRESTORE
+========================================== */
+
+const db =
+    getFirestore(app);
+
+
+
+window.firebaseDB =
+    db;
+
+
+window.firebaseAuth =
+    auth;
+
+
+
+/* ==========================================
+   FIREBASE DELETE
+========================================== */
+
+window.firebaseDeleteDoc =
+    deleteDoc;
+
+
+window.firebaseDoc =
+    doc;
+
+
+
+/* ==========================================
+   FIREBASE ORDERS
+========================================== */
+
+window.firebaseGetOrders =
+    async function () {
+
+        return await getDocs(
+            collection(
+                db,
+                "orders"
+            )
+        );
+
+    };
+
+
+
+console.log(
+    "Firebase dashboard connected"
+);
+
+
+
+/* ==========================================
+   ADMIN AUTHENTICATION
+========================================== */
+
+onAuthStateChanged(
+    auth,
+    function (user) {
+
+
+        if (!user) {
+
+            console.error(
+                "Firebase admin authentication missing."
+            );
+
+            sessionStorage.removeItem(
+                "adminLoggedIn"
+            );
+
+            window.location.replace(
+                "admin.html"
+            );
+
+            return;
+
+        }
+
+
+
+        console.log(
+            "Firebase admin authenticated:",
+            user.email
         );
 
 
-    /* ==========================================
-       FIREBASE AUTH
-    ========================================== */
 
-    const auth =
-        getAuth(app);
+        /* ==========================================
+           ALLOWED ADMIN EMAIL
+        ========================================== */
 
+        if (
+            user.email !==
+            "mdzaidqureshi28@gmail.com"
+        ) {
 
-    /* ==========================================
-       FIRESTORE
-    ========================================== */
-
-    const db =
-        getFirestore(app);
-
-
-    window.firebaseDB =
-        db;
-
-
-    window.firebaseAuth =
-        auth;
-
-
-    window.firebaseUpdateDoc =
-        updateDoc;
-
-
-    window.firebaseDeleteDoc =
-        deleteDoc;
-
-
-    window.firebaseDoc =
-        doc;
-
-
-    /* ==========================================
-       FIREBASE ORDERS
-    ========================================== */
-
-    window.firebaseGetOrders =
-        async function () {
-
-            return await getDocs(
-                collection(
-                    db,
-                    "orders"
-                )
+            console.error(
+                "Unauthorized Firebase account."
             );
 
-        };
-
-
-    console.log(
-        "Firebase dashboard connected"
-    );
-
-
-    /* ==========================================
-       CHECK ADMIN AUTHENTICATION
-    ========================================== */
-
-    onAuthStateChanged(
-        auth,
-        function (user) {
-
-            if (!user) {
-
-                console.error(
-                    "Firebase admin authentication missing."
-                );
-
-                window.location.replace(
-                    "admin.html"
-                );
-
-                return;
-
-            }
-
-
-            console.log(
-                "Firebase admin authenticated:",
-                user.email
+            sessionStorage.removeItem(
+                "adminLoggedIn"
             );
 
+            window.location.replace(
+                "admin.html"
+            );
 
-            if (
-                user.email !==
-                "mdzaidqureshi28@gmail.com"
-            ) {
-
-                console.error(
-                    "Unauthorized Firebase account."
-                );
-
-                window.location.replace(
-                    "admin.html"
-                );
-
-                return;
-
-            }
-
-
-            /* ==========================================
-               AUTH READY → LOAD DASHBOARD
-            ========================================== */
-
-            if (
-                typeof window.loadAdminOrders ===
-                "function"
-            ) {
-
-                window.loadAdminOrders();
-
-            }
+            return;
 
         }
-    );
+
+
+
+        /* ==========================================
+           LOAD DASHBOARD
+        ========================================== */
+
+        if (
+            typeof window.loadAdminOrders ===
+            "function"
+        ) {
+
+            window.loadAdminOrders();
+
+        }
+
+    }
+);
 
 </script>
 
+
+
+<!-- ==========================================
+     DASHBOARD JAVASCRIPT
+========================================== -->
+
 <script src="dashboard.js"></script>
+
 
 </body>
 
